@@ -1,0 +1,15 @@
+{
+  "appTitle": "Centaur Scorekaart",
+  "@appTitle": {
+    "description": "Scorekaart voor Centaur Scores"
+  },
+  "participantScreenTitle": "Deelnemers",
+  "@participantScreenTitle": {
+    "description": "Title for the participants screen"
+  },
+  "scoresScreenTitle": "Scores invoeren",
+  "@scoresScreenTitle": {
+    "description": "Title for the score entry screen"
+  }
+
+}

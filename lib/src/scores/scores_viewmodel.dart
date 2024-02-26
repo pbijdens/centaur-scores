@@ -1,0 +1,27 @@
+import 'package:centaur_scores/src/model/model.dart';
+import 'package:centaur_scores/src/model/repository.dart';
+import 'package:centaur_scores/src/mvvm/events/loading_event.dart';
+import 'package:centaur_scores/src/mvvm/observer.dart';
+import 'package:centaur_scores/src/mvvm/viewmodel.dart';
+import 'package:centaur_scores/src/participants/participants_viewmodel.dart';
+
+class ScoresViewmodel extends EventViewModel {
+  final MatchRepository _repository;
+
+  ScoresViewmodel(this._repository);
+
+  void load() {
+    notify(LoadingEvent(isLoading: true));
+    _repository.getModel().then((value) {
+      notify(ScoresViewmodelLoadedEvent(model: value));
+      notify(LoadingEvent(isLoading: false));
+    });
+  }
+}
+
+class ScoresViewmodelLoadedEvent extends ViewEvent {
+  final MatchModel model;
+
+  ScoresViewmodelLoadedEvent({required this.model})
+      : super("ScoresViewmodelLoadedEvent");
+}
