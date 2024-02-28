@@ -2,8 +2,8 @@ import 'package:centaur_scores/src/model/model.dart';
 import 'package:flutter/material.dart';
 
 class ScoreFormHelper {
-  static const double preferredCellWidth = 80 * 1.25;
-  static const double preferredCellHeight = 45 * 1.25;
+  static const double preferredCellWidth = 80 * 1.20;
+  static const double preferredCellHeight = 45 * 1.20;
 
   static double childAspectRatio(MatchModel model) =>
       ScoreFormHelper.preferredCellWidth / ScoreFormHelper.preferredCellHeight;

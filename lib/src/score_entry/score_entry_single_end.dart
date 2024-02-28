@@ -14,9 +14,9 @@ import 'score_keyboard.dart';
 import 'end_this.dart';
 
 class ScoreEntryForSingleEndView extends StatelessWidget {
-  int arrowNo;
-  int endNo;
-  int lijnNo;
+  final int arrowNo;
+  final int endNo;
+  final int lijnNo;
 
   ScoreEntryForSingleEndView(
       {required this.endNo,
@@ -122,6 +122,9 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Align(alignment: Alignment.center, child: Text('Bezig met laden, even geduld...'));
+    }    
     var group = model.groups
             .where((element) => element.code == participant.group)
             .firstOrNull ??
@@ -136,9 +139,9 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
         child: Column(children: [
           headerLineOne(context, group, subgroup),
           headerLineTwo(context),
-          ScoreViewPreviousEnd(_viewModel, model, participant, _viewModel.arrowNo),
+          ScoreViewPreviousEnd(_viewModel, model, participant),
           ScoreInputThisEnd(_viewModel, model, participant, _viewModel.arrowNo),
-          ScoreViewNextEnd(_viewModel, model, participant, _viewModel.arrowNo),
+          ScoreViewNextEnd(_viewModel, model, participant),
           ScoreKeyboard(_viewModel, model, participant)
         ]));
   }

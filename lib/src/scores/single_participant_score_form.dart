@@ -5,9 +5,9 @@ import 'package:centaur_scores/src/scores/scores_viewmodel.dart';
 import 'package:flutter/material.dart';
 
 class SingeParticipantScoreForm extends StatelessWidget {
-  MatchModel _model;
-  ParticipantModel _participant;
-  int _index;
+  final MatchModel _model;
+  final ParticipantModel _participant;
+  final int _index;
 
   final ScoresViewmodel viewModel;
 

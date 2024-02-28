@@ -7,10 +7,8 @@ class ScoreViewNextEnd extends StatelessWidget {
   final ScoresSingleEndViewmodel _viewModel;
   final MatchModel _model;
   final ParticipantModel _participant;
-  final int _highlightedArrowNo;
 
-  const ScoreViewNextEnd(
-      this._viewModel, this._model, this._participant, this._highlightedArrowNo,
+  const ScoreViewNextEnd(this._viewModel, this._model, this._participant,
       {super.key});
 
   @override

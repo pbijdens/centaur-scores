@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class SingleParticipantHeaderLineTwo extends StatelessWidget {
-  MatchModel model;
-  ParticipantModel participant;
-  int index;
+  final MatchModel model;
+  final ParticipantModel participant;
+  final int index;
 
-  SingleParticipantHeaderLineTwo(
+  const SingleParticipantHeaderLineTwo(
       {super.key,
       required this.participant,
       required this.model,

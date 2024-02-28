@@ -3,11 +3,11 @@ import 'package:centaur_scores/src/scores/score_form_helper.dart';
 import 'package:flutter/material.dart';
 
 class SingeParticipantFooter extends StatelessWidget {
-  MatchModel model;
-  ParticipantModel participant;
-  int index;
+  final MatchModel model;
+  final ParticipantModel participant;
+  final int index;
 
-  SingeParticipantFooter(
+  const SingeParticipantFooter(
       {super.key,
       required this.participant,
       required this.model,

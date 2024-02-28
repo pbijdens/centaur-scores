@@ -3,11 +3,11 @@ import 'package:centaur_scores/src/scores/score_form_helper.dart';
 import 'package:flutter/material.dart';
 
 class SingleParticipantHeaderLineOne extends StatelessWidget {
-  MatchModel model;
-  ParticipantModel participant;
-  int index;
+  final MatchModel model;
+  final ParticipantModel participant;
+  final int index;
 
-  SingleParticipantHeaderLineOne(
+  const SingleParticipantHeaderLineOne(
       {super.key,
       required this.participant,
       required this.model,
@@ -18,8 +18,7 @@ class SingleParticipantHeaderLineOne extends StatelessWidget {
     // Build a Form widget using the _formKey created above.
     return SizedBox(
       width: ScoreFormHelper.scoreCardColumnWidth(model),
-      child: 
-        Container(
+      child: Container(
           alignment: Alignment.topLeft,
           color: ScoreFormHelper.colorForColumn(index),
           child: Padding(

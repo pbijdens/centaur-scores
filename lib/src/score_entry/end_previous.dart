@@ -7,10 +7,8 @@ class ScoreViewPreviousEnd extends StatelessWidget {
   final ScoresSingleEndViewmodel _viewModel;
   final MatchModel _model;
   final ParticipantModel _participant;
-  final int _highlightedArrowNo;
 
-  const ScoreViewPreviousEnd(
-      this._viewModel, this._model, this._participant, this._highlightedArrowNo,
+  const ScoreViewPreviousEnd(this._viewModel, this._model, this._participant,
       {super.key});
 
   @override
@@ -67,9 +65,9 @@ class ScoreViewPreviousEnd extends StatelessWidget {
     bool endFilled = true;
     for (var arrowNo = 0; arrowNo < _model.arrowsPerEnd; arrowNo++) {
       if (_participant.ends.length > endNo) {
-          int? arrowScore = _participant.ends[endNo].arrows[arrowNo];
-          endFilled = endFilled && (arrowScore != null);
-          endTotal += arrowScore ?? 0;
+        int? arrowScore = _participant.ends[endNo].arrows[arrowNo];
+        endFilled = endFilled && (arrowScore != null);
+        endTotal += arrowScore ?? 0;
 
         result.add(Container(
           decoration: BoxDecoration(

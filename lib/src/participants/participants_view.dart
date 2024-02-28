@@ -4,7 +4,6 @@ import 'package:centaur_scores/src/model/repository.dart';
 import 'package:centaur_scores/src/mvvm/events/loading_event.dart';
 import 'package:centaur_scores/src/mvvm/observer.dart';
 import 'package:centaur_scores/src/participants/participants_viewmodel.dart';
-import 'package:centaur_scores/src/scores/score_entry_fullpage_widget.dart';
 import 'package:centaur_scores/src/scores/scores_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -73,6 +72,9 @@ class ParticipantsFormState extends State<ParticipantsForm>
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Align(alignment: Alignment.center, child: Text('Bezig met laden, even geduld...'));
+    }
     // Build a Form widget using the _formKey created above.
     return Form(
       key: _formKey,

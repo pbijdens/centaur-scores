@@ -8,7 +8,6 @@ import 'package:centaur_scores/src/scores/single_participant_header_line_two.dar
 import 'package:centaur_scores/src/scores/single_participant_header_line_one.dart';
 import 'package:centaur_scores/src/scores/single_participant_score_form.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ScoreEntryFullPageWidget extends StatefulWidget {
   const ScoreEntryFullPageWidget({super.key});
@@ -59,6 +58,11 @@ class ScoreEntryFullPageWidgetState extends State<ScoreEntryFullPageWidget>
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Align(
+          alignment: Alignment.center,
+          child: Text('Bezig met laden, even geduld...'));
+    }
     // Build a Form widget using the _formKey created above.
     return Form(
         key: _formKey,
