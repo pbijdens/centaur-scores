@@ -3,7 +3,7 @@
   "@appTitle": {
     "description": "Scorekaart voor Centaur Scores"
   },
-  "participantScreenTitle": "Deelnemers",
+  "participantScreenTitle": "Schutters",
   "@participantScreenTitle": {
     "description": "Title for the participants screen"
   },

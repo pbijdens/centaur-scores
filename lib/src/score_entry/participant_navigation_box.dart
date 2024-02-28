@@ -57,7 +57,9 @@ class ParticipantNavigationBox extends StatelessWidget {
                   color: Colors.transparent,
                   child: (newline == null)
                       ? const Icon(Icons.do_disturb_alt_sharp)
-                      : Text('Volgende ronde'))));
+                      : Text('Volgende ronde',
+                          style: StyleHelper.endEditorBackButtonTextStyle(
+                              context)))));
     }
   }
 }

@@ -99,7 +99,7 @@ class MyApp extends StatelessWidget {
                 style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
           ),
           ListTile(
-            title: const Text('Deelnemers'),
+            title: const Text('Schutters'),
             onTap: () {
               Navigator.pushReplacement(
                   context,
@@ -116,13 +116,6 @@ class MyApp extends StatelessWidget {
                   MaterialPageRoute<void>(
                     builder: (BuildContext context) => const ScoresView(),
                   ));
-            },
-          ),
-          ListTile(
-            title: const Text('Overzicht'),
-            onTap: () {
-              // Update the state of the app.
-              // ...
             },
           ),
           const Divider(),
