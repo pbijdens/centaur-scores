@@ -48,7 +48,37 @@ class ScoresSingleEndViewmodel extends EventViewModel {
           _repository.getParticipantByIndex(_model, nextLijn);
       if (newP != null && (newP.name?.isNotEmpty ?? false)) {
         _lijnNo = nextLijn;
+        _setArrowNo();
         notify(ParticipantChangedEvent(participant: newP));
+        notify(ArrowStateChangedEvent(
+            participant: _model?.participants.participants[_lijnNo],
+            end: endNo,
+            arrow: arrowNo));
+        return;
+      }
+    }
+  }
+
+  void newline() {
+    int nextLijn = -1;
+    int participantArrayLength = _model?.participants.participants.length ?? 0;
+    for (int i = 0; i < participantArrayLength; i++) {
+      // try at most as many times as there are array entries
+      nextLijn = (nextLijn + 1) % participantArrayLength;
+      ParticipantModel? newP =
+          _repository.getParticipantByIndex(_model, nextLijn);
+      if (newP != null && (newP.name?.isNotEmpty ?? false)) {
+        _lijnNo = nextLijn;
+        if (_endNo < (_model?.ends ?? 0) - 1) {
+          _endNo++;
+        }
+        _setArrowNo();
+        notify(ParticipantChangedEvent(participant: newP));
+        notify(ArrowStateChangedEvent(
+            participant: _model?.participants.participants[_lijnNo],
+            end: endNo,
+            arrow: arrowNo));
+        return;
       }
     }
   }
@@ -66,7 +96,13 @@ class ScoresSingleEndViewmodel extends EventViewModel {
             _repository.getParticipantByIndex(_model, nextLijn);
         if (newP != null && (newP.name?.isNotEmpty ?? false)) {
           _lijnNo = nextLijn;
+          _setArrowNo();
           notify(ParticipantChangedEvent(participant: newP));
+          notify(ArrowStateChangedEvent(
+              participant: _model?.participants.participants[_lijnNo],
+              end: endNo,
+              arrow: arrowNo));
+          return;
         }
       }
     }
@@ -121,6 +157,56 @@ class ScoresSingleEndViewmodel extends EventViewModel {
             .indexWhere((element) => element == null) ??
         0;
   }
+
+  ParticipantModel? previousParticipantData() {
+    if (_model != null) {
+      int nextLijn = _lijnNo;
+      int participantArrayLength =
+          _model?.participants.participants.length ?? 0;
+      for (int i = 0; i < participantArrayLength; i++) {
+        // try at most as many times as there are array entries
+        nextLijn =
+            (participantArrayLength + nextLijn - 1) % participantArrayLength;
+        ParticipantModel? newP =
+            _repository.getParticipantByIndex(_model, nextLijn);
+
+        // Do not allow going back
+        if (nextLijn >= _lijnNo) return null;
+
+        if (newP != null && (newP.name?.isNotEmpty ?? false)) {
+          return newP;
+        }
+      }
+    }
+    return null;
+  }
+
+  ParticipantModel? nextParticipantData() {
+    if (_model != null) {
+      int nextLijn = _lijnNo;
+      int participantArrayLength =
+          _model?.participants.participants.length ?? 0;
+      for (int i = 0; i < participantArrayLength; i++) {
+        // try at most as many times as there are array entries
+        nextLijn = (nextLijn + 1) % participantArrayLength;
+        ParticipantModel? newP =
+            _repository.getParticipantByIndex(_model, nextLijn);
+
+        // Do not allow going back
+        if (nextLijn <= _lijnNo) return null;
+
+        if (newP != null && (newP.name?.isNotEmpty ?? false)) {
+          return newP;
+        }
+      }
+    }
+    return null;
+  }
+
+  int columnForParticipant(ParticipantModel participant) =>
+      _model?.participants.participants
+          .indexWhere((x) => x.lijn == participant.lijn) ??
+      0;
 }
 
 class SingleEndViewmodelLoadedEvent extends ViewEvent {

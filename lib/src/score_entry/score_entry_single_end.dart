@@ -13,6 +13,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'score_keyboard.dart';
 import 'end_this.dart';
+import 'participant_navigation_box.dart';
 
 class ScoreEntryForSingleEndView extends StatelessWidget {
   final int arrowNo;
@@ -99,9 +100,7 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
 
   // int _highlightedArrowNo = -1;
 
-  ParticipantModel? _participant;
-  ParticipantModel get participant =>
-      _participant ?? ParticipantModel(lijn: "-", id: 0);
+  ParticipantModel participant = ParticipantModel(lijn: "-", id: 0);
 
   @override
   void notify(ViewEvent event) {
@@ -115,7 +114,7 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
       });
     } else if (event is ParticipantChangedEvent) {
       setState(() {
-        _participant = event.participant;
+        participant = event.participant;
       });
     } else if (event is ArrowStateChangedEvent) {
       setState(() {});
@@ -136,16 +135,43 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
             .firstOrNull ??
         GroupInfo("Onbekend", "-");
 
-    return Container(
-        alignment: Alignment.center,
-        child: Column(children: [
+    return Column(children: [
+      Expanded(flex: 1, child: Container()),
+      Row(children: [
+        Expanded(flex: 1, child: Container()),
+        Padding(
+            padding: const EdgeInsets.all(10),
+            child: ParticipantNavigationBox(
+              _viewModel,
+              getParticipant: () => _viewModel.previousParticipantData(),
+              gotoParticipant: () {
+                _viewModel.previousParticipant();
+              },
+            )),
+        Column(children: [
           headerLineOne(context, group, subgroup),
           headerLineTwo(context),
           ScoreViewPreviousEnd(_viewModel, model, participant),
           ScoreInputThisEnd(_viewModel, model, participant, _viewModel.arrowNo),
           ScoreViewNextEnd(_viewModel, model, participant),
           ScoreKeyboard(_viewModel, model, participant)
-        ]));
+        ]),
+        Padding(
+            padding: const EdgeInsets.all(10),
+            child: ParticipantNavigationBox(
+              _viewModel,
+              getParticipant: () => _viewModel.nextParticipantData(),
+              gotoParticipant: () {
+                _viewModel.nextParticipant();
+              },
+              newline: _viewModel.endNo >= (_viewModel.numberOfEnds - 1) ? null : () {
+                _viewModel.newline();
+              },
+            )),
+        Expanded(flex: 1, child: Container()),
+      ]),
+      Expanded(flex: 1, child: Container()),
+    ]);
   }
 
   SizedBox headerLineOne(
@@ -207,7 +233,8 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
                   children: [
                     Text(participant.name ?? "-",
                         textAlign: TextAlign.left,
-                        style: StyleHelper.editorParticipantNameHeader(context)),
+                        style:
+                            StyleHelper.editorParticipantNameHeader(context)),
                   ]))),
     );
   }
