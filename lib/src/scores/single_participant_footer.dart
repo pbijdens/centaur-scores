@@ -19,10 +19,10 @@ class SingeParticipantFooter extends StatelessWidget {
     return Container(
         color: ScoreFormHelper.colorForColumnFooter(index),
         child: SizedBox(
-          width: ScoreFormHelper.preferredCellWidth * (model.ends + 2),
+          width: ScoreFormHelper.scoreCardColumnWidth(model),
           child: Padding(
                   padding: const EdgeInsets.all(4),
-                  child: Text('Score ${participant.score}',
+                  child: Text('Totaal: ${participant.score}',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge))),
         );

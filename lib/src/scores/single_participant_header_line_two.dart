@@ -28,7 +28,7 @@ class SingleParticipantHeaderLineTwo extends StatelessWidget {
 
     // Build a Form widget using the _formKey created above.
     return SizedBox(
-      width: ScoreFormHelper.preferredCellWidth * (model.ends + 2),
+      width: ScoreFormHelper.scoreCardColumnWidth(model),
       //height: 80,
       child: Container(
           alignment: Alignment.topLeft,

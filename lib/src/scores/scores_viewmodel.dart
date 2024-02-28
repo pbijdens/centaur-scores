@@ -10,6 +10,10 @@ class ScoresViewmodel extends EventViewModel {
 
   ScoresViewmodel(this._repository);
 
+  void notifyViewmodelUpdated() {
+    notify(ScoresViewmodelUpdatedEvent());
+  }
+
   void load() {
     notify(LoadingEvent(isLoading: true));
     _repository.getModel().then((value) {
@@ -24,4 +28,8 @@ class ScoresViewmodelLoadedEvent extends ViewEvent {
 
   ScoresViewmodelLoadedEvent({required this.model})
       : super("ScoresViewmodelLoadedEvent");
+}
+
+class ScoresViewmodelUpdatedEvent extends ViewEvent {
+  ScoresViewmodelUpdatedEvent() : super("ScoresViewmodelUpdatedEvent");
 }

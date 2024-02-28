@@ -24,17 +24,18 @@ class ParticipantsView extends StatelessWidget {
         drawer: MyApp.drawer(context),
         floatingActionButton: FloatingActionButton.extended(
             onPressed: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                   context,
                   MaterialPageRoute<void>(
                     builder: (BuildContext context) => const ScoresView(),
                   ));
             },
-            label: Padding(
-                padding: const EdgeInsets.all(10.0),
+            label: const Padding(
+                padding: EdgeInsets.all(10.0),
                 child: Text("Scores Invoeren", textAlign: TextAlign.center)),
             icon: const Icon(Icons.edit)),
-        body: Container(margin: EdgeInsets.all(20), child: ParticipantsForm()));
+        body: Container(
+            margin: const EdgeInsets.all(20), child: const ParticipantsForm()));
   }
 }
 

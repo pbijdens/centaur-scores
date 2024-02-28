@@ -70,6 +70,10 @@ class ParticipantModel {
     }
     return score;
   }
+
+  void setArrow(int endNo, int arrowNo, int? value) {
+    ends[endNo].set(arrowNo, value);
+  }
 }
 
 class EndModel {
@@ -80,7 +84,7 @@ class EndModel {
     _arrows = List<int?>.filled(arrowsPerEnd, null);
   }
 
-  void set(int index, int value) {
+  void set(int index, int? value) {
     if (index >= _arrows.length) return;
     _arrows[index] = value;
   }
@@ -104,17 +108,71 @@ class GroupInfo {
   GroupInfo(this.label, this.code);
 }
 
+class ScoreButton {
+  ScoreButton(this.label, this.value);
+  String? label = "";
+  int? value;
+}
+
 class MatchModel {
   String deviceID = "ABCDEF";
   String wedstrijdCode = "ICW8";
   String wedstrijdNaam = "Competitie week 8";
   int ends = 10;
   int arrowsPerEnd = 3;
-  Map<String, List<int>> scoreValues = {
-    "-": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    "C": [6, 7, 8, 9, 10],
-    "R": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    "H": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  bool autoProgressAfterEachArrow = true;
+  Map<String, List<ScoreButton>> scoreValues = {
+    "-": [
+      ScoreButton("10", 10),
+      ScoreButton("9", 9),
+      ScoreButton("8", 8),
+      ScoreButton("7", 7),
+      ScoreButton("6", 6),
+      ScoreButton("5", 5),
+      ScoreButton("4", 4),
+      ScoreButton("3", 3),
+      ScoreButton("2", 2),
+      ScoreButton("1", 1),
+      ScoreButton("Mis", 0),
+      ScoreButton("DEL", null)
+    ],
+    "C": [
+      ScoreButton("10", 10),
+      ScoreButton("9", 9),
+      ScoreButton("8", 8),
+      ScoreButton("7", 7),
+      ScoreButton("6", 6),
+      ScoreButton("Mis", 0),
+      ScoreButton("DEL", null)
+    ],
+    "R": [
+      ScoreButton("10", 10),
+      ScoreButton("9", 9),
+      ScoreButton("8", 8),
+      ScoreButton("7", 7),
+      ScoreButton("6", 6),
+      ScoreButton("5", 5),
+      ScoreButton("4", 4),
+      ScoreButton("3", 3),
+      ScoreButton("2", 2),
+      ScoreButton("1", 1),
+      ScoreButton("Mis", 0),
+      ScoreButton("DEL", null)
+    ],
+    "H": [
+      ScoreButton("10", 10),
+      ScoreButton("9", 9),
+      ScoreButton("8", 8),
+      ScoreButton("7", 7),
+      ScoreButton("6", 6),
+      ScoreButton("5", 5),
+      ScoreButton("4", 4),
+      ScoreButton("3", 3),
+      ScoreButton("2", 2),
+      ScoreButton("1", 1),
+      ScoreButton("MISS", 0),
+      ScoreButton("DEL", null)
+    ],
   };
 
   List<GroupInfo> groups = [

@@ -1,7 +1,6 @@
 import 'package:centaur_scores/src/participants/participants_view.dart';
-import 'package:centaur_scores/src/scores/score_entry_fullpage_widget.dart';
+import 'package:centaur_scores/src/score_entry/score_entry_single_end.dart';
 import 'package:centaur_scores/src/scores/scores_view.dart';
-import 'package:centaur_scores/src/settings/settings_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -69,6 +68,10 @@ class MyApp extends StatelessWidget {
               settings: routeSettings,
               builder: (BuildContext context) {
                 switch (routeSettings.name) {
+                  case ScoresView.routeName:
+                    return const ScoresView();
+                  case ScoreEntryForSingleEndView.routeName:
+                    return ScoreEntryForSingleEndView(lijnNo: 0, endNo: -1, arrowNo: -1);
                   case SettingsView.routeName:
                     return SettingsView(controller: settingsController);
                   case ParticipantsView.routeName:
@@ -125,9 +128,7 @@ class MyApp extends StatelessWidget {
           const Divider(),
           ListTile(
             title: const Text('Instellingen'),
-            onTap: () {
-              
-            },
+            onTap: () {},
           ),
         ],
       ),

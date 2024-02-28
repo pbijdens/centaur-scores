@@ -51,4 +51,8 @@ class MatchRepository {
     participant.setSubgroup(subgroup);
     return participant;
   }
+
+  ParticipantModel? getParticipantByIndex(MatchModel? model, int index) {
+    return model?.participants?.participants[index] ?? null;
+  }
 }

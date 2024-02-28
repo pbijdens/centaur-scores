@@ -48,6 +48,8 @@ class ScoreEntryFullPageWidgetState extends State<ScoreEntryFullPageWidget>
         model = event.model;
         participants = event.model.participants.participants;
       });
+    } else if (event is ScoresViewmodelUpdatedEvent) {
+      setState(() {});
     }
   }
 
@@ -64,16 +66,19 @@ class ScoreEntryFullPageWidgetState extends State<ScoreEntryFullPageWidget>
             scrollDirection: Axis.horizontal,
             child: SizedBox(
               child: Column(children: [
-                IntrinsicHeight(child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: singeParticipantDisciplines())),
-                IntrinsicHeight(child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: singeParticipantNames())),
+                IntrinsicHeight(
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: singeParticipantDisciplines())),
+                IntrinsicHeight(
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: singeParticipantNames())),
                 Expanded(
                     flex: 10,
                     child: Row(children: singeParticipantScoreForms())),
-                IntrinsicHeight(child: Row(children: singeParticipantSummaries())),
+                IntrinsicHeight(
+                    child: Row(children: singeParticipantSummaries())),
               ]),
             )));
   }
@@ -83,7 +88,10 @@ class ScoreEntryFullPageWidgetState extends State<ScoreEntryFullPageWidget>
     return participants
         .where((element) => element.name?.isNotEmpty ?? false)
         .map((participant) => SingeParticipantScoreForm(
-            model: model, participant: participant, index: index++))
+            viewModel: _viewModel,
+            model: model,
+            participant: participant,
+            index: index++))
         .toList();
   }
 
