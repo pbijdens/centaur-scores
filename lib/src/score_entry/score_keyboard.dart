@@ -1,6 +1,6 @@
 import 'package:centaur_scores/src/model/model.dart';
 import 'package:centaur_scores/src/score_entry/score_entry_single_end_viewmodel.dart';
-import 'package:centaur_scores/src/scores/score_form_helper.dart';
+import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 
 class ScoreKeyboard extends StatelessWidget {
@@ -14,9 +14,9 @@ class ScoreKeyboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: ScoreFormHelper.colorForColumnFooter(_viewModel.lijnNo),
+        color: StyleHelper.colorForColumnFooter(_viewModel.lijnNo),
         child: SizedBox(
-            width: ScoreFormHelper.scoreCardColumnWidth(_model),
+            width: StyleHelper.scoreCardColumnWidth(_model),
             child: Padding(
                 padding: const EdgeInsets.all(4),
                 child: Column(children: buildRows(context)))));
@@ -40,20 +40,21 @@ class ScoreKeyboard extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
-                        ScoreFormHelper.colorForButton(_model, keys[i].value),
-                    foregroundColor: ScoreFormHelper.colorForButtonLabel(
+                        StyleHelper.colorForButton(_model, keys[i].value),
+                    foregroundColor: StyleHelper.colorForButtonLabel(
                         _model, keys[i].value),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
                   ),
                   child: SizedBox(
-                    height: 65,
+                    height: 85,
                     child: Align(
                         alignment: Alignment.center,
-                        child: keys[i].value == null
-                            ? Text(keys[i].label ?? '!DEL!')
-                            : Text(keys[i].label ?? '')),
+                        child: (keys[i].value == null)
+                            ? Text(keys[i].label ?? '!DEL!', style: StyleHelper.keypadTextStyle(context))
+                            : Text(keys[i].label ?? '', style: StyleHelper.keypadTextStyle(context)?.apply(color: StyleHelper.colorForButtonLabel(
+                        _model, keys[i].value)))),
                   )))));
       if (currentRow.length == buttonsPerRow) {
         result.add(Row(children: currentRow));

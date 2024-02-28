@@ -5,6 +5,8 @@ import 'package:centaur_scores/src/mvvm/events/loading_event.dart';
 import 'package:centaur_scores/src/mvvm/observer.dart';
 import 'package:centaur_scores/src/participants/participants_viewmodel.dart';
 import 'package:centaur_scores/src/scores/scores_view.dart';
+import 'package:centaur_scores/src/style/loading_screen.dart';
+import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'participant_editor.dart';
@@ -29,9 +31,9 @@ class ParticipantsView extends StatelessWidget {
                     builder: (BuildContext context) => const ScoresView(),
                   ));
             },
-            label: const Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text("Scores Invoeren", textAlign: TextAlign.center)),
+            label: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text("Scores Invoeren", textAlign: TextAlign.center, style: StyleHelper.endEditorBackButtonTextStyle(context))),
             icon: const Icon(Icons.edit)),
         body: Container(
             margin: const EdgeInsets.all(20), child: const ParticipantsForm()));
@@ -73,7 +75,7 @@ class ParticipantsFormState extends State<ParticipantsForm>
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Align(alignment: Alignment.center, child: Text('Bezig met laden, even geduld...'));
+      return const LoadingScreen();
     }
     // Build a Form widget using the _formKey created above.
     return Form(

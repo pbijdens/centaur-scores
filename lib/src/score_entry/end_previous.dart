@@ -1,6 +1,6 @@
 import 'package:centaur_scores/src/model/model.dart';
 import 'package:centaur_scores/src/score_entry/score_entry_single_end_viewmodel.dart';
-import 'package:centaur_scores/src/scores/score_form_helper.dart';
+import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 
 class ScoreViewPreviousEnd extends StatelessWidget {
@@ -19,8 +19,8 @@ class ScoreViewPreviousEnd extends StatelessWidget {
             _viewModel.previousEnd();
           },
           child: SizedBox(
-              width: ScoreFormHelper.scoreCardColumnWidth(_model),
-              height: ScoreFormHelper.preferredCellHeight,
+              width: StyleHelper.scoreCardColumnWidth(_model),
+              height: StyleHelper.preferredCellHeight,
               child: ShaderMask(
                   shaderCallback: (rect) {
                     return const LinearGradient(
@@ -32,8 +32,7 @@ class ScoreViewPreviousEnd extends StatelessWidget {
                   },
                   blendMode: BlendMode.dstIn,
                   child: Container(
-                      color:
-                          ScoreFormHelper.colorForScoreForm(_viewModel.lijnNo),
+                      color: StyleHelper.colorForScoreForm(_viewModel.lijnNo),
                       child: GridView.count(
                         primary: false,
                         padding: const EdgeInsets.all(1),
@@ -42,11 +41,19 @@ class ScoreViewPreviousEnd extends StatelessWidget {
                         crossAxisCount: _model.arrowsPerEnd + 2,
                         scrollDirection: Axis.vertical,
                         childAspectRatio:
-                            ScoreFormHelper.childAspectRatioForEditor(_model),
+                            StyleHelper.childAspectRatioForEditor(_model),
                         children: createScoreRows(context),
                       )))));
     }
-    return const Text('Eerste ronde');
+    return SizedBox(
+        height: StyleHelper.preferredCellHeight,
+        width: StyleHelper.scoreCardColumnWidth(_model),
+        child: Container(
+            color: Colors.white70,
+            child: Align(
+                alignment: Alignment.center,
+                child: Text('Eerste ronde',
+                    style: StyleHelper.noMoreEndsTextStyle(context)))));
   }
 
   List<Widget> createScoreRows(BuildContext context) {
@@ -57,8 +64,8 @@ class ScoreViewPreviousEnd extends StatelessWidget {
       alignment: Alignment.centerRight,
       padding: const EdgeInsets.all(8),
       color: Colors.transparent,
-      child:
-          Text('${endNo + 1}', style: Theme.of(context).textTheme.bodyMedium),
+      child: Text('${endNo + 1}',
+          style: StyleHelper.nextPrevEndEndNoTextStyle(context)),
     ));
 
     int endTotal = 0;
@@ -76,7 +83,7 @@ class ScoreViewPreviousEnd extends StatelessWidget {
           alignment: Alignment.center,
           padding: const EdgeInsets.all(4),
           child: Text('${arrowScore ?? "-"}',
-              style: Theme.of(context).textTheme.bodyMedium),
+              style: StyleHelper.nextPrevEndArrowScoreTextStyle(context)),
         ));
       } else {
         result.add(const Text('Laden...'));
@@ -88,7 +95,7 @@ class ScoreViewPreviousEnd extends StatelessWidget {
       alignment: Alignment.center,
       color: Colors.transparent,
       child: Text('${endFilled ? endTotal : "-"}',
-          style: Theme.of(context).textTheme.bodyMedium),
+          style: StyleHelper.nextPrevEndEndScoreTextStyle(context)),
     ));
 
     return result;

@@ -1,5 +1,5 @@
 import 'package:centaur_scores/src/model/model.dart';
-import 'package:centaur_scores/src/scores/score_form_helper.dart';
+import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -28,11 +28,11 @@ class SingleParticipantHeaderLineTwo extends StatelessWidget {
 
     // Build a Form widget using the _formKey created above.
     return SizedBox(
-      width: ScoreFormHelper.scoreCardColumnWidth(model),
+      width: StyleHelper.scoreCardColumnWidth(model),
       //height: 80,
       child: Container(
           alignment: Alignment.topLeft,
-          color: ScoreFormHelper.colorForColumnFooter(index),
+          color: StyleHelper.colorForColumnFooter(index),
           child: Padding(
               padding: const EdgeInsets.all(4),
               child:
@@ -41,26 +41,26 @@ class SingleParticipantHeaderLineTwo extends StatelessWidget {
                     child: RichText(
                   text: TextSpan(
                     text: '',
-                    style: DefaultTextStyle.of(context).style,
+                    style: StyleHelper.scoreFormHeaderLineTwoTextStyle(context),
                     children: <TextSpan>[
-                      const TextSpan(
+                      TextSpan(
                           text: 'Lijn: ',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                          style: StyleHelper.scoreFormHeaderLineTwoBoldTextStyle(context)),
                       TextSpan(text: participant.lijn),
                     ],
                   ))),
                 RichText(
                   text: TextSpan(
                     text: '',
-                    style: DefaultTextStyle.of(context).style,
+                    style: StyleHelper.scoreFormHeaderLineTwoTextStyle(context),
                     children: <TextSpan>[
-                      const TextSpan(
+                      TextSpan(
                           text: ' Klasse: ',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                          style: StyleHelper.scoreFormHeaderLineTwoBoldTextStyle(context)),
                       TextSpan(text: group.label),
-                      const TextSpan(
+                      TextSpan(
                           text: ' / ',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                          style: StyleHelper.scoreFormHeaderLineTwoBoldTextStyle(context)),
                       TextSpan(text: subgroup.label),
                     ],
                   ),

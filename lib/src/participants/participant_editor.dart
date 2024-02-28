@@ -1,5 +1,6 @@
 import 'package:centaur_scores/src/model/model.dart';
 import 'package:centaur_scores/src/participants/participants_viewmodel.dart';
+import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 
 class ParticipantListItem extends StatelessWidget {
@@ -9,7 +10,10 @@ class ParticipantListItem extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
 
   ParticipantListItem(
-      {super.key, required this.participant, required this.model, required this.viewModel});
+      {super.key,
+      required this.participant,
+      required this.model,
+      required this.viewModel});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +27,7 @@ class ParticipantListItem extends StatelessWidget {
             child: Text(
               participant.lijn,
               maxLines: 1,
-              style: Theme.of(context).textTheme.headlineSmall,
+              style: StyleHelper.participantLijnTextStyle(context),
             )),
       ),
       Expanded(
@@ -49,7 +53,10 @@ class ParticipantListItem extends StatelessWidget {
                 .firstOrNull,
             items: model.groups
                 .map((group) => DropdownMenuItem(
-                    value: group, child: Text(group.label ?? "")))
+                    value: group,
+                    child: Text(group.label ?? "",
+                        style: StyleHelper.participantGroupDropdownTextStyle(
+                            context))))
                 .toList(),
             onChanged: (value) {
               viewModel.setParticipantGroup(participant, value as GroupInfo);
@@ -64,7 +71,10 @@ class ParticipantListItem extends StatelessWidget {
                 .firstOrNull,
             items: model.subgroups
                 .map((group) => DropdownMenuItem(
-                    value: group, child: Text(group.label ?? "")))
+                    value: group,
+                    child: Text(group.label ?? "",
+                        style: StyleHelper.participantSubgroupDropdownTextStyle(
+                            context))))
                 .toList(),
             onChanged: (value) {
               viewModel.setParticipantSubgroup(participant, value as GroupInfo);

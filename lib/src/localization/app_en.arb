@@ -7,9 +7,13 @@
   "@participantScreenTitle": {
     "description": "Title for the participants screen"
   },
-  "scoresScreenTitle": "Scores invoeren",
+  "scoresScreenTitle": "Scorebriefjes",
   "@scoresScreenTitle": {
     "description": "Title for the score entry screen"
+  },
+  "singleEndScreenTitle": "Voer de score in",
+  "@singleEndScreenTitle": {
+    "description": "Title for the single end entry screen"
   }
 
 }

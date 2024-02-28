@@ -1,6 +1,6 @@
 import 'package:centaur_scores/src/model/model.dart';
 import 'package:centaur_scores/src/score_entry/score_entry_single_end.dart';
-import 'package:centaur_scores/src/scores/score_form_helper.dart';
+import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:centaur_scores/src/scores/scores_viewmodel.dart';
 import 'package:flutter/material.dart';
 
@@ -25,9 +25,9 @@ class SingeParticipantScoreForm extends StatelessWidget {
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
     return Container(
-      color: ScoreFormHelper.colorForScoreForm(_index),
+      color: StyleHelper.colorForScoreForm(_index),
       child: SizedBox(
-          width: ScoreFormHelper.scoreCardColumnWidth(_model),
+          width: StyleHelper.scoreCardColumnWidth(_model),
           child: GridView.count(
             primary: false,
             padding: const EdgeInsets.all(1),
@@ -35,7 +35,7 @@ class SingeParticipantScoreForm extends StatelessWidget {
             mainAxisSpacing: 2,
             crossAxisCount: _model.arrowsPerEnd + 2,
             scrollDirection: Axis.vertical,
-            childAspectRatio: ScoreFormHelper.childAspectRatio(_model),
+            childAspectRatio: StyleHelper.childAspectRatio(_model),
             children: createScoreRows(context),
           )),
     );
@@ -62,7 +62,7 @@ class SingeParticipantScoreForm extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             color: Colors.transparent,
             child: Text('${endNo + 1}',
-                style: Theme.of(context).textTheme.titleLarge),
+                style: StyleHelper.scoreFormEndNumberTextStyle(context)),
           )));
 
       int endTotal = 0;
@@ -87,9 +87,9 @@ class SingeParticipantScoreForm extends StatelessWidget {
             child: Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.all(8),
-              color: ScoreFormHelper.colorForArrow(_model, arrowScore),
+              color: StyleHelper.colorForArrow(_model, arrowScore),
               child: Text('${arrowScore ?? "-"}',
-                  style: Theme.of(context).textTheme.titleLarge),
+                  style: StyleHelper.scoreFormArrowScoreTextStyle(context)),
             )));
       }
 
@@ -111,7 +111,7 @@ class SingeParticipantScoreForm extends StatelessWidget {
             alignment: Alignment.center,
             color: Colors.transparent,
             child: Text('${endFilled ? endTotal : "-"}',
-                style: Theme.of(context).textTheme.titleLarge),
+                style: StyleHelper.scoreFormEndTotalTextStyle(context)),
           )));
     }
     return result;

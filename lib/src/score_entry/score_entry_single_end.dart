@@ -6,7 +6,8 @@ import 'package:centaur_scores/src/mvvm/observer.dart';
 import 'package:centaur_scores/src/score_entry/end_next.dart';
 import 'package:centaur_scores/src/score_entry/end_previous.dart';
 import 'package:centaur_scores/src/score_entry/score_entry_single_end_viewmodel.dart';
-import 'package:centaur_scores/src/scores/score_form_helper.dart';
+import 'package:centaur_scores/src/style/loading_screen.dart';
+import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -30,7 +31,7 @@ class ScoreEntryForSingleEndView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.scoresScreenTitle),
+          title: Text(AppLocalizations.of(context)!.singleEndScreenTitle),
         ),
         drawer: MyApp.drawer(context),
         backgroundColor: Colors.white38,
@@ -40,9 +41,11 @@ class ScoreEntryForSingleEndView extends StatelessWidget {
                 context,
               );
             },
-            label: const Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text("Terug", textAlign: TextAlign.center)),
+            label: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text("Terug",
+                    textAlign: TextAlign.center,
+                    style: StyleHelper.endEditorBackButtonTextStyle(context))),
             icon: const Icon(Icons.arrow_back)),
         body: Container(
             margin: const EdgeInsets.all(0),
@@ -115,16 +118,15 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
         _participant = event.participant;
       });
     } else if (event is ArrowStateChangedEvent) {
-      setState(() {
-      });
+      setState(() {});
     }
   }
 
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Align(alignment: Alignment.center, child: Text('Bezig met laden, even geduld...'));
-    }    
+      return const LoadingScreen();
+    }
     var group = model.groups
             .where((element) => element.code == participant.group)
             .firstOrNull ??
@@ -149,10 +151,10 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
   SizedBox headerLineOne(
       BuildContext context, GroupInfo group, GroupInfo subgroup) {
     return SizedBox(
-      width: ScoreFormHelper.scoreCardColumnWidth(model),
+      width: StyleHelper.scoreCardColumnWidth(model),
       child: Container(
           alignment: Alignment.topLeft,
-          color: ScoreFormHelper.colorForColumnFooter(_viewModel.lijnNo),
+          color: StyleHelper.colorForColumnFooter(_viewModel.lijnNo),
           child: Padding(
               padding: const EdgeInsets.all(4),
               child:
@@ -161,26 +163,29 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
                     child: RichText(
                         text: TextSpan(
                   text: '',
-                  style: DefaultTextStyle.of(context).style,
+                  style: StyleHelper.endEditorTopHeaderTextStyle(context),
                   children: <TextSpan>[
-                    const TextSpan(
+                    TextSpan(
                         text: 'Lijn: ',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                        style: StyleHelper.endEditorTopHeaderBoldTextStyle(
+                            context)),
                     TextSpan(text: participant.lijn),
                   ],
                 ))),
                 RichText(
                   text: TextSpan(
                     text: '',
-                    style: DefaultTextStyle.of(context).style,
+                    style: StyleHelper.endEditorTopHeaderTextStyle(context),
                     children: <TextSpan>[
-                      const TextSpan(
+                      TextSpan(
                           text: ' Klasse: ',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                          style: StyleHelper.endEditorTopHeaderBoldTextStyle(
+                              context)),
                       TextSpan(text: group.label),
-                      const TextSpan(
+                      TextSpan(
                           text: ' / ',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                          style: StyleHelper.endEditorTopHeaderBoldTextStyle(
+                              context)),
                       TextSpan(text: subgroup.label),
                     ],
                   ),
@@ -191,10 +196,10 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
 
   SizedBox headerLineTwo(BuildContext context) {
     return SizedBox(
-      width: ScoreFormHelper.scoreCardColumnWidth(model),
+      width: StyleHelper.scoreCardColumnWidth(model),
       child: Container(
           alignment: Alignment.topLeft,
-          color: ScoreFormHelper.colorForColumn(_viewModel.lijnNo),
+          color: StyleHelper.colorForColumn(_viewModel.lijnNo),
           child: Padding(
               padding: const EdgeInsets.all(4),
               child: Column(
@@ -202,7 +207,7 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
                   children: [
                     Text(participant.name ?? "-",
                         textAlign: TextAlign.left,
-                        style: Theme.of(context).textTheme.headlineMedium),
+                        style: StyleHelper.editorParticipantNameHeader(context)),
                   ]))),
     );
   }

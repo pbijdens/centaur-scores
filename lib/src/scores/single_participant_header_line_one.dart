@@ -1,5 +1,5 @@
 import 'package:centaur_scores/src/model/model.dart';
-import 'package:centaur_scores/src/scores/score_form_helper.dart';
+import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 
 class SingleParticipantHeaderLineOne extends StatelessWidget {
@@ -17,10 +17,10 @@ class SingleParticipantHeaderLineOne extends StatelessWidget {
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
     return SizedBox(
-      width: ScoreFormHelper.scoreCardColumnWidth(model),
+      width: StyleHelper.scoreCardColumnWidth(model),
       child: Container(
           alignment: Alignment.topLeft,
-          color: ScoreFormHelper.colorForColumn(index),
+          color: StyleHelper.colorForColumn(index),
           child: Padding(
               padding: const EdgeInsets.all(4),
               child: Column(
@@ -28,7 +28,7 @@ class SingleParticipantHeaderLineOne extends StatelessWidget {
                   children: [
                     Text(participant.name ?? "-",
                         textAlign: TextAlign.left,
-                        style: Theme.of(context).textTheme.headlineMedium),
+                        style: StyleHelper.scoreFormHeaderParticipantNameTextStyle(context)),
                   ]))),
     );
   }

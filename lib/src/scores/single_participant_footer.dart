@@ -1,5 +1,5 @@
 import 'package:centaur_scores/src/model/model.dart';
-import 'package:centaur_scores/src/scores/score_form_helper.dart';
+import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 
 class SingeParticipantFooter extends StatelessWidget {
@@ -17,14 +17,14 @@ class SingeParticipantFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
     return Container(
-        color: ScoreFormHelper.colorForColumnFooter(index),
+        color: StyleHelper.colorForColumnFooter(index),
         child: SizedBox(
-          width: ScoreFormHelper.scoreCardColumnWidth(model),
+          width: StyleHelper.scoreCardColumnWidth(model),
           child: Padding(
                   padding: const EdgeInsets.all(4),
                   child: Text('Totaal: ${participant.score}',
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.titleLarge))),
+                      style: StyleHelper.scoreFormFooterTextStyle(context)))),
         );
   }
 }

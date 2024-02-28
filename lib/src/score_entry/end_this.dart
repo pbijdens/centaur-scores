@@ -1,6 +1,6 @@
 import 'package:centaur_scores/src/model/model.dart';
 import 'package:centaur_scores/src/score_entry/score_entry_single_end_viewmodel.dart';
-import 'package:centaur_scores/src/scores/score_form_helper.dart';
+import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 
 class ScoreInputThisEnd extends StatelessWidget {
@@ -22,10 +22,10 @@ class ScoreInputThisEnd extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: ScoreFormHelper.scoreCardColumnWidth(_model),
-        height: ScoreFormHelper.preferredCellHeight + 4,
+        width: StyleHelper.scoreCardColumnWidth(_model),
+        height: StyleHelper.preferredCellHeight + 4,
         child: Container(
-            color: ScoreFormHelper.colorForScoreForm(_viewModel.lijnNo),
+            color: StyleHelper.colorForScoreForm(_viewModel.lijnNo),
             child: GridView.count(
               primary: false,
               padding: const EdgeInsets.all(4),
@@ -34,7 +34,7 @@ class ScoreInputThisEnd extends StatelessWidget {
               crossAxisCount: _model.arrowsPerEnd + 2,
               scrollDirection: Axis.vertical,
               childAspectRatio:
-                  ScoreFormHelper.childAspectRatioForEditor(_model),
+                  StyleHelper.childAspectRatioForEditor(_model),
               children: createScoreRows(context),
             )));
   }
@@ -45,9 +45,9 @@ class ScoreInputThisEnd extends StatelessWidget {
       result.add(Container(
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.all(8),
-        color: ScoreFormHelper.colorForEditRow(),
+        color: StyleHelper.colorForEditRow(),
         child:
-            Text('${endNo + 1}', style: Theme.of(context).textTheme.titleLarge),
+            Text('${endNo + 1}', style: StyleHelper.endEditorEndNoTextStyle(context)),
       ));
 
       int endTotal = 0;
@@ -67,14 +67,14 @@ class ScoreInputThisEnd extends StatelessWidget {
                     border: _highlightedArrowNo != arrowNo
                         ? Border.all(color: Colors.transparent, width: 4.0)
                         : Border.all(
-                            color: ScoreFormHelper.colorForCellBorder(
+                            color: StyleHelper.colorForCellBorder(
                                 _viewModel.lijnNo),
                             width: 4.0),
-                    color: ScoreFormHelper.colorForEditRow()),
+                    color: StyleHelper.colorForEditRow()),
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(4),
                 child: Text('${arrowScore ?? "-"}',
-                    style: Theme.of(context).textTheme.titleLarge),
+                    style: StyleHelper.endEditorArrowScoreTextStyle(context)),
               )));
         } else {
           result.add(const Text('Laden...'));
@@ -84,9 +84,9 @@ class ScoreInputThisEnd extends StatelessWidget {
       result.add(Container(
         padding: const EdgeInsets.all(8),
         alignment: Alignment.center,
-        color: ScoreFormHelper.colorForEditRow(),
+        color: StyleHelper.colorForEditRow(),
         child: Text('${endFilled ? endTotal : "-"}',
-            style: Theme.of(context).textTheme.titleLarge),
+            style: StyleHelper.endEditorEndTotalTextStyle(context)),
       ));
     }
     return result;
