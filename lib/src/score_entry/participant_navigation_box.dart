@@ -25,9 +25,9 @@ class ParticipantNavigationBox extends StatelessWidget {
 
     if (null != participant) {
       return SizedBox(
-          width: 200,
-          height: 150,
-          child: ElevatedButton(
+          height: 400,
+          width: 60,
+          child: RotatedBox(quarterTurns: 3, child: ElevatedButton(
               onPressed: () {
                 gotoParticipant();
               },
@@ -35,18 +35,19 @@ class ParticipantNavigationBox extends StatelessWidget {
                   backgroundColor: StyleHelper.colorForColumnFooter(
                       _viewModel.columnForParticipant(participant)),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  )),
+                    borderRadius: BorderRadius.circular(5.0)                    
+                  ),
+                  ),
               child: Container(
                   color: Colors.transparent,
                   child: Text('${participant.name}',
                       style:
-                          StyleHelper.endEditorBackButtonTextStyle(context)))));
+                          StyleHelper.endEditorBackButtonTextStyle(context))))));
     } else {
       return SizedBox(
-          width: 200,
-          height: 150,
-          child: ElevatedButton(
+          height: 400,
+          width: 60,
+          child: RotatedBox(quarterTurns: 3, child: ElevatedButton(
               onPressed: newline,
               style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
@@ -59,7 +60,7 @@ class ParticipantNavigationBox extends StatelessWidget {
                       ? const Icon(Icons.do_disturb_alt_sharp)
                       : Text('Volgende ronde',
                           style: StyleHelper.endEditorBackButtonTextStyle(
-                              context)))));
+                              context))))));
     }
   }
 }

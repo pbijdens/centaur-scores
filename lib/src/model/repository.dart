@@ -53,6 +53,6 @@ class MatchRepository {
   }
 
   ParticipantModel? getParticipantByIndex(MatchModel? model, int index) {
-    return model?.participants.participants[index] ?? null;
+    return model?.participants.participants[index];
   }
 }

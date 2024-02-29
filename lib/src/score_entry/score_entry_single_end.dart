@@ -37,6 +37,7 @@ class ScoreEntryForSingleEndView extends StatelessWidget {
         drawer: MyApp.drawer(context),
         backgroundColor: Colors.white38,
         floatingActionButton: FloatingActionButton.extended(
+            heroTag: "back1",
             onPressed: () {
               Navigator.pop(
                 context,
@@ -136,7 +137,7 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
         GroupInfo("Onbekend", "-");
 
     return Column(children: [
-      Expanded(flex: 1, child: Container()),
+      SizedBox(height: 10, child: Container()),
       Row(children: [
         Expanded(flex: 1, child: Container()),
         Padding(
@@ -160,13 +161,18 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
             padding: const EdgeInsets.all(10),
             child: ParticipantNavigationBox(
               _viewModel,
-              getParticipant: () => _viewModel.nextParticipantData(),
+              getParticipant: () {
+                ParticipantModel? p = _viewModel.nextParticipantData();
+                return p;
+              },
               gotoParticipant: () {
                 _viewModel.nextParticipant();
               },
-              newline: _viewModel.endNo >= (_viewModel.numberOfEnds - 1) ? null : () {
-                _viewModel.newline();
-              },
+              newline: _viewModel.endNo >= (_viewModel.numberOfEnds - 1)
+                  ? null
+                  : () {
+                      _viewModel.newline();
+                    },
             )),
         Expanded(flex: 1, child: Container()),
       ]),

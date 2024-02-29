@@ -170,10 +170,9 @@ class ScoresSingleEndViewmodel extends EventViewModel {
         ParticipantModel? newP =
             _repository.getParticipantByIndex(_model, nextLijn);
 
-        // Do not allow going back
-        if (nextLijn >= _lijnNo) return null;
-
         if (newP != null && (newP.name?.isNotEmpty ?? false)) {
+          // Do not allow going back
+          if (nextLijn >= _lijnNo) return null;
           return newP;
         }
       }
@@ -182,20 +181,25 @@ class ScoresSingleEndViewmodel extends EventViewModel {
   }
 
   ParticipantModel? nextParticipantData() {
+    int nextLijn = _lijnNo;
+    int participantArrayLength = _model?.participants.participants.length ?? 0;
     if (_model != null) {
-      int nextLijn = _lijnNo;
-      int participantArrayLength =
-          _model?.participants.participants.length ?? 0;
+      bool allComplete = true;
+      for (int i = 0; i < participantArrayLength; i++) {
+        ParticipantModel? newP = _repository.getParticipantByIndex(_model, i);
+        allComplete = allComplete &&
+            ((newP?.name?.isEmpty ?? true) ||
+                (newP?.ends[_endNo].score != null));
+      }
       for (int i = 0; i < participantArrayLength; i++) {
         // try at most as many times as there are array entries
         nextLijn = (nextLijn + 1) % participantArrayLength;
         ParticipantModel? newP =
             _repository.getParticipantByIndex(_model, nextLijn);
 
-        // Do not allow going back
-        if (nextLijn <= _lijnNo) return null;
-
         if (newP != null && (newP.name?.isNotEmpty ?? false)) {
+          // Do not allow going back when all data has been completed
+          if (allComplete && nextLijn <= _lijnNo) return null;
           return newP;
         }
       }
@@ -203,10 +207,11 @@ class ScoresSingleEndViewmodel extends EventViewModel {
     return null;
   }
 
-  int columnForParticipant(ParticipantModel participant) =>
-      _model?.participants.participants
-          .indexWhere((x) => x.lijn == participant.lijn) ??
-      0;
+  int columnForParticipant(ParticipantModel participant) {
+      var result = _model?.participants.participants
+          .indexWhere((x) => x.lijn == participant.lijn);
+      return result ?? 0;
+  }
 }
 
 class SingleEndViewmodelLoadedEvent extends ViewEvent {

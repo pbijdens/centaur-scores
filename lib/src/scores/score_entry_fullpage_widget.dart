@@ -87,41 +87,37 @@ class ScoreEntryFullPageWidgetState extends State<ScoreEntryFullPageWidget>
   }
 
   List<Widget> singeParticipantScoreForms() {
-    int index = 0;
     return participants
         .where((element) => element.name?.isNotEmpty ?? false)
         .map((participant) => SingeParticipantScoreForm(
             viewModel: _viewModel,
             model: model,
             participant: participant,
-            index: index++))
+            index: participants.indexWhere((e) => e.id == participant.id)))
         .toList();
   }
 
   List<Widget> singeParticipantNames() {
-    int index = 0;
     return participants
         .where((element) => element.name?.isNotEmpty ?? false)
         .map((participant) => SingleParticipantHeaderLineOne(
-            model: model, participant: participant, index: index++))
+            model: model, participant: participant, index: participants.indexWhere((e) => e.id == participant.id)))
         .toList();
   }
 
   List<Widget> singeParticipantDisciplines() {
-    int index = 0;
     return participants
         .where((element) => element.name?.isNotEmpty ?? false)
         .map((participant) => SingleParticipantHeaderLineTwo(
-            model: model, participant: participant, index: index++))
+            model: model, participant: participant, index: participants.indexWhere((e) => e.id == participant.id)))
         .toList();
   }
 
   List<Widget> singeParticipantSummaries() {
-    int index = 0;
     return participants
         .where((element) => element.name?.isNotEmpty ?? false)
         .map((participant) => SingeParticipantFooter(
-            model: model, participant: participant, index: index++))
+            model: model, participant: participant, index: participants.indexWhere((e) => e.id == participant.id)))
         .toList();
   }
 }
