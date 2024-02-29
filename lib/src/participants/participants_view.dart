@@ -1,5 +1,4 @@
 import 'package:centaur_scores/src/app.dart';
-import 'package:centaur_scores/src/model/model.dart';
 import 'package:centaur_scores/src/model/repository.dart';
 import 'package:centaur_scores/src/mvvm/events/loading_event.dart';
 import 'package:centaur_scores/src/mvvm/observer.dart';
@@ -9,6 +8,7 @@ import 'package:centaur_scores/src/style/loading_screen.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../model/match_model.dart';
 import 'participant_editor.dart';
 
 class ParticipantsView extends StatelessWidget {
@@ -33,7 +33,9 @@ class ParticipantsView extends StatelessWidget {
             },
             label: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Text("Scores Invoeren", textAlign: TextAlign.center, style: StyleHelper.endEditorBackButtonTextStyle(context))),
+                child: Text("Scores Invoeren",
+                    textAlign: TextAlign.center,
+                    style: StyleHelper.endEditorBackButtonTextStyle(context))),
             icon: const Icon(Icons.edit)),
         body: Container(
             margin: const EdgeInsets.all(20), child: const ParticipantsForm()));
@@ -56,7 +58,6 @@ class ParticipantsFormState extends State<ParticipantsForm>
       ParticipantsViewmodel(MatchRepository());
 
   bool _isLoading = false;
-  List<ParticipantModel> participants = [];
   MatchModel model = MatchModel();
 
   @override
@@ -79,18 +80,28 @@ class ParticipantsFormState extends State<ParticipantsForm>
     }
     // Build a Form widget using the _formKey created above.
     return Form(
-      key: _formKey,
-      child: ListView.builder(
-        padding: const EdgeInsets.all(10.0),
-        itemCount: participants.length,
-        itemBuilder: (context, index) {
-          return ParticipantListItem(
-              viewModel: _viewModel,
-              participant: participants[index],
-              model: model);
-        },
-      ),
-    );
+        key: _formKey,
+        child: Align(
+            alignment: Alignment.topCenter,
+            child: SizedBox(
+                //width: StyleHelper.scoreCardColumnWidth(model),
+                child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      children: createForms(context),
+                    )))));
+  }
+
+  List<Widget> createForms(BuildContext context) {
+    List<Widget> result = [];
+    for (int index = 0; index < model.participants.length; index++) {
+      result.add(ParticipantEditor(
+          viewModel: _viewModel,
+          participant: model.participants[index],
+          index: index,
+          model: model));
+    }
+    return result;
   }
 
   @override
@@ -102,12 +113,7 @@ class ParticipantsFormState extends State<ParticipantsForm>
     } else if (event is ParticipantsViewmodelLoadedEvent) {
       setState(() {
         model = event.model;
-        participants = event.model.participants.participants;
       });
-    } else if (event is ParticipantPropertyChangedEvent) {
-      // setState(() {
-      //   // model.participants.updateParticipant(event.participant.id, event.participant);
-      // });
     }
   }
 }

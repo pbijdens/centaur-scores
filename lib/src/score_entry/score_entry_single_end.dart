@@ -1,5 +1,4 @@
 import 'package:centaur_scores/src/app.dart';
-import 'package:centaur_scores/src/model/model.dart';
 import 'package:centaur_scores/src/model/repository.dart';
 import 'package:centaur_scores/src/mvvm/events/loading_event.dart';
 import 'package:centaur_scores/src/mvvm/observer.dart';
@@ -11,6 +10,9 @@ import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../model/group_info.dart';
+import '../model/match_model.dart';
+import '../model/participant_model.dart';
 import 'score_keyboard.dart';
 import 'end_this.dart';
 import 'participant_navigation_box.dart';
@@ -101,7 +103,7 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
 
   // int _highlightedArrowNo = -1;
 
-  ParticipantModel participant = ParticipantModel(lijn: "-", id: 0);
+  ParticipantModel participant = ParticipantModel.create(lijn: "-", id: 0);
 
   @override
   void notify(ViewEvent event) {

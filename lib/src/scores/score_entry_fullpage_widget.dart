@@ -1,4 +1,3 @@
-import 'package:centaur_scores/src/model/model.dart';
 import 'package:centaur_scores/src/model/repository.dart';
 import 'package:centaur_scores/src/mvvm/events/loading_event.dart';
 import 'package:centaur_scores/src/mvvm/observer.dart';
@@ -9,6 +8,9 @@ import 'package:centaur_scores/src/scores/single_participant_header_line_one.dar
 import 'package:centaur_scores/src/scores/single_participant_score_form.dart';
 import 'package:centaur_scores/src/style/loading_screen.dart';
 import 'package:flutter/material.dart';
+
+import '../model/match_model.dart';
+import '../model/participant_model.dart';
 
 class ScoreEntryFullPageWidget extends StatefulWidget {
   const ScoreEntryFullPageWidget({super.key});
@@ -46,7 +48,7 @@ class ScoreEntryFullPageWidgetState extends State<ScoreEntryFullPageWidget>
     } else if (event is ScoresViewmodelLoadedEvent) {
       setState(() {
         model = event.model;
-        participants = event.model.participants.participants;
+        participants = event.model.participants;
       });
     } else if (event is ScoresViewmodelUpdatedEvent) {
       setState(() {});

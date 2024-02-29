@@ -1,7 +1,10 @@
-import 'package:centaur_scores/src/model/model.dart';
 import 'package:centaur_scores/src/score_entry/score_entry_single_end_viewmodel.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
+
+import '../model/match_model.dart';
+import '../model/participant_model.dart';
+import '../model/score_button_definition.dart';
 
 class ScoreKeyboard extends StatelessWidget {
   final ScoresSingleEndViewmodel _viewModel;
@@ -26,7 +29,7 @@ class ScoreKeyboard extends StatelessWidget {
     List<Widget> result = [];
     List<Widget> currentRow = [];
 
-    List<ScoreButton> keys = _model.scoreValues[_participant.group] ?? [];
+    List<ScoreButtonDefinition> keys = _model.scoreValues[_participant.group] ?? [];
 
     int buttonsPerRow = keys.length > 7 ? 4 : 3;
 
@@ -52,8 +55,8 @@ class ScoreKeyboard extends StatelessWidget {
                     child: Align(
                         alignment: Alignment.center,
                         child: (keys[i].value == null)
-                            ? Text(keys[i].label ?? '!DEL!', style: StyleHelper.keypadTextStyle(context))
-                            : Text(keys[i].label ?? '', style: StyleHelper.keypadTextStyle(context)?.apply(color: StyleHelper.colorForButtonLabel(
+                            ? Text(keys[i].label, style: StyleHelper.keypadTextStyle(context))
+                            : Text(keys[i].label, style: StyleHelper.keypadTextStyle(context)?.apply(color: StyleHelper.colorForButtonLabel(
                         _model, keys[i].value)))),
                   )))));
       if (currentRow.length == buttonsPerRow) {

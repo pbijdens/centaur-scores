@@ -1,9 +1,10 @@
-import 'package:centaur_scores/src/model/model.dart';
 import 'package:centaur_scores/src/participants/participants_view.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
+import '../model/group_info.dart';
+import '../model/match_model.dart';
+import '../model/participant_model.dart';
 
 class SingleParticipantHeaderLineTwo extends StatelessWidget {
   final MatchModel model;

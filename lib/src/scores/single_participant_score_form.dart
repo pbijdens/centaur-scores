@@ -1,8 +1,10 @@
-import 'package:centaur_scores/src/model/model.dart';
 import 'package:centaur_scores/src/score_entry/score_entry_single_end.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:centaur_scores/src/scores/scores_viewmodel.dart';
 import 'package:flutter/material.dart';
+
+import '../model/match_model.dart';
+import '../model/participant_model.dart';
 
 class SingeParticipantScoreForm extends StatelessWidget {
   final MatchModel _model;

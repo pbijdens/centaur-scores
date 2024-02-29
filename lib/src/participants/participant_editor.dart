@@ -1,85 +1,153 @@
-import 'package:centaur_scores/src/model/model.dart';
 import 'package:centaur_scores/src/participants/participants_viewmodel.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 
-class ParticipantListItem extends StatelessWidget {
+import '../model/group_info.dart';
+import '../model/match_model.dart';
+import '../model/participant_model.dart';
+
+class ParticipantEditor extends StatelessWidget {
   final ParticipantsViewmodel viewModel;
   final ParticipantModel participant;
   final MatchModel model;
   final TextEditingController _nameController = TextEditingController();
+  final int index;
 
-  ParticipantListItem(
+  ParticipantEditor(
       {super.key,
       required this.participant,
       required this.model,
-      required this.viewModel});
+      required this.viewModel,
+      required this.index});
 
   @override
   Widget build(BuildContext context) {
     _nameController.text = participant.name ?? "";
+    return Container(
+        color: StyleHelper.colorForScoreForm(index),
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          Container(
+              color: StyleHelper.colorForColumn(index),
+              child: Padding(
+                  padding: EdgeInsets.all(4),
+                  child: Text('Lijn ${participant.lijn}',
+                      style: StyleHelper.participantEntryHeading1TextStyle(
+                          context)))),
+          Padding(
+              padding: EdgeInsets.all(4),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  //
+                  children: [
+                    spacer(context),
+                    Row(children: [
+                      formLabel(context, label: 'Naam'),
+                      formNameField(context),
+                    ]),
+                    spacer(context),
+                    Row(children: [
+                      formLabel(context, label: 'Discipline'),
+                      formGroupField(context),
+                    ]),
+                    spacer(context),
+                    Row(children: [
+                      formLabel(context, label: 'Klasse'),
+                      formSubgroupField(context),
+                    ]),
+                    spacer(context),
+                  ]))
+        ]));
+  }
 
-    return Row(children: [
-      Expanded(
-        flex: 0,
+  Flexible formSubgroupField(BuildContext context) {
+    return Flexible(
+        child: Theme(
+            data: Theme.of(context).copyWith(splashColor: Colors.transparent),
+            child: DropdownButtonFormField<GroupInfo>(
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                filled: true,
+                fillColor: Colors.white.withOpacity(0.5),
+                hintText: 'Klasse (${model.groups.length})',
+              ),
+              value: model.subgroups
+                  .where((element) => element.code == participant.subgroup)
+                  .firstOrNull,
+              items: model.subgroups
+                  .map((group) => DropdownMenuItem(
+                      value: group,
+                      child: Text(group.label,
+                          style:
+                              StyleHelper.participantSubgroupDropdownTextStyle(
+                                  context))))
+                  .toList(),
+              onChanged: (value) {
+                viewModel.setParticipantSubgroup(
+                    participant, value as GroupInfo);
+              },
+            )));
+  }
+
+  Flexible formGroupField(BuildContext context) {
+    return Flexible(
+        child: Theme(
+            data: Theme.of(context).copyWith(splashColor: Colors.transparent),
+            child: DropdownButtonFormField<GroupInfo>(
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                filled: true,
+                fillColor: Colors.white.withOpacity(0.5),
+                hintText: 'Discipline (${model.groups.length})',
+              ),
+              value: model.groups
+                  .where((element) => element.code == participant.group)
+                  .firstOrNull,
+              items: model.groups
+                  .map((group) => DropdownMenuItem(
+                      value: group,
+                      child: Text(group.label,
+                          style: StyleHelper.participantGroupDropdownTextStyle(
+                              context))))
+                  .toList(),
+              onChanged: (value) {
+                viewModel.setParticipantGroup(participant, value as GroupInfo);
+              },
+            )));
+  }
+
+  Flexible formNameField(BuildContext context) {
+    return Flexible(
+        child: Theme(
+            data: Theme.of(context).copyWith(splashColor: Colors.transparent),
+            child: TextField(
+              style: StyleHelper.participantNameTextStyle(context),
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                filled: true,
+                fillColor: Colors.white.withOpacity(0.5),                
+                hintText:
+                    'Voer een naam in...',
+              ),
+              autocorrect: false,
+              enableSuggestions: false,
+              controller: _nameController,
+              onChanged: (value) {
+                viewModel.setParticipantName(participant, value);
+              },
+            )));
+  }
+
+  Widget formLabel(BuildContext context, {required String label}) {
+    return SizedBox(
+        width: 120,
         child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Text(
-              participant.lijn,
-              maxLines: 1,
-              style: StyleHelper.participantLijnTextStyle(context),
-            )),
-      ),
-      Expanded(
-        flex: 2,
-        child: TextField(
-          decoration: InputDecoration(
-            hintText:
-                'Klik om de naam voor de schutter op lijn ${participant.lijn} in te voeren',
-          ),
-          autocorrect: false,
-          controller: _nameController,
-          onChanged: (value) {
-            viewModel.setParticipantName(participant, value);
-          },
-        ),
-      ),
-      Expanded(
-          flex: 1,
-          child: DropdownButtonFormField<GroupInfo>(
-            hint: Text('Discipline (${model.groups.length})'),
-            value: model.groups
-                .where((element) => element.code == participant.group)
-                .firstOrNull,
-            items: model.groups
-                .map((group) => DropdownMenuItem(
-                    value: group,
-                    child: Text(group.label ?? "",
-                        style: StyleHelper.participantGroupDropdownTextStyle(
-                            context))))
-                .toList(),
-            onChanged: (value) {
-              viewModel.setParticipantGroup(participant, value as GroupInfo);
-            },
-          )),
-      Expanded(
-          flex: 1,
-          child: DropdownButtonFormField<GroupInfo>(
-            hint: const Text('Groep'),
-            value: model.subgroups
-                .where((element) => element.code == participant.subgroup)
-                .firstOrNull,
-            items: model.subgroups
-                .map((group) => DropdownMenuItem(
-                    value: group,
-                    child: Text(group.label ?? "",
-                        style: StyleHelper.participantSubgroupDropdownTextStyle(
-                            context))))
-                .toList(),
-            onChanged: (value) {
-              viewModel.setParticipantSubgroup(participant, value as GroupInfo);
-            },
-          )),
-    ]);
+            padding: EdgeInsets.only(right: 10),
+            child: Text(label,
+                style: StyleHelper.participantEntryLabelTextStyle(context))));
+  }
+
+  Widget spacer(BuildContext context) {
+    return const SizedBox(height: 10);
   }
 }

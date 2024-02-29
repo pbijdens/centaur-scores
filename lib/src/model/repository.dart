@@ -1,5 +1,11 @@
-import 'model.dart';
+import 'package:localstorage/localstorage.dart';
+
+import 'group_info.dart';
+import 'match_model.dart';
+import 'model_factory.dart';
 import 'dart:async';
+
+import 'participant_model.dart';
 
 class MatchRepository {
   // SINGLETON PATTERN
@@ -8,6 +14,8 @@ class MatchRepository {
   factory MatchRepository() {
     return _instance;
   }
+
+  final LocalStorage storage = LocalStorage('match-repository');
 
   MatchRepository._internal() {
     print("Match repository was created.");
@@ -23,8 +31,16 @@ class MatchRepository {
 
   Future load() async {
     try {
-      MatchModel model = MatchModel();
-      await model.load();
+      await storage.ready;
+
+      MatchModel model;
+      try {
+        // model = storage.getItem('model');
+        model = ModelFactory.createDebugModel();
+      } catch (error) {
+        model = ModelFactory.createDebugModel();
+      }
+
       completer.complete(model);
     } catch (error) {
       completer.completeError(error);
@@ -34,25 +50,49 @@ class MatchRepository {
   // OPERATIONS
   // STUBBED FOR NOW, SHOULD OF COURSE REGISTER THE OBJECT AS NEEDING SYNC ETC. AND WRITE TO THE LOCAL DB
 
-  ParticipantModel setParticipantName(
-      ParticipantModel participant, String name) {
-    participant.setName(name);
-    return participant;
+  Future setParticipantName(int participantId, String name) async {
+    MatchModel model = await getModel();
+    for (var participant in model.participants) {
+      if (participant.id == participantId) {
+        participant.name = name;
+        return;
+      }
+    }
   }
 
-  ParticipantModel setParticipantGroup(
-      ParticipantModel participant, GroupInfo group) {
-    participant.setGroup(group);
-    return participant;
+  Future setParticipantGroup(int participantId, GroupInfo group) async {
+    MatchModel model = await getModel();
+    for (var participant in model.participants) {
+      if (participant.id == participantId) {
+        participant.group = group.code;
+        return;
+      }
+    }
   }
 
-  ParticipantModel setParticipantSubgroup(
-      ParticipantModel participant, GroupInfo subgroup) {
-    participant.setSubgroup(subgroup);
-    return participant;
+  Future setParticipantSubgroup(int participantId, GroupInfo subgroup) async {
+    MatchModel model = await getModel();
+    for (var participant in model.participants) {
+      if (participant.id == participantId) {
+        participant.subgroup = subgroup.code;
+        return;
+      }
+    }
   }
 
-  ParticipantModel? getParticipantByIndex(MatchModel? model, int index) {
-    return model?.participants.participants[index];
+  Future<ParticipantModel?> getParticipantByIndex(
+      MatchModel? model, int index) async {
+    MatchModel model = await getModel();
+    return model.participants[index];
+  }
+
+  Future setArrow(int participantId, int endNo, int arrowNo, int? value) async {
+    MatchModel model = await getModel();
+    for (var participant in model.participants) {
+      if (participant.id == participantId) {        
+        participant.ends[endNo].arrows[arrowNo] = value;
+        return;
+      }
+    }
   }
 }

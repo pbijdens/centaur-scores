@@ -1,8 +1,11 @@
-import 'package:centaur_scores/src/model/model.dart';
 import 'package:centaur_scores/src/model/repository.dart';
 import 'package:centaur_scores/src/mvvm/events/loading_event.dart';
 import 'package:centaur_scores/src/mvvm/observer.dart';
 import 'package:centaur_scores/src/mvvm/viewmodel.dart';
+
+import '../model/group_info.dart';
+import '../model/match_model.dart';
+import '../model/participant_model.dart';
 
 class ParticipantsViewmodel extends EventViewModel {
   final MatchRepository _repository;
@@ -10,14 +13,14 @@ class ParticipantsViewmodel extends EventViewModel {
   ParticipantsViewmodel(this._repository);
 
   void setParticipantName(ParticipantModel participant, String name) {
-    _repository.setParticipantName(participant, name);
+    _repository.setParticipantName(participant.id, name);
     notify(ParticipantPropertyChangedEvent(
         participant: participant,
         property: ParticipantPropertyChangedEvent.propertyName));
   }
 
   void setParticipantGroup(ParticipantModel participant, GroupInfo group) {
-    _repository.setParticipantGroup(participant, group);
+    _repository.setParticipantGroup(participant.id, group);
     notify(ParticipantPropertyChangedEvent(
         participant: participant,
         property: ParticipantPropertyChangedEvent.propertyGroup));
@@ -25,7 +28,7 @@ class ParticipantsViewmodel extends EventViewModel {
 
   void setParticipantSubgroup(
       ParticipantModel participant, GroupInfo subgroup) {
-    _repository.setParticipantSubgroup(participant, subgroup);
+    _repository.setParticipantSubgroup(participant.id, subgroup);
     notify(ParticipantPropertyChangedEvent(
         participant: participant,
         property: ParticipantPropertyChangedEvent.propertySubgroup));

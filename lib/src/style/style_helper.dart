@@ -1,5 +1,6 @@
-import 'package:centaur_scores/src/model/model.dart';
 import 'package:flutter/material.dart';
+
+import '../model/match_model.dart';
 
 class StyleHelper {
   static const double preferredCellWidth = 80 * 1.20;
@@ -139,4 +140,10 @@ class StyleHelper {
   static TextStyle? scoreFormEndTotalTextStyle(BuildContext context) => endEditorEndTotalTextStyle(context);
 
   static TextStyle? noMoreEndsTextStyle(BuildContext context) => baseTextStyle(context)?.apply(fontSizeFactor: 0.9, color: Colors.black54);
+
+  static TextStyle? participantEntryHeading1TextStyle(BuildContext context) => baseTextStyle(context)?.apply(fontSizeFactor: 1.1, fontWeightDelta: 2, color: Colors.black87);
+
+  static TextStyle? participantEntryLabelTextStyle(BuildContext context) => baseTextStyle(context)?.apply(fontSizeFactor: 0.9, fontWeightDelta: 2, color: Colors.black87);
+
+  static TextStyle? participantNameTextStyle(BuildContext context) => baseTextStyle(context)?.apply(fontSizeFactor: 1.2, fontWeightDelta: 1, color: Colors.black87);
 }

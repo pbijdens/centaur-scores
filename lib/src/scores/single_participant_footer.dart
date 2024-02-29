@@ -1,6 +1,8 @@
-import 'package:centaur_scores/src/model/model.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
+
+import '../model/match_model.dart';
+import '../model/participant_model.dart';
 
 class SingeParticipantFooter extends StatelessWidget {
   final MatchModel model;
