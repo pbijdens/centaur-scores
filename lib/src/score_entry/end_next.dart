@@ -71,13 +71,9 @@ class ScoreViewNextEnd extends StatelessWidget {
           Text('${endNo + 1}', style: StyleHelper.nextPrevEndEndNoTextStyle(context)),
     ));
 
-    int endTotal = 0;
-    bool endFilled = true;
     for (var arrowNo = 0; arrowNo < _model.arrowsPerEnd; arrowNo++) {
       if (_participant.ends.length > endNo) {
         int? arrowScore = _participant.ends[endNo].arrows[arrowNo];
-        endFilled = endFilled && (arrowScore != null);
-        endTotal += arrowScore ?? 0;
 
         result.add(Container(
           decoration: BoxDecoration(
@@ -97,7 +93,7 @@ class ScoreViewNextEnd extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       alignment: Alignment.center,
       color: Colors.transparent,
-      child: Text('${endFilled ? endTotal : "-"}',
+      child: Text('${_participant.ends[endNo].score ?? "-"}',
           style: StyleHelper.nextPrevEndEndScoreTextStyle(context)),
     ));
 

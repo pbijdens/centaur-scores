@@ -59,6 +59,7 @@ class StyleHelper {
     if (null == arrowValue) {
       return const Color.fromRGBO(0xFF, 0xFF, 0xFF, 0.5);
     }
+    if (arrowValue >= 12) return Colors.lime.withOpacity(0.25);
     if (arrowValue >= 9) return Colors.yellow.withOpacity(0.25);
     if (arrowValue >= 7) return Colors.red.withOpacity(0.25);
     if (arrowValue >= 5) return Colors.blue.withOpacity(0.25);

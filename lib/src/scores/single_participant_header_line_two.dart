@@ -22,11 +22,11 @@ class SingleParticipantHeaderLineTwo extends StatelessWidget {
     var group = model.groups
             .where((element) => element.code == participant.group)
             .firstOrNull ??
-        GroupInfo("Onbekend", "-");
+        GroupInfo.create("Onbekend", "-");
     var subgroup = model.subgroups
             .where((element) => element.code == participant.subgroup)
             .firstOrNull ??
-        GroupInfo("Onbekend", "-");
+        GroupInfo.create("Onbekend", "-");
 
     // Build a Form widget using the _formKey created above.
     return InkWell(
@@ -34,7 +34,7 @@ class SingleParticipantHeaderLineTwo extends StatelessWidget {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute<void>(
-              builder: (BuildContext context) => const ParticipantsView(),
+              builder: (BuildContext context) => ParticipantsView(),
             ));
       },
       child: SizedBox(

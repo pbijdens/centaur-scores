@@ -1,15 +1,26 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'end_model.g.dart';
+
+@JsonSerializable()
 class EndModel {
   late List<int?> arrows;
 
   int? get score => calculateScore();
+  set score(int? value) {}
+
+  factory EndModel.fromJson(Map<String, dynamic> json) => _$EndModelFromJson(json);
+  Map<String, dynamic> toJson() => _$EndModelToJson(this);
 
   int? calculateScore() {
     int sum = 0;
+    bool isNull = true;
     for (var element in arrows) {
       sum += element ?? 0;
-      if (element == null) return null; // end score is void when not all arrows
-      // are filled in
+      isNull = isNull && (element == null);
     }
-    return sum;
+    return isNull ? null : sum;
   }
+
+  EndModel();
 }

@@ -1,3 +1,4 @@
+import 'package:centaur_scores/src/model/repository.dart';
 import 'package:centaur_scores/src/participants/participants_view.dart';
 import 'package:centaur_scores/src/score_entry/score_entry_single_end.dart';
 import 'package:centaur_scores/src/scores/scores_view.dart';
@@ -5,17 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
   const MyApp({
     super.key,
-    required this.settingsController,
   });
-
-  final SettingsController settingsController;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +21,7 @@ class MyApp extends StatelessWidget {
     // The ListenableBuilder Widget listens to the SettingsController for changes.
     // Whenever the user updates their settings, the MaterialApp is rebuilt.
     return ListenableBuilder(
-      listenable: settingsController,
+      listenable: MatchRepository(),
       builder: (BuildContext context, Widget? child) {
         return MaterialApp(
           // Providing a restorationScopeId allows the Navigator built by the
@@ -59,7 +56,7 @@ class MyApp extends StatelessWidget {
           // SettingsController to display the correct theme.
           theme: ThemeData(),
           darkTheme: ThemeData.dark(),
-          themeMode: settingsController.themeMode,
+          themeMode: ThemeMode.light,
 
           // Define a function to handle named routes in order to support
           // Flutter web url navigation and deep linking.
@@ -71,12 +68,13 @@ class MyApp extends StatelessWidget {
                   case ScoresView.routeName:
                     return const ScoresView();
                   case ScoreEntryForSingleEndView.routeName:
-                    return ScoreEntryForSingleEndView(lijnNo: 0, endNo: -1, arrowNo: -1);
+                    return ScoreEntryForSingleEndView(
+                        lijnNo: 0, endNo: -1, arrowNo: -1);
                   case SettingsView.routeName:
-                    return SettingsView(controller: settingsController);
+                    return const SettingsView();
                   case ParticipantsView.routeName:
                   default:
-                    return const ParticipantsView();
+                    return ParticipantsView();
                 }
               },
             );
@@ -101,27 +99,30 @@ class MyApp extends StatelessWidget {
           ListTile(
             title: const Text('Schutters'),
             onTap: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (BuildContext context) => const ParticipantsView(),
-                  ));
+              Navigator.of(context).popUntil((predicate) => predicate.isFirst);
+              Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
+                builder: (BuildContext context) => ParticipantsView(),
+              ));
             },
           ),
           ListTile(
             title: const Text('Scores'),
             onTap: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (BuildContext context) => const ScoresView(),
-                  ));
+              Navigator.of(context).popUntil((predicate) => predicate.isFirst);
+              Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
+                builder: (BuildContext context) => ScoresView(),
+              ));
             },
           ),
           const Divider(),
           ListTile(
             title: const Text('Instellingen'),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).popUntil((predicate) => predicate.isFirst);
+              Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
+                builder: (BuildContext context) => const SettingsView(),
+              ));
+            },
           ),
         ],
       ),

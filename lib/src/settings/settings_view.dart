@@ -1,51 +1,89 @@
+import 'package:centaur_scores/src/model/repository.dart';
+import 'package:centaur_scores/src/participants/participants_view.dart';
 import 'package:flutter/material.dart';
 
-import 'settings_controller.dart';
-
-/// Displays the various settings that can be customized by the user.
-///
-/// When a user changes a setting, the SettingsController is updated and
-/// Widgets that listen to the SettingsController are rebuilt.
 class SettingsView extends StatelessWidget {
-  const SettingsView({super.key, required this.controller});
+  const SettingsView({
+    super.key,
+  });
 
   static const routeName = '/settings';
 
-  final SettingsController controller;
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        // Glue the SettingsController to the theme selection DropdownButton.
-        //
-        // When a user selects a theme from the dropdown list, the
-        // SettingsController is updated, which rebuilds the MaterialApp.
-        child: DropdownButton<ThemeMode>(
-          // Read the selected themeMode from the controller
-          value: controller.themeMode,
-          // Call the updateThemeMode method any time the user selects a theme.
-          onChanged: controller.updateThemeMode,
-          items: const [
-            DropdownMenuItem(
-              value: ThemeMode.system,
-              child: Text('System Theme'),
+    return ListenableBuilder(
+        listenable: MatchRepository(),
+        builder: (BuildContext context, Widget? child) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Settings'),
             ),
-            DropdownMenuItem(
-              value: ThemeMode.light,
-              child: Text('Light Theme'),
-            ),
-            DropdownMenuItem(
-              value: ThemeMode.dark,
-              child: Text('Dark Theme'),
-            )
-          ],
-        ),
-      ),
-    );
+            body: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      //
+                      Padding(
+                          padding: EdgeInsets.all(4),
+                          child: FutureBuilder<String>(
+                              future: createSummary(),
+                              builder: (context, snapshot) =>
+                                  Text(snapshot.data ?? "Loading..."))),
+                      //
+                      ElevatedButton(
+                          onPressed: () {
+                            MatchRepository().load().then((value) {
+                              MatchRepository().save().then((value) {
+                                Navigator.of(context).popUntil((predicate) => predicate.isFirst);
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute<void>(
+                                      builder: (BuildContext context) =>
+                                          ParticipantsView(),
+                                    ));
+                              });
+                            });
+                          },
+                          child: const Text("Synchroniseer met de server")),
+                      ElevatedButton(
+                          onPressed: () {
+                            MatchRepository().demo().then((value) {
+                              MatchRepository().save().then((value) {
+                                Navigator.of(context).popUntil((predicate) => predicate.isFirst);
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute<void>(
+                                      builder: (BuildContext context) =>
+                                          ParticipantsView(),
+                                    ));
+                              });
+                            });
+                          },
+                          child: const Text("Replace contents with demo data")),
+                      //
+                    ])),
+          );
+        });
+  }
+
+  Future<String> createSummary() async {
+    var model = await MatchRepository().getModel();
+    String result =
+        "${model.wedstrijdCode}: ${model.wedstrijdNaam}\nRondes: ${model.ends}; Pijlen: ${model.arrowsPerEnd}, ID: ${model.deviceID}\n";
+    result +=
+        '\nDisciplines: ${model.groups.map((e) => '${e.code}: ${e.label}').join(', ')}';
+    result +=
+        '\nKlasses: ${model.subgroups.map((e) => '${e.code}: ${e.label}').join(', ')}';
+    result += '\nToetsenborden:\n';
+    for (var keyboard in model.scoreValues.entries) {
+      result +=
+          '${keyboard.key}:${keyboard.value.map((e) => '${e.label}=${e.value}').join(', ')}\n';
+    }
+    result += '\n';
+    for (var participant in model.participants) {
+      result +=
+          'Lijn ${participant.lijn}: ${participant.name ?? "n/a"}, ${participant.group}, ${participant.subgroup} (score: ${participant.score})\n';
+    }
+
+    return result;
   }
 }

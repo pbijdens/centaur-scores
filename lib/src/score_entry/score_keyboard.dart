@@ -16,6 +16,7 @@ class ScoreKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
         color: StyleHelper.colorForColumnFooter(_viewModel.lijnNo),
         child: SizedBox(
@@ -51,7 +52,7 @@ class ScoreKeyboard extends StatelessWidget {
                     ),
                   ),
                   child: SizedBox(
-                    height: 85,
+                    height: 75,
                     child: Align(
                         alignment: Alignment.center,
                         child: (keys[i].value == null)

@@ -1,5 +1,9 @@
 import 'end_model.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'participant_model.g.dart';
+
+@JsonSerializable()
 class ParticipantModel {
   late int id;
   late String lijn;
@@ -21,4 +25,8 @@ class ParticipantModel {
     }
     return score;
   }
+
+  factory ParticipantModel.fromJson(Map<String, dynamic> json) =>
+      _$ParticipantModelFromJson(json);
+  Map<String, dynamic> toJson() => _$ParticipantModelToJson(this);  
 }

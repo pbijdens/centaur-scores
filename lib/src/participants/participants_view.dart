@@ -12,53 +12,68 @@ import '../model/match_model.dart';
 import 'participant_editor.dart';
 
 class ParticipantsView extends StatelessWidget {
-  const ParticipantsView({super.key});
+  ParticipantsView({super.key});
 
   static const routeName = '/participants';
 
+  final ParticipantsViewmodel _viewModel =
+      ParticipantsViewmodel(MatchRepository());
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.participantScreenTitle),
-        ),
-        drawer: MyApp.drawer(context),
-        floatingActionButton: FloatingActionButton.extended(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (BuildContext context) => const ScoresView(),
-                  ));
-            },
-            label: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text("Scores Invoeren",
-                    textAlign: TextAlign.center,
-                    style: StyleHelper.endEditorBackButtonTextStyle(context))),
-            icon: const Icon(Icons.edit)),
-        body: Container(
-            margin: const EdgeInsets.all(20), child: const ParticipantsForm()));
+    return ListenableBuilder(
+        listenable: MatchRepository(),
+        builder: (BuildContext context, Widget? child) {
+          return Scaffold(
+              appBar: AppBar(
+                title:
+                    Text(AppLocalizations.of(context)!.participantScreenTitle),
+              ),
+              drawer: MyApp.drawer(context),
+              floatingActionButton: FloatingActionButton.extended(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (BuildContext context) => const ScoresView(),
+                        ));
+                  },
+                  label: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text("Scores Invoeren",
+                          textAlign: TextAlign.center,
+                          style: StyleHelper.endEditorBackButtonTextStyle(
+                              context))),
+                  icon: const Icon(Icons.edit)),
+              body: Container(
+                  margin: const EdgeInsets.all(20),
+                  child: ParticipantsForm(_viewModel))
+              //
+              );
+        });
   }
 }
 
 class ParticipantsForm extends StatefulWidget {
-  const ParticipantsForm({super.key});
+  const ParticipantsForm(this._viewmodel, {super.key});
+
+  final ParticipantsViewmodel _viewmodel;
 
   @override
   ParticipantsFormState createState() {
-    return ParticipantsFormState();
+    return ParticipantsFormState(_viewmodel);
   }
 }
 
 class ParticipantsFormState extends State<ParticipantsForm>
     implements EventObserver {
   final _formKey = GlobalKey<FormState>();
-  final ParticipantsViewmodel _viewModel =
-      ParticipantsViewmodel(MatchRepository());
 
   bool _isLoading = false;
   MatchModel model = MatchModel();
+  final ParticipantsViewmodel _viewModel;
+
+  ParticipantsFormState(this._viewModel);
 
   @override
   void initState() {
@@ -84,7 +99,6 @@ class ParticipantsFormState extends State<ParticipantsForm>
         child: Align(
             alignment: Alignment.topCenter,
             child: SizedBox(
-                //width: StyleHelper.scoreCardColumnWidth(model),
                 child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: Column(

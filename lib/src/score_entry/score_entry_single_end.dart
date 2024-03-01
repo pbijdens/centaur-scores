@@ -22,7 +22,7 @@ class ScoreEntryForSingleEndView extends StatelessWidget {
   final int endNo;
   final int lijnNo;
 
-  ScoreEntryForSingleEndView(
+  const ScoreEntryForSingleEndView(
       {required this.endNo,
       required this.lijnNo,
       required this.arrowNo,
@@ -32,29 +32,34 @@ class ScoreEntryForSingleEndView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.singleEndScreenTitle),
-        ),
-        drawer: MyApp.drawer(context),
-        backgroundColor: Colors.white38,
-        floatingActionButton: FloatingActionButton.extended(
-            heroTag: "back1",
-            onPressed: () {
-              Navigator.pop(
-                context,
-              );
-            },
-            label: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text("Terug",
-                    textAlign: TextAlign.center,
-                    style: StyleHelper.endEditorBackButtonTextStyle(context))),
-            icon: const Icon(Icons.arrow_back)),
-        body: Container(
-            margin: const EdgeInsets.all(0),
-            child: ScoreEntryForSingleEndViewForm(
-                endNo: endNo, lijnNo: lijnNo, arrowNo: arrowNo)));
+    return ListenableBuilder(
+        listenable: MatchRepository(),
+        builder: (BuildContext context, Widget? child) {
+          return Scaffold(
+              appBar: AppBar(
+                title: Text(AppLocalizations.of(context)!.singleEndScreenTitle),
+              ),
+              drawer: MyApp.drawer(context),
+              backgroundColor: Colors.white38,
+              floatingActionButton: FloatingActionButton.extended(
+                  heroTag: "back1",
+                  onPressed: () {
+                    Navigator.pop(
+                      context,
+                    );
+                  },
+                  label: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text("Terug",
+                          textAlign: TextAlign.center,
+                          style: StyleHelper.endEditorBackButtonTextStyle(
+                              context))),
+                  icon: const Icon(Icons.arrow_back)),
+              body: Container(
+                  margin: const EdgeInsets.all(0),
+                  child: ScoreEntryForSingleEndViewForm(
+                      endNo: endNo, lijnNo: lijnNo, arrowNo: arrowNo)));
+        });
   }
 }
 
@@ -132,11 +137,11 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
     var group = model.groups
             .where((element) => element.code == participant.group)
             .firstOrNull ??
-        GroupInfo("Onbekend", "-");
+        GroupInfo.create("Onbekend", "-");
     var subgroup = model.subgroups
             .where((element) => element.code == participant.subgroup)
             .firstOrNull ??
-        GroupInfo("Onbekend", "-");
+        GroupInfo.create("Onbekend", "-");
 
     return Column(children: [
       SizedBox(height: 10, child: Container()),

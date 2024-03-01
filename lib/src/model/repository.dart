@@ -1,13 +1,19 @@
+import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 
 import 'group_info.dart';
 import 'match_model.dart';
-import 'model_factory.dart';
+import '../debug/model_factory.dart';
 import 'dart:async';
 
 import 'participant_model.dart';
 
-class MatchRepository {
+//
+// to generate annotation files:
+//flutter packages pub run build_runner build
+//
+
+class MatchRepository with ChangeNotifier {
   // SINGLETON PATTERN
   static final MatchRepository _instance = MatchRepository._internal();
 
@@ -22,21 +28,34 @@ class MatchRepository {
   }
 
   // DATA
-  final Completer<MatchModel> completer = Completer<MatchModel>();
+  Completer<MatchModel> completer = Completer<MatchModel>();
 
   Future<MatchModel> getModel() async {
     MatchModel model = await completer.future;
     return Future.value(model);
   }
 
+  Future demo() async {
+    completer = Completer<MatchModel>();
+    try {
+      await storage.ready;
+      MatchModel model = ModelFactory.createDebugModel();
+      completer.complete(model);
+    } catch (error) {
+      completer.completeError(error);
+    }
+    notifyListeners();
+  }
+
   Future load() async {
+    completer = Completer<MatchModel>();
     try {
       await storage.ready;
 
       MatchModel model;
       try {
-        // model = storage.getItem('model');
-        model = ModelFactory.createDebugModel();
+        Map<String, dynamic> loadedModel = storage.getItem('model');
+        model = MatchModel.fromJson(loadedModel);
       } catch (error) {
         model = ModelFactory.createDebugModel();
       }
@@ -44,6 +63,21 @@ class MatchRepository {
       completer.complete(model);
     } catch (error) {
       completer.completeError(error);
+    }
+    notifyListeners();
+  }
+
+  Future save() async {
+    print("Saving model...");
+    try {
+      await storage.ready;
+      MatchModel model = await getModel();
+      storage.setItem('model', model);
+    } catch (error) {
+      print("Failed to save model...");
+      print(error);
+    } finally {
+      print("Done saving model...");
     }
   }
 
@@ -55,6 +89,7 @@ class MatchRepository {
     for (var participant in model.participants) {
       if (participant.id == participantId) {
         participant.name = name;
+        await save();
         return;
       }
     }
@@ -65,6 +100,7 @@ class MatchRepository {
     for (var participant in model.participants) {
       if (participant.id == participantId) {
         participant.group = group.code;
+        await save();
         return;
       }
     }
@@ -75,6 +111,7 @@ class MatchRepository {
     for (var participant in model.participants) {
       if (participant.id == participantId) {
         participant.subgroup = subgroup.code;
+        await save();
         return;
       }
     }
@@ -89,8 +126,9 @@ class MatchRepository {
   Future setArrow(int participantId, int endNo, int arrowNo, int? value) async {
     MatchModel model = await getModel();
     for (var participant in model.participants) {
-      if (participant.id == participantId) {        
+      if (participant.id == participantId) {
         participant.ends[endNo].arrows[arrowNo] = value;
+        await save();
         return;
       }
     }
