@@ -22,7 +22,7 @@ class ScoresSingleEndViewmodel extends EventViewModel {
     notify(LoadingEvent(isLoading: true));
     _repository.getModel().then((value) {
       _model = value;
-      _numberOfEnds = _model?.ends ?? 1;
+      _numberOfEnds = _model?.numberOfEnds ?? 1;
 
       notify(SingleEndViewmodelLoadedEvent(model: value));
       if (participant != null) {
@@ -66,7 +66,7 @@ class ScoresSingleEndViewmodel extends EventViewModel {
       ParticipantModel? newP = _model?.getParticipantByIndex(nextLijn);
       if (newP != null && (newP.name?.isNotEmpty ?? false)) {
         _lijnNo = nextLijn;
-        if (_endNo < (_model?.ends ?? 0) - 1) {
+        if (_endNo < (_model?.numberOfEnds ?? 0) - 1) {
           _endNo++;
         }
         _setArrowNo();

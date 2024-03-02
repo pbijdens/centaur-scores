@@ -45,7 +45,7 @@ class SingeParticipantScoreForm extends StatelessWidget {
 
   List<Widget> createScoreRows(BuildContext context) {
     List<Widget> result = [];
-    for (var endNo = 0; endNo < _model.ends; endNo++) {
+    for (var endNo = 0; endNo < _model.numberOfEnds; endNo++) {
       result.add(InkWell(
           onTap: () {
             Navigator.push(

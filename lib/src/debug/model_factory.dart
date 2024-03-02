@@ -6,85 +6,89 @@ import '../model/group_info.dart';
 import '../model/score_button_definition.dart';
 
 class ModelFactory {
+  static int nextID = 1;
+
   static MatchModel createDebugModel() {
     MatchModel result = MatchModel();
 
-    result.wedstrijdCode = "ICW8";
-    result.wedstrijdNaam = "Competitie week 8 18/3";
+    result.id = nextID++;
+
+    result.matchCode = "ICW8";
+    result.matchName = "Competitie week 8 18/3";
 
     result.arrowsPerEnd = 3;
-    result.ends = 10;
+    result.numberOfEnds = 10;
 
     result.autoProgressAfterEachArrow = false;
     result.deviceID = "n/a"; // should be provided by the server
 
     result.scoreValues = {
       "-": [
-        ScoreButtonDefinition.create("12", 12),
-        ScoreButtonDefinition.create("11", 11),
-        ScoreButtonDefinition.create("10", 10),
-        ScoreButtonDefinition.create("9", 9),
-        ScoreButtonDefinition.create("8", 8),
-        ScoreButtonDefinition.create("7", 7),
-        ScoreButtonDefinition.create("6", 6),
-        ScoreButtonDefinition.create("5", 5),
-        ScoreButtonDefinition.create("4", 4),
-        ScoreButtonDefinition.create("3", 3),
-        ScoreButtonDefinition.create("2", 2),
-        ScoreButtonDefinition.create("1", 1),
-        ScoreButtonDefinition.create("Mis", 0),
-        ScoreButtonDefinition.create("DEL", null)
+        ScoreButtonDefinition.create(nextID++, "12", 12),
+        ScoreButtonDefinition.create(nextID++, "11", 11),
+        ScoreButtonDefinition.create(nextID++, "10", 10),
+        ScoreButtonDefinition.create(nextID++, "9", 9),
+        ScoreButtonDefinition.create(nextID++, "8", 8),
+        ScoreButtonDefinition.create(nextID++, "7", 7),
+        ScoreButtonDefinition.create(nextID++, "6", 6),
+        ScoreButtonDefinition.create(nextID++, "5", 5),
+        ScoreButtonDefinition.create(nextID++, "4", 4),
+        ScoreButtonDefinition.create(nextID++, "3", 3),
+        ScoreButtonDefinition.create(nextID++, "2", 2),
+        ScoreButtonDefinition.create(nextID++, "1", 1),
+        ScoreButtonDefinition.create(nextID++, "Mis", 0),
+        ScoreButtonDefinition.create(nextID++, "DEL", null)
       ],
       "C": [
-        ScoreButtonDefinition.create("12", 12),
-        ScoreButtonDefinition.create("11", 11),
-        ScoreButtonDefinition.create("10", 10),
-        ScoreButtonDefinition.create("9", 9),
-        ScoreButtonDefinition.create("8", 8),
-        ScoreButtonDefinition.create("7", 7),
-        ScoreButtonDefinition.create("6", 6),
-        ScoreButtonDefinition.create("Mis", 0),
-        ScoreButtonDefinition.create("DEL", null)
+        ScoreButtonDefinition.create(nextID++, "12", 12),
+        ScoreButtonDefinition.create(nextID++, "11", 11),
+        ScoreButtonDefinition.create(nextID++, "10", 10),
+        ScoreButtonDefinition.create(nextID++, "9", 9),
+        ScoreButtonDefinition.create(nextID++, "8", 8),
+        ScoreButtonDefinition.create(nextID++, "7", 7),
+        ScoreButtonDefinition.create(nextID++, "6", 6),
+        ScoreButtonDefinition.create(nextID++, "Mis", 0),
+        ScoreButtonDefinition.create(nextID++, "DEL", null)
       ],
       "R": [
-        ScoreButtonDefinition.create("12", 12),
-        ScoreButtonDefinition.create("11", 11),
-        ScoreButtonDefinition.create("10", 10),
-        ScoreButtonDefinition.create("9", 9),
-        ScoreButtonDefinition.create("8", 8),
-        ScoreButtonDefinition.create("7", 7),
-        ScoreButtonDefinition.create("6", 6),
-        ScoreButtonDefinition.create("5", 5),
-        ScoreButtonDefinition.create("4", 4),
-        ScoreButtonDefinition.create("3", 3),
-        ScoreButtonDefinition.create("2", 2),
-        ScoreButtonDefinition.create("1", 1),
-        ScoreButtonDefinition.create("Mis", 0),
-        ScoreButtonDefinition.create("DEL", null)
+        ScoreButtonDefinition.create(nextID++, "12", 12),
+        ScoreButtonDefinition.create(nextID++, "11", 11),
+        ScoreButtonDefinition.create(nextID++, "10", 10),
+        ScoreButtonDefinition.create(nextID++, "9", 9),
+        ScoreButtonDefinition.create(nextID++, "8", 8),
+        ScoreButtonDefinition.create(nextID++, "7", 7),
+        ScoreButtonDefinition.create(nextID++, "6", 6),
+        ScoreButtonDefinition.create(nextID++, "5", 5),
+        ScoreButtonDefinition.create(nextID++, "4", 4),
+        ScoreButtonDefinition.create(nextID++, "3", 3),
+        ScoreButtonDefinition.create(nextID++, "2", 2),
+        ScoreButtonDefinition.create(nextID++, "1", 1),
+        ScoreButtonDefinition.create(nextID++, "Mis", 0),
+        ScoreButtonDefinition.create(nextID++, "DEL", null)
       ],
       "H": [
-        ScoreButtonDefinition.create("12", 12),
-        ScoreButtonDefinition.create("11", 11),
-        ScoreButtonDefinition.create("10", 10),
-        ScoreButtonDefinition.create("9", 9),
-        ScoreButtonDefinition.create("8", 8),
-        ScoreButtonDefinition.create("7", 7),
-        ScoreButtonDefinition.create("6", 6),
-        ScoreButtonDefinition.create("5", 5),
-        ScoreButtonDefinition.create("4", 4),
-        ScoreButtonDefinition.create("3", 3),
-        ScoreButtonDefinition.create("2", 2),
-        ScoreButtonDefinition.create("1", 1),
-        ScoreButtonDefinition.create("MISS", 0),
-        ScoreButtonDefinition.create("DEL", null)
+        ScoreButtonDefinition.create(nextID++, "12", 12),
+        ScoreButtonDefinition.create(nextID++, "11", 11),
+        ScoreButtonDefinition.create(nextID++, "10", 10),
+        ScoreButtonDefinition.create(nextID++, "9", 9),
+        ScoreButtonDefinition.create(nextID++, "8", 8),
+        ScoreButtonDefinition.create(nextID++, "7", 7),
+        ScoreButtonDefinition.create(nextID++, "6", 6),
+        ScoreButtonDefinition.create(nextID++, "5", 5),
+        ScoreButtonDefinition.create(nextID++, "4", 4),
+        ScoreButtonDefinition.create(nextID++, "3", 3),
+        ScoreButtonDefinition.create(nextID++, "2", 2),
+        ScoreButtonDefinition.create(nextID++, "1", 1),
+        ScoreButtonDefinition.create(nextID++, "MISS", 0),
+        ScoreButtonDefinition.create(nextID++, "DEL", null)
       ],
     };
 
     result.participants = [
-      ParticipantModel.create(id: 0, lijn: "A"),
-      ParticipantModel.create(id: 1, lijn: "B"),
-      ParticipantModel.create(id: 2, lijn: "C"),
-      ParticipantModel.create(id: 3, lijn: "D"),
+      ParticipantModel.create(id: nextID++, lijn: "A"),
+      ParticipantModel.create(id: nextID++, lijn: "B"),
+      ParticipantModel.create(id: nextID++, lijn: "C"),
+      ParticipantModel.create(id: nextID++, lijn: "D"),
     ];
     result.participants[0].name = "Jan de Vries";
     result.participants[0].group = "R";
@@ -99,22 +103,23 @@ class ModelFactory {
     result.participants[2].subgroup = "S";
 
     result.groups = [
-      GroupInfo.create("Onbekend", "-"),
-      GroupInfo.create("Recurve", "R"),
-      GroupInfo.create("Compound", "C"),
-      GroupInfo.create("Hout/Barebow", "H")
+      GroupInfo.create(nextID++, "Onbekend", "-"),
+      GroupInfo.create(nextID++, "Recurve", "R"),
+      GroupInfo.create(nextID++, "Compound", "C"),
+      GroupInfo.create(nextID++, "Hout/Barebow", "H")
     ];
 
     result.subgroups = [
-      GroupInfo.create("Onbekend", "-"),
-      GroupInfo.create("Senioren", "S"),
-      GroupInfo.create("Junioren", "J")
+      GroupInfo.create(nextID++, "Onbekend", "-"),
+      GroupInfo.create(nextID++, "Senioren", "S"),
+      GroupInfo.create(nextID++, "Junioren", "J")
     ];
 
     for (var participant in result.participants) {
       participant.ends = [];
-      for (int endNo = 0; endNo < result.ends; endNo++) {
+      for (int endNo = 0; endNo < result.numberOfEnds; endNo++) {
         var end = EndModel();
+        end.id = nextID++;
         end.arrows = [];
         for (int arrowNo = 0; arrowNo < result.arrowsPerEnd; arrowNo++) {
           end.arrows.add(null);

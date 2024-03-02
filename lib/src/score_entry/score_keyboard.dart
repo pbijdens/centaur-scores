@@ -16,7 +16,6 @@ class ScoreKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
         color: StyleHelper.colorForColumnFooter(_viewModel.lijnNo),
         child: SizedBox(
@@ -30,7 +29,16 @@ class ScoreKeyboard extends StatelessWidget {
     List<Widget> result = [];
     List<Widget> currentRow = [];
 
-    List<ScoreButtonDefinition> keys = _model.scoreValues[_participant.group] ?? [];
+    List<ScoreButtonDefinition> keys = [];
+
+    String? mostRelevantKeyboard = _model.scoreValues.keys
+        .where((element) => element.split(',').map((e) => e.trim()).contains(_participant.group))
+        .lastOrNull;
+    if (mostRelevantKeyboard == null) {
+      keys = _model.scoreValues.entries.firstOrNull?.value ?? [];
+    } else {
+      keys = _model.scoreValues[mostRelevantKeyboard] ?? [];
+    }
 
     int buttonsPerRow = keys.length > 7 ? 4 : 3;
 
@@ -45,8 +53,8 @@ class ScoreKeyboard extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
                         StyleHelper.colorForButton(_model, keys[i].value),
-                    foregroundColor: StyleHelper.colorForButtonLabel(
-                        _model, keys[i].value),
+                    foregroundColor:
+                        StyleHelper.colorForButtonLabel(_model, keys[i].value),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
@@ -56,9 +64,13 @@ class ScoreKeyboard extends StatelessWidget {
                     child: Align(
                         alignment: Alignment.center,
                         child: (keys[i].value == null)
-                            ? Text(keys[i].label, style: StyleHelper.keypadTextStyle(context))
-                            : Text(keys[i].label, style: StyleHelper.keypadTextStyle(context)?.apply(color: StyleHelper.colorForButtonLabel(
-                        _model, keys[i].value)))),
+                            ? Text(keys[i].label,
+                                style: StyleHelper.keypadTextStyle(context))
+                            : Text(keys[i].label,
+                                style: StyleHelper.keypadTextStyle(context)
+                                    ?.apply(
+                                        color: StyleHelper.colorForButtonLabel(
+                                            _model, keys[i].value)))),
                   )))));
       if (currentRow.length == buttonsPerRow) {
         result.add(Row(children: currentRow));

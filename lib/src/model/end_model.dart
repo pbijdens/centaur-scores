@@ -4,6 +4,7 @@ part 'end_model.g.dart';
 
 @JsonSerializable()
 class EndModel {
+  late int id;
   late List<int?> arrows;
 
   int? get score => calculateScore();

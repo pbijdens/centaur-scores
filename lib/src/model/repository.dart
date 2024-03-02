@@ -7,6 +7,7 @@ import '../debug/model_factory.dart';
 import 'dart:async';
 
 import 'participant_model.dart';
+import 'package:uuid/uuid.dart';
 
 //
 // to generate annotation files:
@@ -56,8 +57,10 @@ class MatchRepository with ChangeNotifier {
       try {
         Map<String, dynamic> loadedModel = storage.getItem('model');
         model = MatchModel.fromJson(loadedModel);
+        model.deviceID = await getDeviceID();
       } catch (error) {
         model = ModelFactory.createDebugModel();
+        model.deviceID = await getDeviceID();        
       }
 
       completer.complete(model);
@@ -72,6 +75,7 @@ class MatchRepository with ChangeNotifier {
     try {
       await storage.ready;
       MatchModel model = await getModel();
+      model.deviceID = await getDeviceID(); 
       storage.setItem('model', model);
     } catch (error) {
       print("Failed to save model...");
@@ -132,5 +136,15 @@ class MatchRepository with ChangeNotifier {
         return;
       }
     }
+  }
+
+  Future<String> getDeviceID() async {
+    await storage.ready;
+    String? deviceID = storage.getItem('deviceID');
+    if (deviceID == null || deviceID.isEmpty) {
+      deviceID = const Uuid().v4();
+      storage.setItem('deviceID', deviceID);
+    }
+    return deviceID;
   }
 }

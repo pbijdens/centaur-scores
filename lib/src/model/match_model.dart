@@ -7,10 +7,11 @@ part 'match_model.g.dart';
 
 @JsonSerializable()
 class MatchModel {
+  late int id;
   late String deviceID;
-  late String wedstrijdCode;
-  late String wedstrijdNaam;
-  late int ends;
+  late String matchCode;
+  late String matchName;
+  late int numberOfEnds;
   late int arrowsPerEnd;
   late bool autoProgressAfterEachArrow;
   late Map<String, List<ScoreButtonDefinition>> scoreValues;

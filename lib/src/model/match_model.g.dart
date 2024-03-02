@@ -7,10 +7,11 @@ part of 'match_model.dart';
 // **************************************************************************
 
 MatchModel _$MatchModelFromJson(Map<String, dynamic> json) => MatchModel()
+  ..id = json['id'] as int
   ..deviceID = json['deviceID'] as String
-  ..wedstrijdCode = json['wedstrijdCode'] as String
-  ..wedstrijdNaam = json['wedstrijdNaam'] as String
-  ..ends = json['ends'] as int
+  ..matchCode = json['wedstrijdCode'] as String
+  ..matchName = json['wedstrijdNaam'] as String
+  ..numberOfEnds = json['ends'] as int
   ..arrowsPerEnd = json['arrowsPerEnd'] as int
   ..autoProgressAfterEachArrow = json['autoProgressAfterEachArrow'] as bool
   ..scoreValues = (json['scoreValues'] as Map<String, dynamic>).map(
@@ -33,10 +34,11 @@ MatchModel _$MatchModelFromJson(Map<String, dynamic> json) => MatchModel()
 
 Map<String, dynamic> _$MatchModelToJson(MatchModel instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'deviceID': instance.deviceID,
-      'wedstrijdCode': instance.wedstrijdCode,
-      'wedstrijdNaam': instance.wedstrijdNaam,
-      'ends': instance.ends,
+      'wedstrijdCode': instance.matchCode,
+      'wedstrijdNaam': instance.matchName,
+      'ends': instance.numberOfEnds,
       'arrowsPerEnd': instance.arrowsPerEnd,
       'autoProgressAfterEachArrow': instance.autoProgressAfterEachArrow,
       'scoreValues': instance.scoreValues,

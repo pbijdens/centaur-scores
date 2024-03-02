@@ -5,7 +5,8 @@ part 'score_button_definition.g.dart';
 @JsonSerializable()
 class ScoreButtonDefinition {
   ScoreButtonDefinition();
-  ScoreButtonDefinition.create(this.label, this.value);
+  ScoreButtonDefinition.create(this.id, this.label, this.value);
+  late int id;
   late String label;
   late int? value;
 

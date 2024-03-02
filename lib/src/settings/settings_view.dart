@@ -68,7 +68,7 @@ class SettingsView extends StatelessWidget {
   Future<String> createSummary() async {
     var model = await MatchRepository().getModel();
     String result =
-        "${model.wedstrijdCode}: ${model.wedstrijdNaam}\nRondes: ${model.ends}; Pijlen: ${model.arrowsPerEnd}, ID: ${model.deviceID}\n";
+        "${model.matchCode}: ${model.matchName}\nRondes: ${model.numberOfEnds}; Pijlen: ${model.arrowsPerEnd}, ID: ${model.deviceID}\n";
     result +=
         '\nDisciplines: ${model.groups.map((e) => '${e.code}: ${e.label}').join(', ')}';
     result +=
