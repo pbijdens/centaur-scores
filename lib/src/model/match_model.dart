@@ -17,6 +17,7 @@ class MatchModel {
   late Map<String, List<ScoreButtonDefinition>> scoreValues;
   late List<GroupInfo> groups;
   late List<GroupInfo> subgroups;
+  late List<GroupInfo> targets;
   late List<ParticipantModel> participants;
 
   ParticipantModel? getParticipantByIndex(int index) {

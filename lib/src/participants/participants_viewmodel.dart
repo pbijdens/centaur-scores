@@ -34,6 +34,14 @@ class ParticipantsViewmodel extends EventViewModel {
         property: ParticipantPropertyChangedEvent.propertySubgroup));
   }
 
+  void setParticipantTarget(
+      ParticipantModel participant, GroupInfo target) {
+    _repository.setParticipantTarget(participant.id, target);
+    notify(ParticipantPropertyChangedEvent(
+        participant: participant,
+        property: ParticipantPropertyChangedEvent.propertyTarget));
+  }  
+
   void load() {
     notify(LoadingEvent(isLoading: true));
     _repository.getModel().then((value) {
@@ -53,7 +61,8 @@ class ParticipantsViewmodelLoadedEvent extends ViewEvent {
 class ParticipantPropertyChangedEvent extends ViewEvent {
   static const String propertyName = "name";
   static const String propertyGroup = "group";
-  static const String propertySubgroup = "sungroup";
+  static const String propertySubgroup = "subgroup";
+  static const String propertyTarget = "target";
 
   ParticipantModel participant;
   String property;

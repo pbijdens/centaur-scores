@@ -103,6 +103,8 @@ class StyleHelper {
   static TextStyle? participantGroupDropdownTextStyle(BuildContext context) => baseTextStyle(context);
 
   static TextStyle? participantSubgroupDropdownTextStyle(BuildContext context) => baseTextStyle(context);
+  
+  static TextStyle? participantTargetDropdownTextStyle(BuildContext context) => baseTextStyle(context);
 
   static TextStyle? nextPrevEndEndNoTextStyle(BuildContext context) => baseTextStyle(context)?.apply(fontSizeFactor: 0.9, color: Colors.black54);
 

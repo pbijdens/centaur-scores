@@ -56,6 +56,11 @@ class ParticipantEditor extends StatelessWidget {
                       formSubgroupField(context),
                     ]),
                     spacer(context),
+                    Row(children: [
+                      formLabel(context, label: 'Blazoen'),
+                      formTargetField(context),
+                    ]),
+                    spacer(context),
                   ]))
         ]));
   }
@@ -69,7 +74,7 @@ class ParticipantEditor extends StatelessWidget {
                 border: InputBorder.none,
                 filled: true,
                 fillColor: Colors.white.withOpacity(0.5),
-                hintText: 'Klasse (${model.groups.length})',
+                hintText: 'Klasse',
               ),
               value: model.subgroups
                   .where((element) => element.code == participant.subgroup)
@@ -89,6 +94,35 @@ class ParticipantEditor extends StatelessWidget {
             )));
   }
 
+  Flexible formTargetField(BuildContext context) {
+    return Flexible(
+        child: Theme(
+            data: Theme.of(context).copyWith(splashColor: Colors.transparent),
+            child: DropdownButtonFormField<GroupInfo>(
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                filled: true,
+                fillColor: Colors.white.withOpacity(0.5),
+                hintText: 'Blazoen',
+              ),
+              value: model.targets
+                  .where((element) => element.code == participant.target)
+                  .firstOrNull,
+              items: model.targets
+                  .map((group) => DropdownMenuItem(
+                      value: group,
+                      child: Text(group.label,
+                          style:
+                              StyleHelper.participantTargetDropdownTextStyle(
+                                  context))))
+                  .toList(),
+              onChanged: (value) {
+                viewModel.setParticipantTarget(
+                    participant, value as GroupInfo);
+              },
+            )));
+  }
+
   Flexible formGroupField(BuildContext context) {
     return Flexible(
         child: Theme(
@@ -98,7 +132,7 @@ class ParticipantEditor extends StatelessWidget {
                 border: InputBorder.none,
                 filled: true,
                 fillColor: Colors.white.withOpacity(0.5),
-                hintText: 'Discipline (${model.groups.length})',
+                hintText: 'Discipline',
               ),
               value: model.groups
                   .where((element) => element.code == participant.group)
@@ -125,9 +159,8 @@ class ParticipantEditor extends StatelessWidget {
               decoration: InputDecoration(
                 border: InputBorder.none,
                 filled: true,
-                fillColor: Colors.white.withOpacity(0.5),                
-                hintText:
-                    'Voer een naam in...',
+                fillColor: Colors.white.withOpacity(0.5),
+                hintText: 'Voer een naam in...',
               ),
               autocorrect: false,
               enableSuggestions: false,

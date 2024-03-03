@@ -73,6 +73,8 @@ class SettingsView extends StatelessWidget {
         '\nDisciplines: ${model.groups.map((e) => '${e.code}: ${e.label}').join(', ')}';
     result +=
         '\nKlasses: ${model.subgroups.map((e) => '${e.code}: ${e.label}').join(', ')}';
+    result +=
+        '\nBlazoenen: ${model.targets.map((e) => '${e.code}: ${e.label}').join(', ')}';        
     result += '\nToetsenborden:\n';
     for (var keyboard in model.scoreValues.entries) {
       result +=

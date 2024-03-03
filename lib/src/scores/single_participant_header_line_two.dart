@@ -22,11 +22,11 @@ class SingleParticipantHeaderLineTwo extends StatelessWidget {
     var group = model.groups
             .where((element) => element.code == participant.group)
             .firstOrNull ??
-        GroupInfo.create(0, "Onbekend", "-");
+        GroupInfo.create(0, "Onbekend", "");
     var subgroup = model.subgroups
             .where((element) => element.code == participant.subgroup)
             .firstOrNull ??
-        GroupInfo.create(0, "Onbekend", "-");
+        GroupInfo.create(0, "Onbekend", "");
 
     // Build a Form widget using the _formKey created above.
     return InkWell(

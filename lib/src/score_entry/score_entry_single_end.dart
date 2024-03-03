@@ -137,11 +137,11 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
     var group = model.groups
             .where((element) => element.code == participant.group)
             .firstOrNull ??
-        GroupInfo.create(0, "Onbekend", "-");
+        GroupInfo.create(0, "Onbekend", "");
     var subgroup = model.subgroups
             .where((element) => element.code == participant.subgroup)
             .firstOrNull ??
-        GroupInfo.create(0, "Onbekend", "-");
+        GroupInfo.create(0, "Onbekend", "");
 
     return Column(children: [
       SizedBox(height: 10, child: Container()),

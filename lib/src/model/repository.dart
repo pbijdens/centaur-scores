@@ -60,7 +60,7 @@ class MatchRepository with ChangeNotifier {
         model.deviceID = await getDeviceID();
       } catch (error) {
         model = ModelFactory.createDebugModel();
-        model.deviceID = await getDeviceID();        
+        model.deviceID = await getDeviceID();
       }
 
       completer.complete(model);
@@ -75,7 +75,7 @@ class MatchRepository with ChangeNotifier {
     try {
       await storage.ready;
       MatchModel model = await getModel();
-      model.deviceID = await getDeviceID(); 
+      model.deviceID = await getDeviceID();
       storage.setItem('model', model);
     } catch (error) {
       print("Failed to save model...");
@@ -115,6 +115,17 @@ class MatchRepository with ChangeNotifier {
     for (var participant in model.participants) {
       if (participant.id == participantId) {
         participant.subgroup = subgroup.code;
+        await save();
+        return;
+      }
+    }
+  }
+
+  Future setParticipantTarget(int participantId, GroupInfo target) async {
+    MatchModel model = await getModel();
+    for (var participant in model.participants) {
+      if (participant.id == participantId) {
+        participant.target = target.code;
         await save();
         return;
       }

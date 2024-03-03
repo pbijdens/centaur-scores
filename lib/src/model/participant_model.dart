@@ -8,8 +8,9 @@ class ParticipantModel {
   late int id;
   late String lijn;
   String? name;
-  String group = "-";
-  String subgroup = "-";
+  String group = "";
+  String subgroup = "";
+  String target = "";
   List<EndModel> ends = [];
 
   ParticipantModel();

@@ -32,7 +32,7 @@ class ScoreKeyboard extends StatelessWidget {
     List<ScoreButtonDefinition> keys = [];
 
     String? mostRelevantKeyboard = _model.scoreValues.keys
-        .where((element) => element.split(',').map((e) => e.trim()).contains(_participant.group))
+        .where((element) => element.split(',').map((e) => e.trim()).contains(_participant.target))
         .lastOrNull;
     if (mostRelevantKeyboard == null) {
       keys = _model.scoreValues.entries.firstOrNull?.value ?? [];
