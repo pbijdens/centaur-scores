@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'participant_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class ParticipantModel {
   late int id;
   late String lijn;

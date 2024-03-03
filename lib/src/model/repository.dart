@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 
@@ -8,6 +10,7 @@ import 'dart:async';
 
 import 'participant_model.dart';
 import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
 
 //
 // to generate annotation files:
@@ -43,6 +46,7 @@ class MatchRepository with ChangeNotifier {
       MatchModel model = ModelFactory.createDebugModel();
       completer.complete(model);
     } catch (error) {
+      print('demo(): $error');
       completer.completeError(error);
     }
     notifyListeners();
@@ -54,39 +58,31 @@ class MatchRepository with ChangeNotifier {
       await storage.ready;
 
       MatchModel model;
-      try {
-        Map<String, dynamic> loadedModel = storage.getItem('model');
-        model = MatchModel.fromJson(loadedModel);
-        model.deviceID = await getDeviceID();
-      } catch (error) {
-        model = ModelFactory.createDebugModel();
-        model.deviceID = await getDeviceID();
-      }
+      Map<String, dynamic> loadedModel = storage.getItem('model');
+      model = MatchModel.fromJson(loadedModel);
+      model.deviceID = await getDeviceID();
 
       completer.complete(model);
     } catch (error) {
+      print('ERROR LOADING DATA: $error');
       completer.completeError(error);
     }
     notifyListeners();
   }
 
   Future save() async {
-    print("Saving model...");
     try {
       await storage.ready;
       MatchModel model = await getModel();
+      model.isDirty = true;
       model.deviceID = await getDeviceID();
-      storage.setItem('model', model);
+      storage.setItem('model', model.toJson());
     } catch (error) {
-      print("Failed to save model...");
-      print(error);
+      print("Failed to save model: $error");
     } finally {
       print("Done saving model...");
     }
   }
-
-  // OPERATIONS
-  // STUBBED FOR NOW, SHOULD OF COURSE REGISTER THE OBJECT AS NEEDING SYNC ETC. AND WRITE TO THE LOCAL DB
 
   Future setParticipantName(int participantId, String name) async {
     MatchModel model = await getModel();
@@ -157,5 +153,119 @@ class MatchRepository with ChangeNotifier {
       storage.setItem('deviceID', deviceID);
     }
     return deviceID;
+  }
+
+  Future<String> getServerURL() async {
+    await storage.ready;
+    String? serverURL = storage.getItem('serverURL');
+    if (serverURL == null || serverURL.isEmpty) {
+      serverURL = 'http://192.168.2.3:8062';
+      storage.setItem('serverURL', serverURL);
+    }
+    while (serverURL!.endsWith('/')) {
+      serverURL = serverURL.substring(0, serverURL.length - 1);
+    }
+    return serverURL;
+  }
+
+  Future<String> setServerURL(String value) async {
+    await storage.ready;
+    storage.setItem('serverURL', value);
+    return value;
+  }
+
+  Future<String> synchronizeWithRemoteSystem() async {
+    try {
+      MatchModel localModel = await getModel();
+      MatchModel remoteModel = await getRemoteModel();
+      if (remoteModel.id != localModel.id) {
+        completer = Completer<MatchModel>();
+        completer.complete(remoteModel);
+        storage.setItem('model', remoteModel.toJson());
+        // RESET DEVICE, ACTIVE MATCH CHANGED
+        return 'RESET';
+      } else if (localModel.isDirty) {
+        try {
+          await pushParticipants(remoteModel.id, localModel.participants);
+          localModel.isDirty = false;
+        } catch (error) {
+          print('ERROR: $error');
+          return 'ERROR: $error';
+        }
+      }
+    } catch (error) {
+      print('ERROR: $error');
+      return 'ERROR: $error';
+    }
+    return 'OK';
+  }
+
+  Future<bool> pushParticipants(
+      int matchId, List<ParticipantModel> participants) async {
+    String baseUrl = await getServerURL();
+    var deviceID = await getDeviceID();
+    var client = http.Client();
+    var uri = Uri.parse('$baseUrl/match/$matchId/participants/$deviceID');
+    Map<String, String> headers = Map<String, String>();
+    headers['Content-Type'] = 'application/json';
+    var response =
+        await client.put(uri, headers: headers, body: jsonEncode(participants));
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw 'Request to $baseUrl/match/$matchId/participants/$deviceID failed with status ${response.statusCode}';
+    }
+  }
+
+  Future<MatchModel> getRemoteModel() async {
+    String baseUrl = await getServerURL();
+
+    MatchModel activeMatchModel = await httpGetActiveMatchModel(baseUrl);
+    List<ParticipantModel> participants =
+        await httpGetGetParticipantsForMatch(baseUrl, activeMatchModel.id);
+
+    activeMatchModel.participants = participants;
+
+    return activeMatchModel;
+  }
+
+  Future<MatchModel> httpGetActiveMatchModel(String baseUrl) async {
+    var client = http.Client();
+    var uri = Uri.parse('${baseUrl}/match/active');
+    var response = await client.get(uri);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> result =
+          jsonDecode(const Utf8Decoder().convert(response.bodyBytes))
+              as Map<String, dynamic>;
+      result['isDirty'] = jsonDecode("false");
+      result['participants'] = jsonDecode("[]");
+      return MatchModel.fromJson(result);
+    } else {
+      throw 'Request to $baseUrl/match/active failed with status ${response.statusCode}';
+    }
+  }
+
+  Future<List<ParticipantModel>> httpGetGetParticipantsForMatch(
+      String baseUrl, int matchId) async {
+    var deviceID = await getDeviceID();
+    var client = http.Client();
+    var uri = Uri.parse('${baseUrl}/match/$matchId/participants/$deviceID');
+    var response = await client.get(uri);
+    if (response.statusCode == 200) {
+      List result = jsonDecode(const Utf8Decoder().convert(response.bodyBytes));
+      var resultList = result.map((item) {
+        if (item['name'] == null) {
+          item['name'] = '';
+        }
+        return ParticipantModel.fromJson(item);
+      }).toList();
+      resultList.sort((a, b) => a.lijn.compareTo(b.lijn));
+      for (int i = 0; i < resultList.length; i++) {
+        resultList[i].id = i + 1;
+      }
+      return resultList;
+    } else {
+      throw 'Request to $baseUrl/match/active failed with status ${response.statusCode}';
+    }
   }
 }

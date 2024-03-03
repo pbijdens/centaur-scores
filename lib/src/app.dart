@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
                     return ScoreEntryForSingleEndView(
                         lijnNo: 0, endNo: -1, arrowNo: -1);
                   case SettingsView.routeName:
-                    return const SettingsView();
+                    return SettingsView();
                   case ParticipantsView.routeName:
                   default:
                     return ParticipantsView();
@@ -120,7 +120,7 @@ class MyApp extends StatelessWidget {
             onTap: () {
               Navigator.of(context).popUntil((predicate) => predicate.isFirst);
               Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
-                builder: (BuildContext context) => const SettingsView(),
+                builder: (BuildContext context) => SettingsView(),
               ));
             },
           ),

@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'end_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class EndModel {
   late int id;
   late List<int?> arrows;

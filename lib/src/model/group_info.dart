@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'group_info.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class GroupInfo {
   late int id;
   late String label;

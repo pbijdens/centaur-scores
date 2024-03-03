@@ -7,6 +7,7 @@ part of 'match_model.dart';
 // **************************************************************************
 
 MatchModel _$MatchModelFromJson(Map<String, dynamic> json) => MatchModel()
+  ..isDirty = json['isDirty'] as bool
   ..id = json['id'] as int
   ..deviceID = json['deviceID'] as String
   ..matchCode = json['matchCode'] as String
@@ -37,6 +38,7 @@ MatchModel _$MatchModelFromJson(Map<String, dynamic> json) => MatchModel()
 
 Map<String, dynamic> _$MatchModelToJson(MatchModel instance) =>
     <String, dynamic>{
+      'isDirty': instance.isDirty,
       'id': instance.id,
       'deviceID': instance.deviceID,
       'matchCode': instance.matchCode,
@@ -44,9 +46,10 @@ Map<String, dynamic> _$MatchModelToJson(MatchModel instance) =>
       'numberOfEnds': instance.numberOfEnds,
       'arrowsPerEnd': instance.arrowsPerEnd,
       'autoProgressAfterEachArrow': instance.autoProgressAfterEachArrow,
-      'scoreValues': instance.scoreValues,
-      'groups': instance.groups,
-      'subgroups': instance.subgroups,
-      'targets': instance.targets,
-      'participants': instance.participants,
+      'scoreValues': instance.scoreValues
+          .map((k, e) => MapEntry(k, e.map((e) => e.toJson()).toList())),
+      'groups': instance.groups.map((e) => e.toJson()).toList(),
+      'subgroups': instance.subgroups.map((e) => e.toJson()).toList(),
+      'targets': instance.targets.map((e) => e.toJson()).toList(),
+      'participants': instance.participants.map((e) => e.toJson()).toList(),
     };

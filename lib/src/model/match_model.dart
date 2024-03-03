@@ -5,8 +5,9 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'match_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class MatchModel {
+  bool isDirty = false;
   late int id;
   late String deviceID;
   late String matchCode;

@@ -1,13 +1,17 @@
+import 'package:centaur_scores/src/app.dart';
 import 'package:centaur_scores/src/model/repository.dart';
 import 'package:centaur_scores/src/participants/participants_view.dart';
+import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 
 class SettingsView extends StatelessWidget {
-  const SettingsView({
+  SettingsView({
     super.key,
   });
 
   static const routeName = '/settings';
+  final TextEditingController _urlController = TextEditingController();
+  final MatchRepository _repository = MatchRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +22,37 @@ class SettingsView extends StatelessWidget {
             appBar: AppBar(
               title: const Text('Settings'),
             ),
+            drawer: MyApp.drawer(context),
             body: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      Flexible(
+                          child: Theme(
+                              data: Theme.of(context)
+                                  .copyWith(splashColor: Colors.transparent),
+                              child: FutureBuilder<String>(
+                                  future: _repository.getServerURL(),
+                                  builder: (context, snapshot) {
+                                    _urlController.text = snapshot.data ?? '';
+                                    return TextField(
+                                        style: StyleHelper
+                                            .participantNameTextStyle(context),
+                                        decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          filled: true,
+                                          fillColor:
+                                              Colors.white.withOpacity(0.5),
+                                          hintText: 'Voer een server URL in...',
+                                        ),
+                                        autocorrect: false,
+                                        enableSuggestions: false,
+                                        controller: _urlController,
+                                        onChanged: (value) {
+                                          _repository.setServerURL(value);
+                                        });
+                                  }))),
                       //
                       Padding(
                           padding: EdgeInsets.all(4),
@@ -33,15 +63,19 @@ class SettingsView extends StatelessWidget {
                       //
                       ElevatedButton(
                           onPressed: () {
-                            MatchRepository().load().then((value) {
-                              MatchRepository().save().then((value) {
-                                Navigator.of(context)
-                                    .popUntil((predicate) => predicate.isFirst);
-                                Navigator.of(context)
-                                    .pushReplacement(MaterialPageRoute<void>(
-                                  builder: (BuildContext context) =>
-                                      ParticipantsView(),
-                                ));
+                            MatchRepository()
+                                .synchronizeWithRemoteSystem()
+                                .then((value) {
+                              MatchRepository().load().then((value) {
+                                MatchRepository().save().then((value) {
+                                  Navigator.of(context).popUntil(
+                                      (predicate) => predicate.isFirst);
+                                  Navigator.of(context)
+                                      .pushReplacement(MaterialPageRoute<void>(
+                                    builder: (BuildContext context) =>
+                                        ParticipantsView(),
+                                  ));
+                                });
                               });
                             });
                           },
@@ -60,7 +94,8 @@ class SettingsView extends StatelessWidget {
                               });
                             });
                           },
-                          child: const Text("Alle scores en deelnemers vervangen door voorbeeld-data")),
+                          child: const Text(
+                              "Alle scores en deelnemers vervangen door voorbeeld-data")),
                       //
                     ])),
           );
@@ -69,14 +104,14 @@ class SettingsView extends StatelessWidget {
 
   Future<String> createSummary() async {
     var model = await MatchRepository().getModel();
-    String result = 'Actieve wedstrijd: ${model.matchCode}: ${model.matchName}\n';
+    String result =
+        'Actieve wedstrijd: ${model.matchCode}: ${model.matchName}\n';
     result += 'Dit apparaat: ${model.deviceID}\n';
     result +=
         'Configuratie: ${model.numberOfEnds} rondes(s) van ${model.arrowsPerEnd} pijl(en)';
     result +=
         ' met ${model.groups.length} discipline(s), ${model.subgroups.length} klasse(s), en ${model.targets.length} blazoen(en)';
-    result +=
-        ' en ${model.scoreValues.entries.length} toesenbord(en)';
+    result += ' en ${model.scoreValues.entries.length} toesenbord(en)';
 
     return result;
   }

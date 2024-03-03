@@ -27,6 +27,6 @@ Map<String, dynamic> _$ParticipantModelToJson(ParticipantModel instance) =>
       'group': instance.group,
       'subgroup': instance.subgroup,
       'target': instance.target,
-      'ends': instance.ends,
+      'ends': instance.ends.map((e) => e.toJson()).toList(),
       'score': instance.score,
     };
