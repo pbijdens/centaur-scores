@@ -35,30 +35,32 @@ class SettingsView extends StatelessWidget {
                           onPressed: () {
                             MatchRepository().load().then((value) {
                               MatchRepository().save().then((value) {
-                                Navigator.of(context).popUntil((predicate) => predicate.isFirst);
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute<void>(
-                                      builder: (BuildContext context) =>
-                                          ParticipantsView(),
-                                    ));
+                                Navigator.of(context)
+                                    .popUntil((predicate) => predicate.isFirst);
+                                Navigator.of(context)
+                                    .pushReplacement(MaterialPageRoute<void>(
+                                  builder: (BuildContext context) =>
+                                      ParticipantsView(),
+                                ));
                               });
                             });
                           },
-                          child: const Text("Synchroniseer met de server")),
+                          child: const Text("Nu synchroniseren")),
                       ElevatedButton(
                           onPressed: () {
                             MatchRepository().demo().then((value) {
                               MatchRepository().save().then((value) {
-                                Navigator.of(context).popUntil((predicate) => predicate.isFirst);
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute<void>(
-                                      builder: (BuildContext context) =>
-                                          ParticipantsView(),
-                                    ));
+                                Navigator.of(context)
+                                    .popUntil((predicate) => predicate.isFirst);
+                                Navigator.of(context)
+                                    .pushReplacement(MaterialPageRoute<void>(
+                                  builder: (BuildContext context) =>
+                                      ParticipantsView(),
+                                ));
                               });
                             });
                           },
-                          child: const Text("Replace contents with demo data")),
+                          child: const Text("Alle scores en deelnemers vervangen door voorbeeld-data")),
                       //
                     ])),
           );
@@ -67,24 +69,14 @@ class SettingsView extends StatelessWidget {
 
   Future<String> createSummary() async {
     var model = await MatchRepository().getModel();
-    String result =
-        "${model.matchCode}: ${model.matchName}\nRondes: ${model.numberOfEnds}; Pijlen: ${model.arrowsPerEnd}, ID: ${model.deviceID}\n";
+    String result = 'Actieve wedstrijd: ${model.matchCode}: ${model.matchName}\n';
+    result += 'Dit apparaat: ${model.deviceID}\n';
     result +=
-        '\nDisciplines: ${model.groups.map((e) => '${e.code}: ${e.label}').join(', ')}';
+        'Configuratie: ${model.numberOfEnds} rondes(s) van ${model.arrowsPerEnd} pijl(en)';
     result +=
-        '\nKlasses: ${model.subgroups.map((e) => '${e.code}: ${e.label}').join(', ')}';
+        ' met ${model.groups.length} discipline(s), ${model.subgroups.length} klasse(s), en ${model.targets.length} blazoen(en)';
     result +=
-        '\nBlazoenen: ${model.targets.map((e) => '${e.code}: ${e.label}').join(', ')}';        
-    result += '\nToetsenborden:\n';
-    for (var keyboard in model.scoreValues.entries) {
-      result +=
-          '${keyboard.key}:${keyboard.value.map((e) => '${e.label}=${e.value}').join(', ')}\n';
-    }
-    result += '\n';
-    for (var participant in model.participants) {
-      result +=
-          'Lijn ${participant.lijn}: ${participant.name ?? "n/a"}, ${participant.group}, ${participant.subgroup} (score: ${participant.score})\n';
-    }
+        ' en ${model.scoreValues.entries.length} toesenbord(en)';
 
     return result;
   }
