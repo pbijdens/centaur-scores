@@ -26,6 +26,7 @@ dev_dependencies:
   flutter_lints: ^3.0.0
   build_runner: ^2.4.8
   json_serializable: ^6.7.1  
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
@@ -36,3 +37,22 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/images/
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/icons/icon.png"
+    background_color: "#FFFFFF"
+    theme_color: "#FFFFFF"
+  windows:
+    generate: true
+    image_path: "assets/icons/icon.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/icons/icon.png"
+
