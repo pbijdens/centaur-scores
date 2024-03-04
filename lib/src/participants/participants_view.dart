@@ -12,12 +12,9 @@ import '../model/match_model.dart';
 import 'participant_editor.dart';
 
 class ParticipantsView extends StatelessWidget {
-  ParticipantsView({super.key});
+  const ParticipantsView({super.key});
 
   static const routeName = '/participants';
-
-  final ParticipantsViewmodel _viewModel =
-      ParticipantsViewmodel(MatchRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +44,7 @@ class ParticipantsView extends StatelessWidget {
                   icon: const Icon(Icons.edit)),
               body: Container(
                   margin: const EdgeInsets.all(20),
-                  child: ParticipantsForm(_viewModel))
+                  child: const ParticipantsForm())
               //
               );
         });
@@ -55,13 +52,11 @@ class ParticipantsView extends StatelessWidget {
 }
 
 class ParticipantsForm extends StatefulWidget {
-  const ParticipantsForm(this._viewmodel, {super.key});
-
-  final ParticipantsViewmodel _viewmodel;
+  const ParticipantsForm({super.key});
 
   @override
   ParticipantsFormState createState() {
-    return ParticipantsFormState(_viewmodel);
+    return ParticipantsFormState();
   }
 }
 
@@ -69,11 +64,13 @@ class ParticipantsFormState extends State<ParticipantsForm>
     implements EventObserver {
   final _formKey = GlobalKey<FormState>();
 
+  final ParticipantsViewmodel _viewModel =
+      ParticipantsViewmodel(MatchRepository());  
+
   bool _isLoading = false;
   MatchModel model = MatchModel();
-  final ParticipantsViewmodel _viewModel;
 
-  ParticipantsFormState(this._viewModel);
+  ParticipantsFormState();
 
   @override
   void initState() {

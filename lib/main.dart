@@ -9,7 +9,7 @@ void main() async {
   final matchRepository = MatchRepository();
 
   // Load the current state for the application (fire and forget)
-  matchRepository.load();
+  matchRepository.loadFromStorage();
 
   // Run the app and pass in the SettingsController. The app listens to the
   // SettingsController for changes, then passes it further down to the

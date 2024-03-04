@@ -34,28 +34,11 @@ class SettingsView extends StatelessWidget {
                                   .copyWith(splashColor: Colors.transparent),
                               child: FutureBuilder<String>(
                                   future: _repository.getServerURL(),
-                                  builder: (context, snapshot) {
-                                    _urlController.text = snapshot.data ?? '';
-                                    return TextField(
-                                        style: StyleHelper
-                                            .participantNameTextStyle(context),
-                                        decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          filled: true,
-                                          fillColor:
-                                              Colors.white.withOpacity(0.5),
-                                          hintText: 'Voer een server URL in...',
-                                        ),
-                                        autocorrect: false,
-                                        enableSuggestions: false,
-                                        controller: _urlController,
-                                        onChanged: (value) {
-                                          _repository.setServerURL(value);
-                                        });
-                                  }))),
+                                  builder: buildServerURLField,
+                                  ))),
                       //
                       Padding(
-                          padding: EdgeInsets.all(4),
+                          padding: const EdgeInsets.all(4),
                           child: FutureBuilder<String>(
                               future: createSummary(),
                               builder: (context, snapshot) =>
@@ -63,36 +46,12 @@ class SettingsView extends StatelessWidget {
                       //
                       ElevatedButton(
                           onPressed: () {
-                            MatchRepository()
-                                .synchronizeWithRemoteSystem()
-                                .then((value) {
-                              MatchRepository().load().then((value) {
-                                MatchRepository().save().then((value) {
-                                  Navigator.of(context).popUntil(
-                                      (predicate) => predicate.isFirst);
-                                  Navigator.of(context)
-                                      .pushReplacement(MaterialPageRoute<void>(
-                                    builder: (BuildContext context) =>
-                                        ParticipantsView(),
-                                  ));
-                                });
-                              });
-                            });
+                            invokeSynchronizeAction(context);
                           },
                           child: const Text("Nu synchroniseren")),
                       ElevatedButton(
                           onPressed: () {
-                            MatchRepository().demo().then((value) {
-                              MatchRepository().save().then((value) {
-                                Navigator.of(context)
-                                    .popUntil((predicate) => predicate.isFirst);
-                                Navigator.of(context)
-                                    .pushReplacement(MaterialPageRoute<void>(
-                                  builder: (BuildContext context) =>
-                                      ParticipantsView(),
-                                ));
-                              });
-                            });
+                            invokeDemoDataAction(context);
                           },
                           child: const Text(
                               "Alle scores en deelnemers vervangen door voorbeeld-data")),
@@ -100,6 +59,58 @@ class SettingsView extends StatelessWidget {
                     ])),
           );
         });
+  }
+
+  TextField buildServerURLField(BuildContext context, AsyncSnapshot<String> snapshot) {
+    _urlController.text = snapshot.data ?? '';
+    return TextField(
+        style: StyleHelper
+            .participantNameTextStyle(context),
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          filled: true,
+          fillColor:
+              Colors.white.withOpacity(0.5),
+          hintText: 'Voer een server URL in...',
+        ),
+        autocorrect: false,
+        enableSuggestions: false,
+        controller: _urlController,
+        onChanged: (value) {
+          _repository.setServerURL(value);
+        });
+  }
+
+  void invokeDemoDataAction(BuildContext context) {
+    MatchRepository().demo().then((value) {
+      MatchRepository().registerChangeLocally().then((value) {
+        Navigator.of(context)
+            .popUntil((predicate) => predicate.isFirst);
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute<void>(
+          builder: (BuildContext context) =>
+              const ParticipantsView(),
+        ));
+      });
+    });
+  }
+
+  void invokeSynchronizeAction(BuildContext context) {
+    MatchRepository()
+        .synchronizeWithRemoteSystem()
+        .then((value) {
+      MatchRepository().loadFromStorage().then((value) {
+        MatchRepository().registerChangeLocally().then((value) {
+          Navigator.of(context).popUntil(
+              (predicate) => predicate.isFirst);
+          Navigator.of(context)
+              .pushReplacement(MaterialPageRoute<void>(
+            builder: (BuildContext context) =>
+                const ParticipantsView(),
+          ));
+        });
+      });
+    });
   }
 
   Future<String> createSummary() async {

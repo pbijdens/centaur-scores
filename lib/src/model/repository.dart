@@ -13,13 +13,16 @@ import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
 //
-// to generate annotation files:
-//flutter packages pub run build_runner build
+// to generate code for the JSON files besed on the JSON annotations:
+//   flutter packages pub run build_runner build
 //
 
 class MatchRepository with ChangeNotifier {
   // SINGLETON PATTERN
   static final MatchRepository _instance = MatchRepository._internal();
+
+  // If the system is not configured, it tries to use this URL to fetch its data
+  static const String hardcodedURL = "http://192.168.2.3:8062";
 
   factory MatchRepository() {
     return _instance;
@@ -52,7 +55,7 @@ class MatchRepository with ChangeNotifier {
     notifyListeners();
   }
 
-  Future load() async {
+  Future loadFromStorage() async {
     completer = Completer<MatchModel>();
     try {
       await storage.ready;
@@ -65,12 +68,24 @@ class MatchRepository with ChangeNotifier {
       completer.complete(model);
     } catch (error) {
       print('ERROR LOADING DATA: $error');
-      completer.completeError(error);
+      await initializeAppFromRemoteModelOnly();
     }
     notifyListeners();
   }
 
-  Future save() async {
+  Future<void> initializeAppFromRemoteModelOnly() async {
+    try {
+      MatchModel remoteModel = await getRemoteModel();
+      remoteModel.deviceID = await getDeviceID();
+      completer.complete(remoteModel);
+    } catch (error) {
+      MatchModel emptyModel = ModelFactory.createEmptyModel();
+      emptyModel.deviceID = await getDeviceID();
+      completer.complete(emptyModel);
+    }
+  }
+
+  Future registerChangeLocally() async {
     try {
       await storage.ready;
       MatchModel model = await getModel();
@@ -89,7 +104,7 @@ class MatchRepository with ChangeNotifier {
     for (var participant in model.participants) {
       if (participant.id == participantId) {
         participant.name = name;
-        await save();
+        await registerChangeLocally();
         return;
       }
     }
@@ -100,7 +115,7 @@ class MatchRepository with ChangeNotifier {
     for (var participant in model.participants) {
       if (participant.id == participantId) {
         participant.group = group.code;
-        await save();
+        await registerChangeLocally();
         return;
       }
     }
@@ -111,7 +126,7 @@ class MatchRepository with ChangeNotifier {
     for (var participant in model.participants) {
       if (participant.id == participantId) {
         participant.subgroup = subgroup.code;
-        await save();
+        await registerChangeLocally();
         return;
       }
     }
@@ -122,7 +137,7 @@ class MatchRepository with ChangeNotifier {
     for (var participant in model.participants) {
       if (participant.id == participantId) {
         participant.target = target.code;
-        await save();
+        await registerChangeLocally();
         return;
       }
     }
@@ -139,7 +154,7 @@ class MatchRepository with ChangeNotifier {
     for (var participant in model.participants) {
       if (participant.id == participantId) {
         participant.ends[endNo].arrows[arrowNo] = value;
-        await save();
+        await registerChangeLocally();
         return;
       }
     }
@@ -159,7 +174,7 @@ class MatchRepository with ChangeNotifier {
     await storage.ready;
     String? serverURL = storage.getItem('serverURL');
     if (serverURL == null || serverURL.isEmpty) {
-      serverURL = 'http://192.168.2.3:8062';
+      serverURL = hardcodedURL;
       storage.setItem('serverURL', serverURL);
     }
     while (serverURL!.endsWith('/')) {
