@@ -68,8 +68,7 @@ class MyApp extends StatelessWidget {
                   case ScoresView.routeName:
                     return const ScoresView();
                   case ScoreEntryForSingleEndView.routeName:
-                    return ScoreEntryForSingleEndView(
-                        lijnNo: 0, endNo: -1, arrowNo: -1);
+                    return const ScoreEntryForSingleEndView(lijnNo: 0, endNo: -1, arrowNo: -1);
                   case SettingsView.routeName:
                     return SettingsView();
                   case ParticipantsView.routeName:

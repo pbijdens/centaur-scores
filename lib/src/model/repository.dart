@@ -47,6 +47,7 @@ class MatchRepository with ChangeNotifier {
     try {
       await storage.ready;
       MatchModel model = ModelFactory.createDebugModel();
+      print("Completing completer with demo data...");
       completer.complete(model);
     } catch (error) {
       print('demo(): $error');
@@ -61,13 +62,23 @@ class MatchRepository with ChangeNotifier {
       await storage.ready;
 
       MatchModel model;
-      Map<String, dynamic> loadedModel = storage.getItem('model');
-      model = MatchModel.fromJson(loadedModel);
-      model.deviceID = await getDeviceID();
+      dynamic modelFromStorage = storage.getItem('model');
+      if (null == modelFromStorage ||
+          modelFromStorage is! Map<String, dynamic>) {
+        print('No model found in storage, checking remote feed first.');
+        await initializeAppFromRemoteModelOnly();
+      } else {
+        Map<String, dynamic> loadedModel = modelFromStorage;
+        print('Loaded model from local storage: ${jsonEncode(loadedModel)}');
+        model = MatchModel.fromJson(loadedModel);
+        model.deviceID = await getDeviceID();
 
-      completer.complete(model);
+        print("Completing completer...");
+        completer.complete(model);
+      }
     } catch (error) {
-      print('ERROR LOADING DATA: $error');
+      print(
+          'Error loading data: $error - trying remote model (again) instead...');
       await initializeAppFromRemoteModelOnly();
     }
     notifyListeners();
@@ -75,12 +86,20 @@ class MatchRepository with ChangeNotifier {
 
   Future<void> initializeAppFromRemoteModelOnly() async {
     try {
+      print('Getting remote model...');
       MatchModel remoteModel = await getRemoteModel();
+      print('Model = ${jsonEncode(remoteModel.toJson())}');
+      print('Getting the device ID...');
       remoteModel.deviceID = await getDeviceID();
+      print('Device ID = ${remoteModel.deviceID}');
+      print("Completing completer...");
       completer.complete(remoteModel);
+      print('Done');
     } catch (error) {
+      print('Loading remote model failed with error: $error');
       MatchModel emptyModel = ModelFactory.createEmptyModel();
       emptyModel.deviceID = await getDeviceID();
+      print("Completing completer from catch...");
       completer.complete(emptyModel);
     }
   }
@@ -91,11 +110,11 @@ class MatchRepository with ChangeNotifier {
       MatchModel model = await getModel();
       model.isDirty = true;
       model.deviceID = await getDeviceID();
-      storage.setItem('model', model.toJson());
+      await storage.setItem('model', model.toJson());
     } catch (error) {
-      print("Failed to save model: $error");
+      print("Failed to save model to storage: $error");
     } finally {
-      print("Done saving model...");
+      print("Done with registerChangeLocally...");
     }
   }
 
@@ -165,7 +184,7 @@ class MatchRepository with ChangeNotifier {
     String? deviceID = storage.getItem('deviceID');
     if (deviceID == null || deviceID.isEmpty) {
       deviceID = const Uuid().v4();
-      storage.setItem('deviceID', deviceID);
+      await storage.setItem('deviceID', deviceID);
     }
     return deviceID;
   }
@@ -175,7 +194,7 @@ class MatchRepository with ChangeNotifier {
     String? serverURL = storage.getItem('serverURL');
     if (serverURL == null || serverURL.isEmpty) {
       serverURL = hardcodedURL;
-      storage.setItem('serverURL', serverURL);
+      await storage.setItem('serverURL', serverURL);
     }
     while (serverURL!.endsWith('/')) {
       serverURL = serverURL.substring(0, serverURL.length - 1);
@@ -185,7 +204,7 @@ class MatchRepository with ChangeNotifier {
 
   Future<String> setServerURL(String value) async {
     await storage.ready;
-    storage.setItem('serverURL', value);
+    await storage.setItem('serverURL', value);
     return value;
   }
 
@@ -194,9 +213,12 @@ class MatchRepository with ChangeNotifier {
       MatchModel localModel = await getModel();
       MatchModel remoteModel = await getRemoteModel();
       if (remoteModel.id != localModel.id) {
+        print(
+            "Remote model does not match local model. Replacing local model...");
         completer = Completer<MatchModel>();
+        print("Completing completer after sync...");
         completer.complete(remoteModel);
-        storage.setItem('model', remoteModel.toJson());
+        await storage.setItem('model', remoteModel.toJson());
         // RESET DEVICE, ACTIVE MATCH CHANGED
         return 'RESET';
       } else if (localModel.isDirty) {
@@ -204,12 +226,12 @@ class MatchRepository with ChangeNotifier {
           await pushParticipants(remoteModel.id, localModel.participants);
           localModel.isDirty = false;
         } catch (error) {
-          print('ERROR: $error');
+          print('An error occurred pushing participants: $error');
           return 'ERROR: $error';
         }
       }
     } catch (error) {
-      print('ERROR: $error');
+      print('synchronizeWithRemoteSystem failed with error $error');
       return 'ERROR: $error';
     }
     return 'OK';

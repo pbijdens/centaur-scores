@@ -65,7 +65,7 @@ class ParticipantsFormState extends State<ParticipantsForm>
   final _formKey = GlobalKey<FormState>();
 
   final ParticipantsViewmodel _viewModel =
-      ParticipantsViewmodel(MatchRepository());  
+      ParticipantsViewmodel(MatchRepository());
 
   bool _isLoading = false;
   MatchModel model = MatchModel();
@@ -81,8 +81,8 @@ class ParticipantsFormState extends State<ParticipantsForm>
 
   @override
   void dispose() {
-    super.dispose();
     _viewModel.unsubscribe(this);
+    super.dispose();
   }
 
   @override
@@ -95,12 +95,21 @@ class ParticipantsFormState extends State<ParticipantsForm>
         key: _formKey,
         child: Align(
             alignment: Alignment.topCenter,
-            child: SizedBox(
-                child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Column(
-                      children: createForms(context),
-                    )))));
+            child: LayoutBuilder(builder:
+                (BuildContext context, BoxConstraints viewportConstraints) {
+              return SingleChildScrollView(
+                  child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: viewportConstraints.maxHeight,
+                      ),                      
+                      //
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: createForms(context),
+                      )));
+            })));
   }
 
   List<Widget> createForms(BuildContext context) {
