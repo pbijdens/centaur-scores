@@ -22,7 +22,7 @@ class MatchRepository with ChangeNotifier {
   static final MatchRepository _instance = MatchRepository._internal();
 
   // If the system is not configured, it tries to use this URL to fetch its data
-  static const String hardcodedURL = "http://192.168.2.3:8062";
+  static const String hardcodedURL = "http://192.168.2.22:8062";
 
   factory MatchRepository() {
     return _instance;
@@ -30,8 +30,28 @@ class MatchRepository with ChangeNotifier {
 
   final LocalStorage storage = LocalStorage('match-repository');
 
+  Timer? timer;
+
   MatchRepository._internal() {
     print("Match repository was created.");
+    timer =
+        Timer.periodic(Duration(seconds: 15), (Timer t) => uploadIfNeeded());
+  }
+
+  bool? currentIsDirtyState;
+  void uploadIfNeeded() {
+    print("timer...");
+    getModel().then((model) {
+      bool newDirty = model.isDirty;
+      if (currentIsDirtyState == null || newDirty != currentIsDirtyState) {
+        sync().catchError((err) {
+          print("sync failed");
+        }).then((result) {
+          print("sync done");
+          currentIsDirtyState = result;
+        });
+      }
+    });
   }
 
   // DATA
@@ -118,6 +138,18 @@ class MatchRepository with ChangeNotifier {
     }
   }
 
+  Future registerChangeLocallyNoIsDirty() async {
+    try {
+      await storage.ready;
+      MatchModel model = await getModel();
+      await storage.setItem('model', model.toJson());
+    } catch (error) {
+      print("Failed to save model to storage: $error");
+    } finally {
+      print("Done with registerChangeLocally...");
+    }
+  }
+
   Future setParticipantName(int participantId, String name) async {
     MatchModel model = await getModel();
     for (var participant in model.participants) {
@@ -194,7 +226,7 @@ class MatchRepository with ChangeNotifier {
     String? serverURL = storage.getItem('serverURL');
     if (serverURL == null || serverURL.isEmpty) {
       serverURL = hardcodedURL;
-      await storage.setItem('serverURL', serverURL);
+      await storage.setItem('serverURL', serverURL ?? hardcodedURL);
     }
     while (serverURL!.endsWith('/')) {
       serverURL = serverURL.substring(0, serverURL.length - 1);
@@ -235,6 +267,30 @@ class MatchRepository with ChangeNotifier {
       return 'ERROR: $error';
     }
     return 'OK';
+  }
+
+  Future<bool> sync() async {
+    try {
+      print('Synchronizing model...');
+      var model = await getModel();
+      if (model.isDirty) {
+        print('Model is dirty, pushing...');
+        await pushParticipants(model.id, model.participants);
+        model.isDirty = false;
+        await registerChangeLocallyNoIsDirty();
+        notifyListeners();
+        print('Model is no longer dirty...');
+        return false;
+      } else {
+        print('Model is not dirty.');
+        return false;
+      }
+    } catch (error) {
+      print("ERROR: $error");
+    } finally {
+      print('End of sync action...');
+    }
+    return true;
   }
 
   Future<bool> pushParticipants(
