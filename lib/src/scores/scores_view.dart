@@ -1,6 +1,7 @@
 import 'package:centaur_scores/src/app.dart';
 import 'package:centaur_scores/src/model/repository.dart';
 import 'package:centaur_scores/src/scores/score_entry_fullpage_widget.dart';
+import 'package:centaur_scores/src/syncwidget/score_sync_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -16,8 +17,8 @@ class ScoresView extends StatelessWidget {
         builder: (BuildContext context, Widget? child) {
           return Scaffold(
               appBar: AppBar(
-                title: Text(AppLocalizations.of(context)!.scoresScreenTitle),
-              ),
+                title: Row(children: [ScoreSyncWidget(), Text(AppLocalizations.of(context)!.scoresScreenTitle)],
+              )),
               drawer: MyApp.drawer(context),
               body: Container(
                   margin: const EdgeInsets.all(0),

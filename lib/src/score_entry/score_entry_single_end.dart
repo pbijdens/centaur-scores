@@ -7,6 +7,7 @@ import 'package:centaur_scores/src/score_entry/end_previous.dart';
 import 'package:centaur_scores/src/score_entry/score_entry_single_end_viewmodel.dart';
 import 'package:centaur_scores/src/style/loading_screen.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
+import 'package:centaur_scores/src/syncwidget/score_sync_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -37,7 +38,7 @@ class ScoreEntryForSingleEndView extends StatelessWidget {
         builder: (BuildContext context, Widget? child) {
           return Scaffold(
               appBar: AppBar(
-                title: Text(AppLocalizations.of(context)!.singleEndScreenTitle),
+                title: Row(children: [ScoreSyncWidget(), Text(AppLocalizations.of(context)!.singleEndScreenTitle)]),
               ),
               drawer: MyApp.drawer(context),
               backgroundColor: Colors.white38,

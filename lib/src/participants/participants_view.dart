@@ -6,6 +6,7 @@ import 'package:centaur_scores/src/participants/participants_viewmodel.dart';
 import 'package:centaur_scores/src/scores/scores_view.dart';
 import 'package:centaur_scores/src/style/loading_screen.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
+import 'package:centaur_scores/src/syncwidget/score_sync_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../model/match_model.dart';
@@ -24,7 +25,7 @@ class ParticipantsView extends StatelessWidget {
           return Scaffold(
               appBar: AppBar(
                 title:
-                    Text(AppLocalizations.of(context)!.participantScreenTitle),
+                    Row(children: [ScoreSyncWidget(), Text(AppLocalizations.of(context)!.participantScreenTitle)]),
               ),
               drawer: MyApp.drawer(context),
               floatingActionButton: FloatingActionButton.extended(
