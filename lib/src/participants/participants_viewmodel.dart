@@ -1,4 +1,4 @@
-import 'package:centaur_scores/src/model/repository.dart';
+import 'package:centaur_scores/src/repository/repository.dart';
 import 'package:centaur_scores/src/mvvm/events/loading_event.dart';
 import 'package:centaur_scores/src/mvvm/observer.dart';
 import 'package:centaur_scores/src/mvvm/viewmodel.dart';

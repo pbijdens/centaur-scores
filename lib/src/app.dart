@@ -1,4 +1,5 @@
-import 'package:centaur_scores/src/model/repository.dart';
+import 'package:centaur_scores/src/navigationservice.dart';
+import 'package:centaur_scores/src/repository/repository.dart';
 import 'package:centaur_scores/src/participants/participants_view.dart';
 import 'package:centaur_scores/src/score_entry/score_entry_single_end.dart';
 import 'package:centaur_scores/src/scores/scores_view.dart';
@@ -10,20 +11,19 @@ import 'settings/settings_view.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
-  const MyApp({
+  MyApp({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Glue the SettingsController to the MaterialApp.
-    //
-    // The ListenableBuilder Widget listens to the SettingsController for changes.
-    // Whenever the user updates their settings, the MaterialApp is rebuilt.
-    return ListenableBuilder(
+    var innerBuilder = ListenableBuilder(
       listenable: MatchRepository(),
       builder: (BuildContext context, Widget? child) {
         return MaterialApp(
+          // Root key
+          navigatorKey: NavigationService.navigatorKey,
+
           // Providing a restorationScopeId allows the Navigator built by the
           // MaterialApp to restore the navigation stack when a user leaves and
           // returns to the app after it has been killed while running in the
@@ -68,7 +68,8 @@ class MyApp extends StatelessWidget {
                   case ScoresView.routeName:
                     return const ScoresView();
                   case ScoreEntryForSingleEndView.routeName:
-                    return const ScoreEntryForSingleEndView(lijnNo: 0, endNo: -1, arrowNo: -1);
+                    return const ScoreEntryForSingleEndView(
+                        lijnNo: 0, endNo: -1, arrowNo: -1);
                   case SettingsView.routeName:
                     return SettingsView();
                   case ParticipantsView.routeName:
@@ -81,6 +82,31 @@ class MyApp extends StatelessWidget {
         );
       },
     );
+
+    var builder = FutureBuilder<Null>(
+      future: initialize(),
+      builder: (context, snapshot) => innerBuilder,
+    );
+
+    return builder;
+
+    // Glue the SettingsController to the MaterialApp.
+    //
+    // The ListenableBuilder Widget listens to the SettingsController for changes.
+    // Whenever the user updates their settings, the MaterialApp is rebuilt.
+  }
+
+  Future<Null> initialize() async {
+    print("Initializing MyApp");
+    final matchRepository = MatchRepository();
+    matchRepository.onModelReplaced = (completer) async {
+      print("onModelReplaced");
+      MyApp.onRepositoryChanged();
+    };
+
+    print("matchRepository.initialize()..");
+    // Load the current state for the application (fire and forget)
+    await matchRepository.initialize();
   }
 
   static Widget drawer(BuildContext context) {
@@ -126,5 +152,21 @@ class MyApp extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  static void onRepositoryChanged() {
+    var context = NavigationService.navigatorKey.currentContext;
+    print("onRepositoryChanged - invoked");
+    if (context != null) {
+      print("onRepositoryChanged - working");
+      var navigator = Navigator.of(context, rootNavigator: true);
+      navigator.popUntil((predicate) => predicate.isFirst);
+      navigator.pushReplacement(MaterialPageRoute<void>(
+        builder: (BuildContext context) {
+          print("New ParticipantsView!");
+          return const ParticipantsView();
+        },
+      ));
+    }
   }
 }

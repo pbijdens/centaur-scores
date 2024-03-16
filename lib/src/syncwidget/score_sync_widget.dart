@@ -1,7 +1,8 @@
 import 'dart:async';
 
+import 'package:centaur_scores/src/app.dart';
 import 'package:centaur_scores/src/model/match_model.dart';
-import 'package:centaur_scores/src/model/repository.dart';
+import 'package:centaur_scores/src/repository/repository.dart';
 import 'package:flutter/material.dart';
 
 class ScoreSyncWidget extends StatefulWidget {

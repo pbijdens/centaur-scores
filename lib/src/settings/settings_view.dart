@@ -1,6 +1,5 @@
 import 'package:centaur_scores/src/app.dart';
-import 'package:centaur_scores/src/model/repository.dart';
-import 'package:centaur_scores/src/participants/participants_view.dart';
+import 'package:centaur_scores/src/repository/repository.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:centaur_scores/src/syncwidget/score_sync_widget.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +33,9 @@ class SettingsView extends StatelessWidget {
                               data: Theme.of(context)
                                   .copyWith(splashColor: Colors.transparent),
                               child: FutureBuilder<String>(
-                                  future: _repository.getServerURL(),
-                                  builder: buildServerURLField,
-                                  ))),
+                                future: _repository.getServerURL(),
+                                builder: buildServerURLField,
+                              ))),
                       //
                       Padding(
                           padding: const EdgeInsets.all(4),
@@ -45,33 +44,20 @@ class SettingsView extends StatelessWidget {
                               builder: (context, snapshot) =>
                                   Text(snapshot.data ?? "Loading..."))),
                       //
-                      ElevatedButton(
-                          onPressed: () {
-                            invokeSynchronizeAction(context);
-                          },
-                          child: const Text("Nu synchroniseren")),
-                      ElevatedButton(
-                          onPressed: () {
-                            invokeDemoDataAction(context);
-                          },
-                          child: const Text(
-                              "Alle scores en deelnemers vervangen door voorbeeld-data")),
-                      //
                     ])),
           );
         });
   }
 
-  TextField buildServerURLField(BuildContext context, AsyncSnapshot<String> snapshot) {
+  TextField buildServerURLField(
+      BuildContext context, AsyncSnapshot<String> snapshot) {
     _urlController.text = snapshot.data ?? '';
     return TextField(
-        style: StyleHelper
-            .participantNameTextStyle(context),
+        style: StyleHelper.participantNameTextStyle(context),
         decoration: InputDecoration(
           border: InputBorder.none,
           filled: true,
-          fillColor:
-              Colors.white.withOpacity(0.5),
+          fillColor: Colors.white.withOpacity(0.5),
           hintText: 'Voer een server URL in...',
         ),
         autocorrect: false,
@@ -80,38 +66,6 @@ class SettingsView extends StatelessWidget {
         onChanged: (value) {
           _repository.setServerURL(value);
         });
-  }
-
-  void invokeDemoDataAction(BuildContext context) {
-    MatchRepository().demo().then((value) {
-      MatchRepository().registerChangeLocally().then((value) {
-        Navigator.of(context)
-            .popUntil((predicate) => predicate.isFirst);
-        Navigator.of(context)
-            .pushReplacement(MaterialPageRoute<void>(
-          builder: (BuildContext context) =>
-              const ParticipantsView(),
-        ));
-      });
-    });
-  }
-
-  void invokeSynchronizeAction(BuildContext context) {
-    MatchRepository()
-        .synchronizeWithRemoteSystem()
-        .then((value) {
-      MatchRepository().loadFromStorage().then((value) {
-        MatchRepository().registerChangeLocally().then((value) {
-          Navigator.of(context).popUntil(
-              (predicate) => predicate.isFirst);
-          Navigator.of(context)
-              .pushReplacement(MaterialPageRoute<void>(
-            builder: (BuildContext context) =>
-                const ParticipantsView(),
-          ));
-        });
-      });
-    });
   }
 
   Future<String> createSummary() async {

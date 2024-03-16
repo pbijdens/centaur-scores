@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:centaur_scores/src/model/repository.dart';
+import 'package:centaur_scores/src/repository/repository.dart';
 import 'package:flutter/material.dart';
 
 import 'src/app.dart';
@@ -13,11 +13,6 @@ void main() async {
     () async {
       // Set up the SettingsController, which will glue user settings to multiple
       // Flutter Widgets.
-      final matchRepository = MatchRepository();
-
-      // Load the current state for the application (fire and forget)
-      await matchRepository.loadFromStorage();
-      
       WidgetsFlutterBinding.ensureInitialized();
       FlutterError.onError = (FlutterErrorDetails details) {
         //this line prints the default flutter gesture caught exception in console

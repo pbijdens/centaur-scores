@@ -1,5 +1,5 @@
 import 'package:centaur_scores/src/app.dart';
-import 'package:centaur_scores/src/model/repository.dart';
+import 'package:centaur_scores/src/repository/repository.dart';
 import 'package:centaur_scores/src/scores/score_entry_fullpage_widget.dart';
 import 'package:centaur_scores/src/syncwidget/score_sync_widget.dart';
 import 'package:flutter/material.dart';
