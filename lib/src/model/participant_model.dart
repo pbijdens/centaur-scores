@@ -11,6 +11,7 @@ class ParticipantModel {
   String group = "";
   String subgroup = "";
   String target = "";
+  String deviceId = "";
   List<EndModel> ends = [];
 
   ParticipantModel();
@@ -29,5 +30,5 @@ class ParticipantModel {
 
   factory ParticipantModel.fromJson(Map<String, dynamic> json) =>
       _$ParticipantModelFromJson(json);
-  Map<String, dynamic> toJson() => _$ParticipantModelToJson(this);  
+  Map<String, dynamic> toJson() => _$ParticipantModelToJson(this);
 }

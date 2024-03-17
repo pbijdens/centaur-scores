@@ -176,7 +176,7 @@ class MatchRepository with ChangeNotifier {
   Future<MatchModel> getRemoteModel() async {
     MatchModel activeMatchModel = await _api.httpGetActiveMatchModel();
     List<ParticipantModel> participants =
-        await _api.httpGetGetParticipantsForMatch(activeMatchModel.id);
+        await _api.httpGetParticipantsForMatch(activeMatchModel.id);
 
     activeMatchModel.participants = participants;
 
