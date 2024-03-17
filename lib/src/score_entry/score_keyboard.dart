@@ -60,7 +60,7 @@ class ScoreKeyboard extends StatelessWidget {
                     ),
                   ),
                   child: SizedBox(
-                    height: 75,
+                    height: 60,
                     child: Align(
                         alignment: Alignment.center,
                         child: (keys[i].value == null)
