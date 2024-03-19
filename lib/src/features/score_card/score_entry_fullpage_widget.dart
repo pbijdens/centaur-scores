@@ -1,16 +1,16 @@
 import 'package:centaur_scores/src/repository/repository.dart';
 import 'package:centaur_scores/src/mvvm/events/loading_event.dart';
 import 'package:centaur_scores/src/mvvm/observer.dart';
-import 'package:centaur_scores/src/scores/scores_viewmodel.dart';
-import 'package:centaur_scores/src/scores/single_participant_footer.dart';
-import 'package:centaur_scores/src/scores/single_participant_header_line_two.dart';
-import 'package:centaur_scores/src/scores/single_participant_header_line_one.dart';
-import 'package:centaur_scores/src/scores/single_participant_score_form.dart';
+import 'package:centaur_scores/src/features/score_card/scores_viewmodel.dart';
+import 'package:centaur_scores/src/features/score_card/single_participant_footer.dart';
+import 'package:centaur_scores/src/features/score_card/single_participant_header_line_two.dart';
+import 'package:centaur_scores/src/features/score_card/single_participant_header_line_one.dart';
+import 'package:centaur_scores/src/features/score_card/single_participant_score_form.dart';
 import 'package:centaur_scores/src/style/loading_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../model/match_model.dart';
-import '../model/participant_model.dart';
+import '../../model/match_model.dart';
+import '../../model/participant_model.dart';
 
 class ScoreEntryFullPageWidget extends StatefulWidget {
   const ScoreEntryFullPageWidget({super.key});

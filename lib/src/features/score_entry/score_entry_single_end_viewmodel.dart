@@ -3,8 +3,8 @@ import 'package:centaur_scores/src/mvvm/events/loading_event.dart';
 import 'package:centaur_scores/src/mvvm/observer.dart';
 import 'package:centaur_scores/src/mvvm/viewmodel.dart';
 
-import '../model/match_model.dart';
-import '../model/participant_model.dart';
+import '../../model/match_model.dart';
+import '../../model/participant_model.dart';
 
 class ScoresSingleEndViewmodel extends EventViewModel {
   final MatchRepository _repository;

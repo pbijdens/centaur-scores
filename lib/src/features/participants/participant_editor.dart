@@ -1,10 +1,10 @@
-import 'package:centaur_scores/src/participants/participants_viewmodel.dart';
+import 'package:centaur_scores/src/features/participants/participants_viewmodel.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 
-import '../model/group_info.dart';
-import '../model/match_model.dart';
-import '../model/participant_model.dart';
+import '../../model/group_info.dart';
+import '../../model/match_model.dart';
+import '../../model/participant_model.dart';
 
 class ParticipantEditor extends StatelessWidget {
   final ParticipantsViewmodel viewModel;

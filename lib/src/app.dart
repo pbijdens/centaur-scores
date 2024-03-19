@@ -1,13 +1,13 @@
 import 'package:centaur_scores/src/navigationservice.dart';
 import 'package:centaur_scores/src/repository/repository.dart';
-import 'package:centaur_scores/src/participants/participants_view.dart';
-import 'package:centaur_scores/src/score_entry/score_entry_single_end.dart';
-import 'package:centaur_scores/src/scores/scores_view.dart';
+import 'package:centaur_scores/src/features/participants/participants_view.dart';
+import 'package:centaur_scores/src/features/score_entry/score_entry_single_end.dart';
+import 'package:centaur_scores/src/features/score_card/scores_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'settings/settings_view.dart';
+import 'features/settings/settings_view.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
