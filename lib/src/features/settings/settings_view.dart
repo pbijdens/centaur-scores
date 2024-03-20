@@ -1,7 +1,7 @@
 import 'package:centaur_scores/src/app.dart';
 import 'package:centaur_scores/src/repository/repository.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
-import 'package:centaur_scores/src/syncwidget/score_sync_widget.dart';
+import 'package:centaur_scores/src/features/syncwidget/score_sync_widget.dart';
 import 'package:flutter/material.dart';
 
 class SettingsView extends StatelessWidget {
@@ -20,7 +20,7 @@ class SettingsView extends StatelessWidget {
         builder: (BuildContext context, Widget? child) {
           return Scaffold(
             appBar: AppBar(
-              title: Row(children: [ScoreSyncWidget(), const Text('Settings')]),
+              title: const Row(children: [ScoreSyncWidget(), Text('Settings')]),
             ),
             drawer: MyApp.drawer(context),
             body: Padding(

@@ -1,10 +1,10 @@
-import 'package:centaur_scores/src/score_entry/score_entry_single_end.dart';
+import 'package:centaur_scores/src/features/score_entry/score_entry_single_end.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
-import 'package:centaur_scores/src/scores/scores_viewmodel.dart';
+import 'package:centaur_scores/src/features/score_card/scores_viewmodel.dart';
 import 'package:flutter/material.dart';
 
-import '../model/match_model.dart';
-import '../model/participant_model.dart';
+import '../../model/match_model.dart';
+import '../../model/participant_model.dart';
 
 class SingeParticipantScoreForm extends StatelessWidget {
   final MatchModel _model;
@@ -84,10 +84,17 @@ class SingeParticipantScoreForm extends StatelessWidget {
             },
             child: Container(
               alignment: Alignment.center,
-              padding: const EdgeInsets.all(8),
-              color: StyleHelper.colorForArrow(_model, arrowScore),
+              margin: const EdgeInsets.all(2),
+              padding: const EdgeInsets.fromLTRB(6,4,6,8),
+              decoration: BoxDecoration(
+                  border: Border.all(
+                    color: StyleHelper.colorForArrow(arrowScore),
+                  ),
+                  color: StyleHelper.colorForArrow(arrowScore),
+                  borderRadius: BorderRadius.all(Radius.circular(15))),
               child: Text('${arrowScore ?? "-"}',
-                  style: StyleHelper.scoreFormArrowScoreTextStyle(context)),
+                  style: StyleHelper.scoreFormArrowScoreTextStyle(
+                      context, arrowScore)),
             )));
       }
 

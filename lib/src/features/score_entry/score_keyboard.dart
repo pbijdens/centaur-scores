@@ -1,10 +1,10 @@
-import 'package:centaur_scores/src/score_entry/score_entry_single_end_viewmodel.dart';
+import 'package:centaur_scores/src/features/score_entry/score_entry_single_end_viewmodel.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 
-import '../model/match_model.dart';
-import '../model/participant_model.dart';
-import '../model/score_button_definition.dart';
+import '../../model/match_model.dart';
+import '../../model/participant_model.dart';
+import '../../model/score_button_definition.dart';
 
 class ScoreKeyboard extends StatelessWidget {
   final ScoresSingleEndViewmodel _viewModel;
@@ -52,9 +52,9 @@ class ScoreKeyboard extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
-                        StyleHelper.colorForButton(_model, keys[i].value),
+                        StyleHelper.colorForButton(context, keys[i].value),
                     foregroundColor:
-                        StyleHelper.colorForButtonLabel(_model, keys[i].value),
+                        StyleHelper.colorForButtonLabel(context, keys[i].value),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
@@ -70,7 +70,7 @@ class ScoreKeyboard extends StatelessWidget {
                                 style: StyleHelper.keypadTextStyle(context)
                                     ?.apply(
                                         color: StyleHelper.colorForButtonLabel(
-                                            _model, keys[i].value)))),
+                                            context, keys[i].value)))),
                   )))));
       if (currentRow.length == buttonsPerRow) {
         result.add(Row(children: currentRow));

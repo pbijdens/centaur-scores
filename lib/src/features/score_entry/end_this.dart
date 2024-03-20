@@ -1,9 +1,9 @@
-import 'package:centaur_scores/src/score_entry/score_entry_single_end_viewmodel.dart';
+import 'package:centaur_scores/src/features/score_entry/score_entry_single_end_viewmodel.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 
-import '../model/match_model.dart';
-import '../model/participant_model.dart';
+import '../../model/match_model.dart';
+import '../../model/participant_model.dart';
 
 class ScoreInputThisEnd extends StatelessWidget {
   final ScoresSingleEndViewmodel _viewModel;
@@ -20,7 +20,7 @@ class ScoreInputThisEnd extends StatelessWidget {
       int hlArrow = _viewModel.participant?.ends[_viewModel.endNo].arrows
               .indexWhere((element) => element != null) ??
           0;
-      _viewModel.hilightCell(_viewModel.endNo, hlArrow < 0 ? 0 : hlArrow);
+      _viewModel.hilightCellNoNotify(_viewModel.endNo, hlArrow < 0 ? 0 : hlArrow);
     }
   }
 

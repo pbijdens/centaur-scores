@@ -2,18 +2,18 @@ import 'package:centaur_scores/src/app.dart';
 import 'package:centaur_scores/src/repository/repository.dart';
 import 'package:centaur_scores/src/mvvm/events/loading_event.dart';
 import 'package:centaur_scores/src/mvvm/observer.dart';
-import 'package:centaur_scores/src/score_entry/end_next.dart';
-import 'package:centaur_scores/src/score_entry/end_previous.dart';
-import 'package:centaur_scores/src/score_entry/score_entry_single_end_viewmodel.dart';
+import 'package:centaur_scores/src/features/score_entry/end_next.dart';
+import 'package:centaur_scores/src/features/score_entry/end_previous.dart';
+import 'package:centaur_scores/src/features/score_entry/score_entry_single_end_viewmodel.dart';
 import 'package:centaur_scores/src/style/loading_screen.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
-import 'package:centaur_scores/src/syncwidget/score_sync_widget.dart';
+import 'package:centaur_scores/src/features/syncwidget/score_sync_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../model/group_info.dart';
-import '../model/match_model.dart';
-import '../model/participant_model.dart';
+import '../../model/group_info.dart';
+import '../../model/match_model.dart';
+import '../../model/participant_model.dart';
 import 'score_keyboard.dart';
 import 'end_this.dart';
 import 'participant_navigation_box.dart';
@@ -38,7 +38,10 @@ class ScoreEntryForSingleEndView extends StatelessWidget {
         builder: (BuildContext context, Widget? child) {
           return Scaffold(
               appBar: AppBar(
-                title: Row(children: [ScoreSyncWidget(), Text(AppLocalizations.of(context)!.singleEndScreenTitle)]),
+                title: Row(children: [
+                  const ScoreSyncWidget(),
+                  Text(AppLocalizations.of(context)!.singleEndScreenTitle)
+                ]),
               ),
               drawer: MyApp.drawer(context),
               backgroundColor: Colors.white38,
@@ -144,48 +147,51 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
             .firstOrNull ??
         GroupInfo.create(0, "Onbekend", "");
 
-    return Column(children: [
-      SizedBox(height: 10, child: Container()),
-      Row(children: [
-        Expanded(flex: 1, child: Container()),
-        Padding(
-            padding: const EdgeInsets.all(10),
-            child: ParticipantNavigationBox(
-              _viewModel,
-              getParticipant: () => _viewModel.previousParticipantData(),
-              gotoParticipant: () {
-                _viewModel.previousParticipant();
-              },
-            )),
-        Column(children: [
-          headerLineOne(context, group, subgroup),
-          headerLineTwo(context),
-          ScoreViewPreviousEnd(_viewModel, model, participant),
-          ScoreInputThisEnd(_viewModel, model, participant, _viewModel.arrowNo),
-          ScoreViewNextEnd(_viewModel, model, participant),
-          ScoreKeyboard(_viewModel, model, participant)
+    return LayoutBuilder(builder: (context, constraints) {
+      return Column(children: [
+        SizedBox(height: 10, child: Container()),
+        Row(children: [
+          Expanded(flex: 1, child: Container()),
+          Padding(
+              padding: const EdgeInsets.all(10),
+              child: ParticipantNavigationBox(
+                _viewModel,
+                getParticipant: () => _viewModel.previousParticipantData(),
+                gotoParticipant: () {
+                  _viewModel.previousParticipant();
+                },
+              )),
+          Column(children: [
+            headerLineOne(context, group, subgroup),
+            headerLineTwo(context),
+            ScoreViewPreviousEnd(_viewModel, model, participant),
+            ScoreInputThisEnd(
+                _viewModel, model, participant, _viewModel.arrowNo),
+            ScoreViewNextEnd(_viewModel, model, participant),
+            ScoreKeyboard(_viewModel, model, participant)
+          ]),
+          Padding(
+              padding: const EdgeInsets.all(10),
+              child: ParticipantNavigationBox(
+                _viewModel,
+                getParticipant: () {
+                  ParticipantModel? p = _viewModel.nextParticipantData();
+                  return p;
+                },
+                gotoParticipant: () {
+                  _viewModel.nextParticipant();
+                },
+                newline: _viewModel.endNo >= (_viewModel.numberOfEnds - 1)
+                    ? null
+                    : () {
+                        _viewModel.newline();
+                      },
+              )),
+          Expanded(flex: 1, child: Container()),
         ]),
-        Padding(
-            padding: const EdgeInsets.all(10),
-            child: ParticipantNavigationBox(
-              _viewModel,
-              getParticipant: () {
-                ParticipantModel? p = _viewModel.nextParticipantData();
-                return p;
-              },
-              gotoParticipant: () {
-                _viewModel.nextParticipant();
-              },
-              newline: _viewModel.endNo >= (_viewModel.numberOfEnds - 1)
-                  ? null
-                  : () {
-                      _viewModel.newline();
-                    },
-            )),
         Expanded(flex: 1, child: Container()),
-      ]),
-      Expanded(flex: 1, child: Container()),
-    ]);
+      ]);
+    });
   }
 
   SizedBox headerLineOne(
@@ -221,12 +227,12 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
                           text: ' Klasse: ',
                           style: StyleHelper.endEditorTopHeaderBoldTextStyle(
                               context)),
-                      TextSpan(text: group.label),
+                      TextSpan(text: restrictLength(group.label, 12)),
                       TextSpan(
                           text: ' / ',
                           style: StyleHelper.endEditorTopHeaderBoldTextStyle(
                               context)),
-                      TextSpan(text: subgroup.label),
+                      TextSpan(text: restrictLength(subgroup.label, 12)),
                     ],
                   ),
                 )
@@ -251,5 +257,11 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
                             StyleHelper.editorParticipantNameHeader(context)),
                   ]))),
     );
+  }
+
+  String? restrictLength(String? input, int maxLength) {
+    if (input == null) return null;
+    if (input.length > maxLength) return "${input.substring(0, maxLength)}...";
+    return input;
   }
 }

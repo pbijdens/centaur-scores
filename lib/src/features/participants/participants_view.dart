@@ -2,14 +2,14 @@ import 'package:centaur_scores/src/app.dart';
 import 'package:centaur_scores/src/repository/repository.dart';
 import 'package:centaur_scores/src/mvvm/events/loading_event.dart';
 import 'package:centaur_scores/src/mvvm/observer.dart';
-import 'package:centaur_scores/src/participants/participants_viewmodel.dart';
-import 'package:centaur_scores/src/scores/scores_view.dart';
+import 'package:centaur_scores/src/features/participants/participants_viewmodel.dart';
+import 'package:centaur_scores/src/features/score_card/scores_view.dart';
 import 'package:centaur_scores/src/style/loading_screen.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
-import 'package:centaur_scores/src/syncwidget/score_sync_widget.dart';
+import 'package:centaur_scores/src/features/syncwidget/score_sync_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../model/match_model.dart';
+import '../../model/match_model.dart';
 import 'participant_editor.dart';
 
 class ParticipantsView extends StatelessWidget {
@@ -25,7 +25,7 @@ class ParticipantsView extends StatelessWidget {
           return Scaffold(
               appBar: AppBar(
                 title:
-                    Row(children: [ScoreSyncWidget(), Text(AppLocalizations.of(context)!.participantScreenTitle)]),
+                    Row(children: [const ScoreSyncWidget(), Text(AppLocalizations.of(context)!.participantScreenTitle)]),
               ),
               drawer: MyApp.drawer(context),
               floatingActionButton: FloatingActionButton.extended(

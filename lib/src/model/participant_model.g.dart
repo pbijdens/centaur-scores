@@ -14,6 +14,7 @@ ParticipantModel _$ParticipantModelFromJson(Map<String, dynamic> json) =>
       ..group = json['group'] as String
       ..subgroup = json['subgroup'] as String
       ..target = json['target'] as String
+      ..deviceID = json['deviceID'] as String
       ..ends = (json['ends'] as List<dynamic>)
           .map((e) => EndModel.fromJson(e as Map<String, dynamic>))
           .toList()
@@ -27,6 +28,7 @@ Map<String, dynamic> _$ParticipantModelToJson(ParticipantModel instance) =>
       'group': instance.group,
       'subgroup': instance.subgroup,
       'target': instance.target,
+      'deviceID': instance.deviceID,
       'ends': instance.ends.map((e) => e.toJson()).toList(),
       'score': instance.score,
     };

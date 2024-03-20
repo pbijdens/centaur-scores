@@ -3,8 +3,8 @@ import 'package:centaur_scores/src/mvvm/events/loading_event.dart';
 import 'package:centaur_scores/src/mvvm/observer.dart';
 import 'package:centaur_scores/src/mvvm/viewmodel.dart';
 
-import '../model/match_model.dart';
-import '../model/participant_model.dart';
+import '../../model/match_model.dart';
+import '../../model/participant_model.dart';
 
 class ScoresSingleEndViewmodel extends EventViewModel {
   final MatchRepository _repository;
@@ -26,7 +26,7 @@ class ScoresSingleEndViewmodel extends EventViewModel {
 
       notify(SingleEndViewmodelLoadedEvent(model: value));
       if (participant != null) {
-        notify(ParticipantChangedEvent(participant: participant!));
+        notify(ParticipantChangedEvent(participant: participant!, end: endNo, arrow: arrowNo));
       }
       notify(LoadingEvent(isLoading: false));
     });
@@ -49,8 +49,7 @@ class ScoresSingleEndViewmodel extends EventViewModel {
       if (newP != null && (newP.name?.isNotEmpty ?? false)) {
         _lijnNo = nextLijn;
         _setArrowNo();
-        notify(ParticipantChangedEvent(participant: newP));
-        notify(ArrowStateChangedEvent(
+        notify(ParticipantChangedEvent(
             participant: newP, end: endNo, arrow: arrowNo));
         return;
       }
@@ -70,8 +69,7 @@ class ScoresSingleEndViewmodel extends EventViewModel {
           _endNo++;
         }
         _setArrowNo();
-        notify(ParticipantChangedEvent(participant: newP));
-        notify(ArrowStateChangedEvent(
+        notify(ParticipantChangedEvent(
             participant: newP, end: endNo, arrow: arrowNo));
         return;
       }
@@ -90,8 +88,7 @@ class ScoresSingleEndViewmodel extends EventViewModel {
         if (newP != null && (newP.name?.isNotEmpty ?? false)) {
           _lijnNo = nextLijn;
           _setArrowNo();
-          notify(ParticipantChangedEvent(participant: newP));
-          notify(ArrowStateChangedEvent(
+          notify(ParticipantChangedEvent(
               participant: newP, end: endNo, arrow: arrowNo));
           return;
         }
@@ -103,6 +100,10 @@ class ScoresSingleEndViewmodel extends EventViewModel {
     _arrowNo = arrow;
     notify(ArrowStateChangedEvent(
         participant: participant, end: end, arrow: arrow));
+  }
+
+  void hilightCellNoNotify(int end, int arrow) {
+    _arrowNo = arrow;
   }
 
   void setScore(int? value) {
@@ -205,8 +206,10 @@ class SingleEndViewmodelLoadedEvent extends ViewEvent {
 
 class ParticipantChangedEvent extends ViewEvent {
   final ParticipantModel participant;
+  final int end;
+  final int arrow;
 
-  ParticipantChangedEvent({required this.participant})
+  ParticipantChangedEvent({required this.participant, required this.end, required this.arrow})
       : super("ParticipantChangedEvent");
 }
 

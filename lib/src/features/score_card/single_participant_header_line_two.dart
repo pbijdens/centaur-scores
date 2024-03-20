@@ -1,10 +1,10 @@
-import 'package:centaur_scores/src/participants/participants_view.dart';
+import 'package:centaur_scores/src/features/participants/participants_view.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 
-import '../model/group_info.dart';
-import '../model/match_model.dart';
-import '../model/participant_model.dart';
+import '../../model/group_info.dart';
+import '../../model/match_model.dart';
+import '../../model/participant_model.dart';
 
 class SingleParticipantHeaderLineTwo extends StatelessWidget {
   final MatchModel model;
@@ -74,17 +74,23 @@ class SingleParticipantHeaderLineTwo extends StatelessWidget {
                                   style: StyleHelper
                                       .scoreFormHeaderLineTwoBoldTextStyle(
                                           context)),
-                              TextSpan(text: group.label),
+                              TextSpan(text: restrictLength(group.label, 12)),
                               TextSpan(
                                   text: ' / ',
                                   style: StyleHelper
                                       .scoreFormHeaderLineTwoBoldTextStyle(
                                           context)),
-                              TextSpan(text: subgroup.label),
+                              TextSpan(text: restrictLength(subgroup.label, 12)),
                             ],
                           ),
                         )
                       ])))),
     );
+  }
+
+  String? restrictLength(String? input, int maxLength) {
+    if (input == null) return null;
+    if (input.length > maxLength) return "${input.substring(0, maxLength)}...";
+    return input;
   }
 }

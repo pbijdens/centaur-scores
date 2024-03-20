@@ -1,24 +1,24 @@
-import 'package:centaur_scores/src/score_entry/score_entry_single_end_viewmodel.dart';
+import 'package:centaur_scores/src/features/score_entry/score_entry_single_end_viewmodel.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 
-import '../model/match_model.dart';
-import '../model/participant_model.dart';
+import '../../model/match_model.dart';
+import '../../model/participant_model.dart';
 
-class ScoreViewPreviousEnd extends StatelessWidget {
+class ScoreViewNextEnd extends StatelessWidget {
   final ScoresSingleEndViewmodel _viewModel;
   final MatchModel _model;
   final ParticipantModel _participant;
 
-  const ScoreViewPreviousEnd(this._viewModel, this._model, this._participant,
+  const ScoreViewNextEnd(this._viewModel, this._model, this._participant,
       {super.key});
 
   @override
   Widget build(BuildContext context) {
-    if (_viewModel.endNo > 0) {
+    if (_viewModel.endNo < (_viewModel.participant?.ends.length ?? 1) - 1) {
       return InkWell(
           onTap: () {
-            _viewModel.previousEnd();
+            _viewModel.nextEnd();
           },
           child: SizedBox(
               width: StyleHelper.scoreCardColumnWidth(_model),
@@ -26,15 +26,16 @@ class ScoreViewPreviousEnd extends StatelessWidget {
               child: ShaderMask(
                   shaderCallback: (rect) {
                     return const LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
                       colors: [Colors.black, Colors.transparent],
                     ).createShader(
                         Rect.fromLTRB(0, 0, rect.width, rect.height));
                   },
                   blendMode: BlendMode.dstIn,
                   child: Container(
-                      color: StyleHelper.colorForScoreForm(_viewModel.lijnNo),
+                      color:
+                          StyleHelper.colorForScoreForm(_viewModel.lijnNo),
                       child: GridView.count(
                         primary: false,
                         padding: const EdgeInsets.all(1),
@@ -54,20 +55,20 @@ class ScoreViewPreviousEnd extends StatelessWidget {
             color: Colors.white70,
             child: Align(
                 alignment: Alignment.center,
-                child: Text('Eerste ronde',
+                child: Text('Laatste ronde',
                     style: StyleHelper.noMoreEndsTextStyle(context)))));
   }
 
   List<Widget> createScoreRows(BuildContext context) {
-    int endNo = _viewModel.endNo - 1;
+    int endNo = _viewModel.endNo + 1;
 
     List<Widget> result = [];
     result.add(Container(
       alignment: Alignment.centerRight,
       padding: const EdgeInsets.all(8),
       color: Colors.transparent,
-      child: Text('${endNo + 1}',
-          style: StyleHelper.nextPrevEndEndNoTextStyle(context)),
+      child:
+          Text('${endNo + 1}', style: StyleHelper.nextPrevEndEndNoTextStyle(context)),
     ));
 
     for (var arrowNo = 0; arrowNo < _model.arrowsPerEnd; arrowNo++) {
