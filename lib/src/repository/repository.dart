@@ -1,3 +1,4 @@
+import 'package:centaur_scores/src/features/participants/participants_viewmodel.dart';
 import 'package:centaur_scores/src/repository/centaur_scores_api.dart';
 import 'package:centaur_scores/src/repository/modelstore.dart';
 import 'package:flutter/material.dart';
@@ -245,5 +246,23 @@ class MatchRepository with ChangeNotifier {
     } catch (error) {
       print('checkIfActiveMatchChanged failed with error $error');
     }
+  }
+
+  Future<Null> TransferTo(
+      ParticipantModel participant, ParticipantModel remoteParticipant) async {
+    await _sync();
+    MatchModel model = await getModel();
+    await _api.moveParticipantToThisDevice(
+        model.id, remoteParticipant, participant.lijn);
+
+    print("Forcing reload of the active match");
+    MatchModel remoteModel = await getRemoteModel();
+    // Replace the model with the server-provided value
+    _globalModelCompleter = Completer<MatchModel>();
+    if (null != onModelReplaced) onModelReplaced!(_globalModelCompleter);
+    _globalModelCompleter.complete(remoteModel);
+
+    await _store.saveModel(remoteModel);
+    notifyListeners();
   }
 }

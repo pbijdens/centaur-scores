@@ -1,4 +1,5 @@
 import 'package:centaur_scores/src/features/participants/participants_viewmodel.dart';
+import 'package:centaur_scores/src/features/score_transfer/score_transfer.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -44,6 +45,7 @@ class ParticipantEditor extends StatelessWidget {
                     Row(children: [
                       formLabel(context, label: 'Naam'),
                       formNameField(context),
+                      formChooseParticipantButton(context)
                     ]),
                     spacer(context),
                     Row(children: [
@@ -112,13 +114,11 @@ class ParticipantEditor extends StatelessWidget {
                   .map((group) => DropdownMenuItem(
                       value: group,
                       child: Text(group.label,
-                          style:
-                              StyleHelper.participantTargetDropdownTextStyle(
-                                  context))))
+                          style: StyleHelper.participantTargetDropdownTextStyle(
+                              context))))
                   .toList(),
               onChanged: (value) {
-                viewModel.setParticipantTarget(
-                    participant, value as GroupInfo);
+                viewModel.setParticipantTarget(participant, value as GroupInfo);
               },
             )));
   }
@@ -182,5 +182,17 @@ class ParticipantEditor extends StatelessWidget {
 
   Widget spacer(BuildContext context) {
     return const SizedBox(height: 10);
+  }
+
+  Widget formChooseParticipantButton(BuildContext context) {
+    return IconButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                  builder: (BuildContext context) =>
+                      ScoreTransferView(participant: participant)));
+        },
+        icon: const Icon(Icons.transfer_within_a_station));
   }
 }

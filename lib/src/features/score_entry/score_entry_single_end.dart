@@ -227,12 +227,12 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
                           text: ' Klasse: ',
                           style: StyleHelper.endEditorTopHeaderBoldTextStyle(
                               context)),
-                      TextSpan(text: group.label),
+                      TextSpan(text: restrictLength(group.label, 12)),
                       TextSpan(
                           text: ' / ',
                           style: StyleHelper.endEditorTopHeaderBoldTextStyle(
                               context)),
-                      TextSpan(text: subgroup.label),
+                      TextSpan(text: restrictLength(subgroup.label, 12)),
                     ],
                   ),
                 )
@@ -257,5 +257,11 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
                             StyleHelper.editorParticipantNameHeader(context)),
                   ]))),
     );
+  }
+
+  String? restrictLength(String? input, int maxLength) {
+    if (input == null) return null;
+    if (input.length > maxLength) return "${input.substring(0, maxLength)}...";
+    return input;
   }
 }

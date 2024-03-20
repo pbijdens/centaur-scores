@@ -1,3 +1,4 @@
+import 'package:centaur_scores/src/features/score_transfer/score_transfer.dart';
 import 'package:centaur_scores/src/navigationservice.dart';
 import 'package:centaur_scores/src/repository/repository.dart';
 import 'package:centaur_scores/src/features/participants/participants_view.dart';
@@ -23,6 +24,8 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           // Root key
           navigatorKey: NavigationService.navigatorKey,
+
+          debugShowCheckedModeBanner: false,
 
           // Providing a restorationScopeId allows the Navigator built by the
           // MaterialApp to restore the navigation stack when a user leaves and
@@ -72,6 +75,7 @@ class MyApp extends StatelessWidget {
                         lijnNo: 0, endNo: -1, arrowNo: -1);
                   case SettingsView.routeName:
                     return SettingsView();
+                  case ScoreTransferView.routeName:
                   case ParticipantsView.routeName:
                   default:
                     return ParticipantsView();
@@ -163,7 +167,6 @@ class MyApp extends StatelessWidget {
       navigator.popUntil((predicate) => predicate.isFirst);
       navigator.pushReplacement(MaterialPageRoute<void>(
         builder: (BuildContext context) {
-          print("New ParticipantsView!");
           return const ParticipantsView();
         },
       ));

@@ -22,12 +22,17 @@ class ModelStore {
   Future<MatchModel?> loadModel() async {
     await storage.ready;
 
+    try {
     var loadedModel = await storage.getItem('model');
     if (null == loadedModel) {
       return null;
     } else {
       MatchModel result = MatchModel.fromJson(loadedModel);
       return result;
+    }
+    } catch (error) {
+      print('Error: $error');
+      return null;
     }
   }
 

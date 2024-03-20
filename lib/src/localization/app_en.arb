@@ -7,6 +7,10 @@
   "@participantScreenTitle": {
     "description": "Title for the participants screen"
   },
+  "transferScreenTitle": "Schutter overnemen",
+  "@transferScreenTitle": {
+    "description": "Title for the score transfer screen"
+  },
   "scoresScreenTitle": "Scorebriefjes",
   "@scoresScreenTitle": {
     "description": "Title for the score entry screen"

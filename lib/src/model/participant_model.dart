@@ -11,7 +11,7 @@ class ParticipantModel {
   String group = "";
   String subgroup = "";
   String target = "";
-  String deviceId = "";
+  String deviceID = "";
   List<EndModel> ends = [];
 
   ParticipantModel();

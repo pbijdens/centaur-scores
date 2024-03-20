@@ -84,10 +84,17 @@ class SingeParticipantScoreForm extends StatelessWidget {
             },
             child: Container(
               alignment: Alignment.center,
-              padding: const EdgeInsets.all(8),
-              color: StyleHelper.colorForArrow(_model, arrowScore),
+              margin: const EdgeInsets.all(2),
+              padding: const EdgeInsets.fromLTRB(6,4,6,8),
+              decoration: BoxDecoration(
+                  border: Border.all(
+                    color: StyleHelper.colorForArrow(arrowScore),
+                  ),
+                  color: StyleHelper.colorForArrow(arrowScore),
+                  borderRadius: BorderRadius.all(Radius.circular(15))),
               child: Text('${arrowScore ?? "-"}',
-                  style: StyleHelper.scoreFormArrowScoreTextStyle(context)),
+                  style: StyleHelper.scoreFormArrowScoreTextStyle(
+                      context, arrowScore)),
             )));
       }
 

@@ -20,7 +20,7 @@ class ScoreInputThisEnd extends StatelessWidget {
       int hlArrow = _viewModel.participant?.ends[_viewModel.endNo].arrows
               .indexWhere((element) => element != null) ??
           0;
-      _viewModel.hilightCell(_viewModel.endNo, hlArrow < 0 ? 0 : hlArrow);
+      _viewModel.hilightCellNoNotify(_viewModel.endNo, hlArrow < 0 ? 0 : hlArrow);
     }
   }
 

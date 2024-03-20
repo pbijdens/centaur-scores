@@ -92,11 +92,8 @@ class CentaurScoresAPI {
         }
         return ParticipantModel.fromJson(item);
       }).toList();
-      resultList.sort((a, b) =>
-          '${a.deviceId}${a.name}'.compareTo('${b.deviceId}${b.name}'));
-      for (int i = 0; i < resultList.length; i++) {
-        resultList[i].id = i + 1;
-      }
+      resultList.sort((a, b) => '${a.deviceID}${a.lijn}${a.name}'
+          .compareTo('${b.deviceID}${b.lijn}${b.name}'));
       return resultList;
     } else {
       throw 'Request to $uri failed with status ${response.statusCode}';
@@ -104,19 +101,19 @@ class CentaurScoresAPI {
   }
 
   Future<bool> moveParticipantToThisDevice(
-      int matchId, ParticipantModel participant) async {
+      int matchId, ParticipantModel participant, String lijn) async {
     String baseUrl = await _store.getServerURL();
     var deviceID = await _store.getDeviceID();
     var client = http.Client();
     var uri = Uri.parse(
-        '$baseUrl/match/$matchId/participants/${participant.id}/transfer/$deviceID');
+        '$baseUrl/match/$matchId/participants/${participant.id}/transfer/$deviceID/$lijn');
     Map<String, String> headers = Map<String, String>();
     headers['Content-Type'] = 'application/json';
-    var response = await client.post(uri, headers: headers, body: "{}");
+    var response = await client.post(uri, headers: headers);
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw 'Request to $baseUrl/match/$matchId/participants/${participant.id}/transfer/$deviceID failed with status ${response.statusCode}';
+      throw 'Request to $uri failed with status ${response.statusCode}';
     }
   }
 }

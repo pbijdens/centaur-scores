@@ -74,17 +74,23 @@ class SingleParticipantHeaderLineTwo extends StatelessWidget {
                                   style: StyleHelper
                                       .scoreFormHeaderLineTwoBoldTextStyle(
                                           context)),
-                              TextSpan(text: group.label),
+                              TextSpan(text: restrictLength(group.label, 12)),
                               TextSpan(
                                   text: ' / ',
                                   style: StyleHelper
                                       .scoreFormHeaderLineTwoBoldTextStyle(
                                           context)),
-                              TextSpan(text: subgroup.label),
+                              TextSpan(text: restrictLength(subgroup.label, 12)),
                             ],
                           ),
                         )
                       ])))),
     );
+  }
+
+  String? restrictLength(String? input, int maxLength) {
+    if (input == null) return null;
+    if (input.length > maxLength) return "${input.substring(0, maxLength)}...";
+    return input;
   }
 }

@@ -52,9 +52,9 @@ class ScoreKeyboard extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
-                        StyleHelper.colorForButton(_model, keys[i].value),
+                        StyleHelper.colorForButton(context, keys[i].value),
                     foregroundColor:
-                        StyleHelper.colorForButtonLabel(_model, keys[i].value),
+                        StyleHelper.colorForButtonLabel(context, keys[i].value),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
@@ -70,7 +70,7 @@ class ScoreKeyboard extends StatelessWidget {
                                 style: StyleHelper.keypadTextStyle(context)
                                     ?.apply(
                                         color: StyleHelper.colorForButtonLabel(
-                                            _model, keys[i].value)))),
+                                            context, keys[i].value)))),
                   )))));
       if (currentRow.length == buttonsPerRow) {
         result.add(Row(children: currentRow));

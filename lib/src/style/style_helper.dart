@@ -17,57 +17,57 @@ class StyleHelper {
 
   static Color colorForColumn(int columnNo) {
     List<Color> colors = [
-      Colors.blue.shade500,
-      Colors.red.shade400,
-      Colors.yellow.shade500,
-      Colors.orange.shade500,
+      darken(colorForScoreForm(0), 0.1),
+      darken(colorForScoreForm(1), 0.1),
+      darken(colorForScoreForm(2), 0.1),
+      darken(colorForScoreForm(3), 0.1),
     ];
     return colors[columnNo % colors.length];
   }
 
   static Color colorForCellBorder(int columnNo) {
     List<Color> colors = [
-      Colors.blue.shade800,
-      Colors.red.shade800,
-      Colors.yellow.shade800,
-      Colors.orange.shade800,
+      darken(colorForScoreForm(0), 0.4),
+      darken(colorForScoreForm(1), 0.4),
+      darken(colorForScoreForm(2), 0.4),
+      darken(colorForScoreForm(3), 0.4),
     ];
     return colors[columnNo % colors.length];
   }
 
   static Color colorForScoreForm(int columnNo) {
     List<Color> colors = [
-      Colors.blue.shade50,
-      Colors.red.shade50,
-      Colors.yellow.shade50,
-      Colors.orange.shade50,
+      lighten(Colors.blue.shade100, 0.05),
+      lighten(Colors.red.shade100, 0.05),
+      lighten(Colors.yellow.shade100, 0.05),
+      lighten(Colors.orange.shade100, 0.05),
     ];
     return colors[columnNo % colors.length];
   }
 
   static Color colorForColumnFooter(int columnNo) {
     List<Color> colors = [
-      Colors.blue.shade100,
-      Colors.red.shade100,
-      Colors.yellow.shade100,
-      Colors.orange.shade100,
+      darken(colorForScoreForm(0), 0.2),
+      darken(colorForScoreForm(1), 0.2),
+      darken(colorForScoreForm(2), 0.2),
+      darken(colorForScoreForm(3), 0.2),
     ];
     return colors[columnNo % colors.length];
   }
 
-  static Color colorForArrow(MatchModel model, int? arrowValue) {
+  static Color colorForArrow(int? arrowValue) {
     if (null == arrowValue) {
       return const Color.fromRGBO(0xFF, 0xFF, 0xFF, 0.5);
     }
-    if (arrowValue >= 12) return Colors.lime.withOpacity(0.25);
-    if (arrowValue >= 9) return Colors.yellow.withOpacity(0.25);
-    if (arrowValue >= 7) return Colors.red.withOpacity(0.25);
-    if (arrowValue >= 5) return Colors.blue.withOpacity(0.25);
-    if (arrowValue >= 3) return Colors.black.withOpacity(0.25);
-    return const Color.fromRGBO(0xFF, 0xFF, 0xFF, 1.0).withOpacity(0.5);
+    if (arrowValue >= 12) return Colors.lime;
+    if (arrowValue >= 9) return Colors.yellow;
+    if (arrowValue >= 7) return Colors.red;
+    if (arrowValue >= 5) return Colors.blue;
+    if (arrowValue >= 3) return Colors.black;
+    return const Color.fromRGBO(0xFF, 0xFF, 0xFF, 1.0);
   }
 
-  static Color colorForButton(MatchModel model, int? arrowValue) {
+  static Color colorForButton(BuildContext context, int? arrowValue) {
     if (null == arrowValue) {
       return const Color.fromRGBO(0xFF, 0xFF, 0xFF, 1);
     }
@@ -78,16 +78,8 @@ class StyleHelper {
     return const Color.fromRGBO(0xFF, 0xFF, 0xFF, 1.0);
   }
 
-  static Color colorForButtonLabel(MatchModel model, int? arrowValue) {
-    if (null == arrowValue) {
-      return Colors.black54;
-    }
-    if (arrowValue >= 9) return Colors.black;
-    if (arrowValue >= 7) return Colors.white;
-    if (arrowValue >= 5) return Colors.black;
-    if (arrowValue >= 3) return Colors.white;
-    if (arrowValue >= 1) return Colors.black;
-    return Colors.black54;
+  static Color colorForButtonLabel(BuildContext context, int? arrowValue) {
+    return colorForButton(context, arrowValue).computeLuminance() < 0.5 ?  darken(Colors.white, 0.05) : Colors.black87;
   }
 
   static colorForEditRow() {
@@ -138,7 +130,7 @@ class StyleHelper {
 
   static TextStyle? scoreFormEndNumberTextStyle(BuildContext context) => endEditorEndNoTextStyle(context);
 
-  static TextStyle? scoreFormArrowScoreTextStyle(BuildContext context) => endEditorArrowScoreTextStyle(context);
+  static TextStyle? scoreFormArrowScoreTextStyle(BuildContext context, int? score) => colorForArrow(score).computeLuminance() < 0.5 ?  endEditorArrowScoreTextStyle(context)?.apply(color:darken(Colors.white, 0.05)) : endEditorArrowScoreTextStyle(context)?.apply(color: Colors.black87);
 
   static TextStyle? scoreFormEndTotalTextStyle(BuildContext context) => endEditorEndTotalTextStyle(context);
 
@@ -149,4 +141,22 @@ class StyleHelper {
   static TextStyle? participantEntryLabelTextStyle(BuildContext context) => baseTextStyle(context)?.apply(fontSizeFactor: 0.9, fontWeightDelta: 2, color: Colors.black87);
 
   static TextStyle? participantNameTextStyle(BuildContext context) => baseTextStyle(context)?.apply(fontSizeFactor: 1.2, fontWeightDelta: 1, color: Colors.black87);
+
+  static Color darken(Color color, [double amount = .1]) {
+    assert(amount >= 0 && amount <= 1);
+
+    final hsl = HSLColor.fromColor(color);
+    final hslDark = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
+
+    return hslDark.toColor();
+  }
+
+  static Color lighten(Color color, [double amount = .1]) {
+    assert(amount >= 0 && amount <= 1);
+
+    final hsl = HSLColor.fromColor(color);
+    final hslLight = hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
+
+    return hslLight.toColor();
+  }
 }
