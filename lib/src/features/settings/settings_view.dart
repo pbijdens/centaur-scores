@@ -20,7 +20,7 @@ class SettingsView extends StatelessWidget {
         builder: (BuildContext context, Widget? child) {
           return Scaffold(
             appBar: AppBar(
-              title: Row(children: [ScoreSyncWidget(), const Text('Settings')]),
+              title: const Row(children: [ScoreSyncWidget(), Text('Settings')]),
             ),
             drawer: MyApp.drawer(context),
             body: Padding(

@@ -17,7 +17,7 @@ class ScoresView extends StatelessWidget {
         builder: (BuildContext context, Widget? child) {
           return Scaffold(
               appBar: AppBar(
-                title: Row(children: [ScoreSyncWidget(), Text(AppLocalizations.of(context)!.scoresScreenTitle)],
+                title: Row(children: [const ScoreSyncWidget(), Text(AppLocalizations.of(context)!.scoresScreenTitle)],
               )),
               drawer: MyApp.drawer(context),
               body: Container(

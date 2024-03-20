@@ -25,7 +25,7 @@ class ParticipantsView extends StatelessWidget {
           return Scaffold(
               appBar: AppBar(
                 title:
-                    Row(children: [ScoreSyncWidget(), Text(AppLocalizations.of(context)!.participantScreenTitle)]),
+                    Row(children: [const ScoreSyncWidget(), Text(AppLocalizations.of(context)!.participantScreenTitle)]),
               ),
               drawer: MyApp.drawer(context),
               floatingActionButton: FloatingActionButton.extended(
