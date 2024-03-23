@@ -17,7 +17,13 @@ class MatchRepository with ChangeNotifier {
   static final MatchRepository _instance = MatchRepository._internal();
 
   // If the system is not configured, it tries to use this URL to fetch its data
-  static const String hardcodedURL = "http://192.168.50.236:8062";
+  static const String hardcodedURL = "http://192.168.50.54:8062";
+
+  // Check every this many seconds if there are changes to upload.
+  final Duration _timerInterval = const Duration(seconds: 10);
+
+  // Last run timestamp
+  int _timerLastRunMsSinceEpoch = DateTime.now().millisecondsSinceEpoch;
 
   factory MatchRepository() {
     return _instance;
@@ -25,8 +31,7 @@ class MatchRepository with ChangeNotifier {
 
   MatchRepository._internal() {
     print("Match repository was created.");
-    _timer =
-        Timer.periodic(Duration(seconds: 10), (Timer t) => _timerFunction());
+    _timer = Timer.periodic(_timerInterval, (Timer t) => _timerFunction());
   }
 
   final ModelStore _store = ModelStore();
@@ -44,6 +49,7 @@ class MatchRepository with ChangeNotifier {
 
   Future<MatchModel> getModel() async {
     MatchModel model = await _globalModelCompleter.future;
+    _verifyTimer();
     return Future.value(model);
   }
 
@@ -185,11 +191,20 @@ class MatchRepository with ChangeNotifier {
   }
 
   void _timerFunction() {
-    print("timer...");
+    // Register the last run time
+    final int now = DateTime.now().millisecondsSinceEpoch;
+    _timerLastRunMsSinceEpoch = now;
+
+    print("timer run at $now...");
     getModel().then((model) {
       bool newDirty = model.isDirty;
 
-      if (currentIsDirtyState == null || newDirty != currentIsDirtyState) {
+      if (currentIsDirtyState == null // not synchronized yet
+          ||
+          currentIsDirtyState == true // last sync failed or skipped
+          ||
+          newDirty == true) {
+        // model is dirty
         _sync().catchError((err) {
           print("sync failed");
         }).then((result) {
@@ -220,6 +235,7 @@ class MatchRepository with ChangeNotifier {
       }
     } catch (error) {
       print("ERROR: $error");
+      notifyListeners();
     } finally {
       print('End of sync action...');
     }
@@ -264,5 +280,15 @@ class MatchRepository with ChangeNotifier {
 
     await _store.saveModel(remoteModel);
     notifyListeners();
+  }
+
+  _verifyTimer() {
+    final int now = DateTime.now().millisecondsSinceEpoch;
+    final int msSinceLastRun = now - _timerLastRunMsSinceEpoch;
+    final int allowedDelayMS = 2 * _timerInterval.inMilliseconds;
+    if (msSinceLastRun > allowedDelayMS) {
+      print(
+          "Timer is not active (anymore). isActive = ${_timer?.isActive ?? -1}");
+    }
   }
 }
