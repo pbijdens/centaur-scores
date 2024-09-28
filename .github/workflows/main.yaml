@@ -1,4 +1,4 @@
-name: "CentaurScores Debug Build"
+name: "CentaurScores Build"
 
 on:
   pull_request:
