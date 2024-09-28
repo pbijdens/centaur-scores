@@ -43,16 +43,16 @@ class ScoreSyncWidgetState extends State<ScoreSyncWidget> {
                       child: Container(
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: isDirty
-                                ? Colors.red.shade200
-                                : Colors.green.shade200,                            
+                              color: isDirty
+                                  ? Colors.red.shade200
+                                  : Colors.green.shade200,
                               border: Border.all(
                                 color: isDirty
                                     ? Colors.red.shade800
                                     : Colors.green.shade800,
                               ),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(size))),
+                              borderRadius: const BorderRadius.all(
+                                  Radius.circular(size))),
                           child: isDirty
                               ? Icon(
                                   Icons.sync_disabled_sharp,

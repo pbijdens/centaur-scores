@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:centaur_scores/src/repository/repository.dart';
 import 'package:flutter/material.dart';
 
 import 'src/app.dart';
@@ -17,16 +16,16 @@ void main() async {
       FlutterError.onError = (FlutterErrorDetails details) {
         //this line prints the default flutter gesture caught exception in console
         //FlutterError.dumpErrorToConsole(details);
-        print("Error From INSIDE FRAME_WORK");
-        print("----------------------");
-        print("Error :  ${details.exception}");
-        print("StackTrace :  ${details.stack}");
+        debugPrint("Error From INSIDE FRAMEWORK");
+        debugPrint("----------------------");
+        debugPrint("Error :  ${details.exception}");
+        debugPrint("StackTrace :  ${details.stack}");
       };
 
-      runApp(MyApp());
+      runApp(const MyApp());
     },
     (dynamic error, StackTrace stackTrace) {
-      print("=================== CAUGHT DART ERROR $error $stackTrace");
+      debugPrint("=================== CAUGHT DART ERROR $error $stackTrace");
       // Send report
     },
   );

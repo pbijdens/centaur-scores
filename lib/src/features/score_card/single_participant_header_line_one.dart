@@ -24,7 +24,7 @@ class SingleParticipantHeaderLineOne extends StatelessWidget {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute<void>(
-              builder: (BuildContext context) => ParticipantsView(),
+              builder: (BuildContext context) => const ParticipantsView(),
             ));
       },
       child: SizedBox(

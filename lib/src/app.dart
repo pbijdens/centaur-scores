@@ -12,7 +12,7 @@ import 'features/settings/settings_view.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
-  MyApp({
+  const MyApp({
     super.key,
   });
 
@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
                   case ScoreTransferView.routeName:
                   case ParticipantsView.routeName:
                   default:
-                    return ParticipantsView();
+                    return const ParticipantsView();
                 }
               },
             );
@@ -101,14 +101,14 @@ class MyApp extends StatelessWidget {
   }
 
   Future<Null> initialize() async {
-    print("Initializing MyApp");
+    debugPrint("Initializing MyApp");
     final matchRepository = MatchRepository();
     matchRepository.onModelReplaced = (completer) async {
-      print("onModelReplaced");
+      debugPrint("onModelReplaced");
       MyApp.onRepositoryChanged();
     };
 
-    print("matchRepository.initialize()..");
+    debugPrint("matchRepository.initialize()..");
     // Load the current state for the application (fire and forget)
     await matchRepository.initialize();
   }
@@ -130,7 +130,7 @@ class MyApp extends StatelessWidget {
             onTap: () {
               Navigator.of(context).popUntil((predicate) => predicate.isFirst);
               Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
-                builder: (BuildContext context) => ParticipantsView(),
+                builder: (BuildContext context) => const ParticipantsView(),
               ));
             },
           ),
@@ -139,7 +139,7 @@ class MyApp extends StatelessWidget {
             onTap: () {
               Navigator.of(context).popUntil((predicate) => predicate.isFirst);
               Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
-                builder: (BuildContext context) => ScoresView(),
+                builder: (BuildContext context) => const ScoresView(),
               ));
             },
           ),
@@ -160,9 +160,9 @@ class MyApp extends StatelessWidget {
 
   static void onRepositoryChanged() {
     var context = NavigationService.navigatorKey.currentContext;
-    print("onRepositoryChanged - invoked");
+    debugPrint("onRepositoryChanged - invoked");
     if (context != null) {
-      print("onRepositoryChanged - working");
+      debugPrint("onRepositoryChanged - working");
       var navigator = Navigator.of(context, rootNavigator: true);
       navigator.popUntil((predicate) => predicate.isFirst);
       navigator.pushReplacement(MaterialPageRoute<void>(

@@ -31,12 +31,12 @@ class ParticipantEditor extends StatelessWidget {
           Container(
               color: StyleHelper.colorForColumn(index),
               child: Padding(
-                  padding: EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(4),
                   child: Text('Lijn ${participant.lijn}',
                       style: StyleHelper.participantEntryHeading1TextStyle(
                           context)))),
           Padding(
-              padding: EdgeInsets.all(4),
+              padding: const EdgeInsets.all(4),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   //
@@ -175,7 +175,7 @@ class ParticipantEditor extends StatelessWidget {
     return SizedBox(
         width: 120,
         child: Padding(
-            padding: EdgeInsets.only(right: 10),
+            padding: const EdgeInsets.only(right: 10),
             child: Text(label,
                 style: StyleHelper.participantEntryLabelTextStyle(context))));
   }

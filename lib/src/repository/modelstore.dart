@@ -3,6 +3,7 @@ import 'package:centaur_scores/src/repository/repository.dart';
 import 'package:centaur_scores/src/model/settings_model.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:uuid/uuid.dart';
+import 'dart:developer';
 
 class ModelStore {
   static final ModelStore _instance = ModelStore._internal();
@@ -12,7 +13,7 @@ class ModelStore {
   }
 
   ModelStore._internal() {
-    print("ModelStore was created.");
+    log("ModelStore was created.");
   }
 
   // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -23,15 +24,15 @@ class ModelStore {
     await storage.ready;
 
     try {
-    var loadedModel = await storage.getItem('model');
-    if (null == loadedModel) {
-      return null;
-    } else {
-      MatchModel result = MatchModel.fromJson(loadedModel);
-      return result;
-    }
+      var loadedModel = await storage.getItem('model');
+      if (null == loadedModel) {
+        return null;
+      } else {
+        MatchModel result = MatchModel.fromJson(loadedModel);
+        return result;
+      }
     } catch (error) {
-      print('Error: $error');
+      log('Error: $error');
       return null;
     }
   }
@@ -57,7 +58,7 @@ class ModelStore {
     var serverURL = settings.serverURL;
     while (serverURL.endsWith('/')) {
       serverURL = serverURL.substring(0, serverURL.length - 1);
-    }    
+    }
     return serverURL;
   }
 

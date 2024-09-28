@@ -34,7 +34,7 @@ class SingleParticipantHeaderLineTwo extends StatelessWidget {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute<void>(
-              builder: (BuildContext context) => ParticipantsView(),
+              builder: (BuildContext context) => const ParticipantsView(),
             ));
       },
       child: SizedBox(
@@ -80,7 +80,8 @@ class SingleParticipantHeaderLineTwo extends StatelessWidget {
                                   style: StyleHelper
                                       .scoreFormHeaderLineTwoBoldTextStyle(
                                           context)),
-                              TextSpan(text: restrictLength(subgroup.label, 12)),
+                              TextSpan(
+                                  text: restrictLength(subgroup.label, 12)),
                             ],
                           ),
                         )

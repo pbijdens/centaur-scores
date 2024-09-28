@@ -5,7 +5,6 @@ import 'package:centaur_scores/src/model/match_model.dart';
 import 'package:centaur_scores/src/model/participant_model.dart';
 import 'package:centaur_scores/src/repository/centaur_scores_api.dart';
 import 'package:centaur_scores/src/repository/repository.dart';
-import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -50,8 +49,11 @@ class ScoreTransferPage extends StatelessWidget {
           return ListView.builder(
               itemCount: participants.data?.length ?? 0,
               itemBuilder: (context, index) {
-                final ParticipantModel? remoteParticipant = participants.data?[index];
-                return ScoreTransferListItem(participant: participant, remoteParticipant: remoteParticipant!);
+                final ParticipantModel? remoteParticipant =
+                    participants.data?[index];
+                return ScoreTransferListItem(
+                    participant: participant,
+                    remoteParticipant: remoteParticipant!);
               });
         });
   }
@@ -67,11 +69,8 @@ class ScoreTransferPage extends StatelessWidget {
 class ScoreTransferListItem extends StatelessWidget {
   final ParticipantModel participant;
   final ParticipantModel remoteParticipant;
-  const ScoreTransferListItem({
-    super.key,
-    required this.participant,
-    required this.remoteParticipant
-  });
+  const ScoreTransferListItem(
+      {super.key, required this.participant, required this.remoteParticipant});
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +82,10 @@ class ScoreTransferListItem extends StatelessWidget {
           children: <Widget>[
             ListTile(
               leading: const Icon(Icons.person),
-              title: Text('${remoteParticipant.name} (${remoteParticipant.score})'),
-              subtitle: Text('Lijn: ${remoteParticipant.lijn} @ ${remoteParticipant.deviceID}'),
+              title: Text(
+                  '${remoteParticipant.name} (${remoteParticipant.score})'),
+              subtitle: Text(
+                  'Lijn: ${remoteParticipant.lijn} @ ${remoteParticipant.deviceID}'),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -92,11 +93,14 @@ class ScoreTransferListItem extends StatelessWidget {
                 TextButton(
                   child: const Text('OVERNEMEN'),
                   onPressed: () {
-                    repository.TransferTo(participant, remoteParticipant);
-                    Navigator.of(context).popUntil((predicate) => predicate.isFirst);
-                    Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
-                      builder: (BuildContext context) => const ParticipantsView(),
-                    ));                    
+                    repository.transferTo(participant, remoteParticipant);
+                    Navigator.of(context)
+                        .popUntil((predicate) => predicate.isFirst);
+                    Navigator.of(context)
+                        .pushReplacement(MaterialPageRoute<void>(
+                      builder: (BuildContext context) =>
+                          const ParticipantsView(),
+                    ));
                   },
                 ),
                 const SizedBox(width: 8),

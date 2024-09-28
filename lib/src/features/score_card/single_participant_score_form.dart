@@ -13,7 +13,7 @@ class SingeParticipantScoreForm extends StatelessWidget {
 
   final ScoresViewmodel viewModel;
 
-  SingeParticipantScoreForm(
+  const SingeParticipantScoreForm(
       {super.key,
       required this.viewModel,
       required ParticipantModel participant,
@@ -85,13 +85,13 @@ class SingeParticipantScoreForm extends StatelessWidget {
             child: Container(
               alignment: Alignment.center,
               margin: const EdgeInsets.all(2),
-              padding: const EdgeInsets.fromLTRB(6,4,6,8),
+              padding: const EdgeInsets.fromLTRB(6, 4, 6, 8),
               decoration: BoxDecoration(
                   border: Border.all(
                     color: StyleHelper.colorForArrow(arrowScore),
                   ),
                   color: StyleHelper.colorForArrow(arrowScore),
-                  borderRadius: BorderRadius.all(Radius.circular(15))),
+                  borderRadius: const BorderRadius.all(Radius.circular(15))),
               child: Text('${arrowScore ?? "-"}',
                   style: StyleHelper.scoreFormArrowScoreTextStyle(
                       context, arrowScore)),

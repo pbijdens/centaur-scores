@@ -3,6 +3,7 @@ import 'package:centaur_scores/src/repository/modelstore.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../model/match_model.dart';
+import 'dart:developer';
 
 class CentaurScoresAPI {
   static final CentaurScoresAPI _instance = CentaurScoresAPI._internal();
@@ -12,12 +13,12 @@ class CentaurScoresAPI {
   }
 
   CentaurScoresAPI._internal() {
-    print("CentaurScoresAPI was created.");
+    log("CentaurScoresAPI was created.");
   }
 
   // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
-  ModelStore _store = ModelStore();
+  final ModelStore _store = ModelStore();
 
   Future<bool> pushParticipants(
       int matchId, List<ParticipantModel> participants) async {
@@ -25,7 +26,7 @@ class CentaurScoresAPI {
     var deviceID = await _store.getDeviceID();
     var client = http.Client();
     var uri = Uri.parse('$baseUrl/match/$matchId/participants/$deviceID');
-    Map<String, String> headers = Map<String, String>();
+    Map<String, String> headers = <String, String>{};
     headers['Content-Type'] = 'application/json';
     var response =
         await client.put(uri, headers: headers, body: jsonEncode(participants));
@@ -39,7 +40,7 @@ class CentaurScoresAPI {
   Future<MatchModel> httpGetActiveMatchModel() async {
     String baseUrl = await _store.getServerURL();
     var client = http.Client();
-    var uri = Uri.parse('${baseUrl}/match/active');
+    var uri = Uri.parse('$baseUrl/match/active');
     var response = await client.get(uri);
     if (response.statusCode == 200) {
       Map<String, dynamic> result =
@@ -58,7 +59,7 @@ class CentaurScoresAPI {
     String baseUrl = await _store.getServerURL();
     var deviceID = await _store.getDeviceID();
     var client = http.Client();
-    var uri = Uri.parse('${baseUrl}/match/$matchId/participants/$deviceID');
+    var uri = Uri.parse('$baseUrl/match/$matchId/participants/$deviceID');
     var response = await client.get(uri);
     if (response.statusCode == 200) {
       List result = jsonDecode(const Utf8Decoder().convert(response.bodyBytes));
@@ -82,7 +83,7 @@ class CentaurScoresAPI {
       int matchId) async {
     String baseUrl = await _store.getServerURL();
     var client = http.Client();
-    var uri = Uri.parse('${baseUrl}/match/$matchId/participants');
+    var uri = Uri.parse('$baseUrl/match/$matchId/participants');
     var response = await client.get(uri);
     if (response.statusCode == 200) {
       List result = jsonDecode(const Utf8Decoder().convert(response.bodyBytes));
@@ -107,7 +108,7 @@ class CentaurScoresAPI {
     var client = http.Client();
     var uri = Uri.parse(
         '$baseUrl/match/$matchId/participants/${participant.id}/transfer/$deviceID/$lijn');
-    Map<String, String> headers = Map<String, String>();
+    Map<String, String> headers = <String, String>{};
     headers['Content-Type'] = 'application/json';
     var response = await client.post(uri, headers: headers);
     if (response.statusCode == 200) {

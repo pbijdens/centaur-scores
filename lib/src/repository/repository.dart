@@ -1,4 +1,3 @@
-import 'package:centaur_scores/src/features/participants/participants_viewmodel.dart';
 import 'package:centaur_scores/src/repository/centaur_scores_api.dart';
 import 'package:centaur_scores/src/repository/modelstore.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,8 @@ class MatchRepository with ChangeNotifier {
   static final MatchRepository _instance = MatchRepository._internal();
 
   // If the system is not configured, it tries to use this URL to fetch its data
-  static const String hardcodedURL = "http://192.168.50.54:8062";
+  //static const String hardcodedURL = "http://192.168.50.54:8062";
+  static const String hardcodedURL = "http://10.62.140.149:8062";
 
   // Check every this many seconds if there are changes to upload.
   final Duration _timerInterval = const Duration(seconds: 10);
@@ -30,7 +30,7 @@ class MatchRepository with ChangeNotifier {
   }
 
   MatchRepository._internal() {
-    print("Match repository was created.");
+    debugPrint("Match repository was created.");
     _timer = Timer.periodic(_timerInterval, (Timer t) => _timerFunction());
   }
 
@@ -64,25 +64,26 @@ class MatchRepository with ChangeNotifier {
       MatchModel result;
       if (null == localModel && null != remoteModel) {
         // There is only a remote model
-        print("Initialize: Only found remote model...");
+        debugPrint("Initialize: Only found remote model...");
         result = remoteModel;
         result.deviceID = await _store.getDeviceID();
         _globalModelCompleter.complete(result);
       } else if (null == remoteModel && null != localModel) {
-        print("Initialize: Only found local model...");
+        debugPrint("Initialize: Only found local model...");
         result = localModel;
         result.deviceID = await _store.getDeviceID();
         _globalModelCompleter.complete(result);
       } else if (null != remoteModel && null != localModel) {
-        print("Initialize: Found both models, preferring local model...");
+        debugPrint("Initialize: Found both models, preferring local model...");
         result = localModel; // TODO: MERGE
         result.deviceID = await _store.getDeviceID();
         _globalModelCompleter.complete(result);
       } else {
-        print("Initialize: Found no model... Not completing...");
+        debugPrint("Initialize: Found no model... Not completing...");
       }
     } catch (error) {
-      print("Initialize: Error loading model... Not completing... => $error");
+      debugPrint(
+          "Initialize: Error loading model... Not completing... => $error");
     }
     notifyListeners();
   }
@@ -92,7 +93,7 @@ class MatchRepository with ChangeNotifier {
       MatchModel remoteModel = await getRemoteModel();
       return remoteModel;
     } catch (error) {
-      print('Could not fetch remote model: $error');
+      debugPrint('Could not fetch remote model: $error');
       return null;
     }
   }
@@ -104,9 +105,9 @@ class MatchRepository with ChangeNotifier {
       await _store.saveModel(model);
       notifyListeners();
     } catch (error) {
-      print("Failed to save model to storage: $error");
+      debugPrint("Failed to save model to storage: $error");
     } finally {
-      print("Done: markModelDirtyAndSaveLocally...");
+      debugPrint("Done: markModelDirtyAndSaveLocally...");
     }
   }
 
@@ -195,7 +196,7 @@ class MatchRepository with ChangeNotifier {
     final int now = DateTime.now().millisecondsSinceEpoch;
     _timerLastRunMsSinceEpoch = now;
 
-    print("timer run at $now...");
+    debugPrint("timer run at $now...");
     getModel().then((model) {
       bool newDirty = model.isDirty;
 
@@ -206,9 +207,10 @@ class MatchRepository with ChangeNotifier {
           newDirty == true) {
         // model is dirty
         _sync().catchError((err) {
-          print("sync failed");
+          debugPrint("sync failed");
+          return true;
         }).then((result) {
-          print("sync done");
+          debugPrint("sync done");
           currentIsDirtyState = result;
         });
       }
@@ -222,22 +224,22 @@ class MatchRepository with ChangeNotifier {
     try {
       var model = await getModel();
       if (model.isDirty) {
-        print('Model is dirty, pushing...');
+        debugPrint('Model is dirty, pushing...');
         await _api.pushParticipants(model.id, model.participants);
         model.isDirty = false;
         await _store.saveModel(model);
         notifyListeners();
-        print('Model is no longer dirty...');
+        debugPrint('Model is no longer dirty...');
         return false;
       } else {
-        print('Model is not dirty.');
+        debugPrint('Model is not dirty.');
         return false;
       }
     } catch (error) {
-      print("ERROR: $error");
+      debugPrint("ERROR: $error");
       notifyListeners();
     } finally {
-      print('End of sync action...');
+      debugPrint('End of sync action...');
     }
     return true;
   }
@@ -247,7 +249,7 @@ class MatchRepository with ChangeNotifier {
       MatchModel localModel = await getModel();
       MatchModel remoteModel = await getRemoteModel();
       if (remoteModel.id != localModel.id) {
-        print(
+        debugPrint(
             "Active match changed from ${localModel.id} to ${remoteModel.id}");
 
         // Replace the model with the server-provided value
@@ -260,18 +262,18 @@ class MatchRepository with ChangeNotifier {
         notifyListeners();
       }
     } catch (error) {
-      print('checkIfActiveMatchChanged failed with error $error');
+      debugPrint('checkIfActiveMatchChanged failed with error $error');
     }
   }
 
-  Future<Null> TransferTo(
+  Future<Null> transferTo(
       ParticipantModel participant, ParticipantModel remoteParticipant) async {
     await _sync();
     MatchModel model = await getModel();
     await _api.moveParticipantToThisDevice(
         model.id, remoteParticipant, participant.lijn);
 
-    print("Forcing reload of the active match");
+    debugPrint("Forcing reload of the active match");
     MatchModel remoteModel = await getRemoteModel();
     // Replace the model with the server-provided value
     _globalModelCompleter = Completer<MatchModel>();
@@ -287,7 +289,7 @@ class MatchRepository with ChangeNotifier {
     final int msSinceLastRun = now - _timerLastRunMsSinceEpoch;
     final int allowedDelayMS = 2 * _timerInterval.inMilliseconds;
     if (msSinceLastRun > allowedDelayMS) {
-      print(
+      debugPrint(
           "Timer is not active (anymore). isActive = ${_timer?.isActive ?? -1}");
     }
   }
