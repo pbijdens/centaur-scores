@@ -2,6 +2,8 @@
 
 A new Flutter project.
 
+See this [Medium Article](https://medium.com/@colonal/automating-flutter-builds-and-releases-with-github-actions-77ccf4a1ccdd) for information on setting up the build.
+
 ## Getting Started
 
 This project is a starting point for a Flutter application that follows the
