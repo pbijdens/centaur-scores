@@ -217,6 +217,10 @@ class MatchRepository with ChangeNotifier {
 
       // Sync was completed already, now check to see if we need to ditch this match
       _checkIfActiveMatchChanged().then((value) {});
+
+      // While we're at it, check to make sure that we're not flagged for an
+      // update.
+      _checkIfSynchronizationRequestedForThisDevice().then((value) {});
     });
   }
 
@@ -242,6 +246,28 @@ class MatchRepository with ChangeNotifier {
       debugPrint('End of sync action...');
     }
     return true;
+  }
+
+  Future<Null> _checkIfSynchronizationRequestedForThisDevice() async {
+    try {
+      bool needsSync = await _api.doesDeviceNeedSync();
+      if (needsSync) {
+        debugPrint("Device was listed for a forced update.");
+        MatchModel remoteModel = await getRemoteModel();
+        _globalModelCompleter = Completer<MatchModel>();
+        if (null != onModelReplaced) onModelReplaced!(_globalModelCompleter);
+        _globalModelCompleter.complete(remoteModel);
+
+        // Save this new model locally to start off hte JSON cache
+        await _store.saveModel(remoteModel);
+        notifyListeners();
+
+        _api.clearDeviceNeedSync();
+      }
+    } catch (error) {
+      debugPrint(
+          '_checkIfSynchronizationRequestedForThisDevice failed with error $error');
+    }
   }
 
   Future<Null> _checkIfActiveMatchChanged() async {

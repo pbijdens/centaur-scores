@@ -117,4 +117,34 @@ class CentaurScoresAPI {
       throw 'Request to $uri failed with status ${response.statusCode}';
     }
   }
+
+  Future<bool> doesDeviceNeedSync() async {
+    String baseUrl = await _store.getServerURL();
+    var client = http.Client();
+    var deviceID = await _store.getDeviceID();
+    var uri = Uri.parse('$baseUrl/devices/$deviceID/sync');
+    Map<String, String> headers = <String, String>{};
+    headers['Content-Type'] = 'application/json';
+    var response = await client.get(uri, headers: headers);
+    if (response.statusCode == 200) {
+      return const Utf8Decoder().convert(response.bodyBytes) == "true";
+    } else {
+      throw 'Request to $uri failed with status ${response.statusCode}';
+    }
+  }
+
+  Future<bool> clearDeviceNeedSync() async {
+    String baseUrl = await _store.getServerURL();
+    var client = http.Client();
+    var deviceID = await _store.getDeviceID();
+    var uri = Uri.parse('$baseUrl/devices/$deviceID/sync');
+    Map<String, String> headers = <String, String>{};
+    headers['Content-Type'] = 'application/json';
+    var response = await client.delete(uri, headers: headers);
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw 'Request to $uri failed with status ${response.statusCode}';
+    }
+  }
 }
