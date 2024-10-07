@@ -17,7 +17,8 @@ class MatchRepository with ChangeNotifier {
 
   // If the system is not configured, it tries to use this URL to fetch its data
   //static const String hardcodedURL = "http://192.168.50.54:8062";
-  static const String hardcodedURL = "http://10.62.140.149:8062";
+  //static const String hardcodedURL = "http://10.62.140.149:8062";
+  static const String hardcodedURL = "http://cs.centaur.local:8062";
 
   // Check every this many seconds if there are changes to upload.
   final Duration _timerInterval = const Duration(seconds: 10);
