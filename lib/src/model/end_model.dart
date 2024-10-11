@@ -10,7 +10,8 @@ class EndModel {
   int? get score => calculateScore();
   set score(int? value) {}
 
-  factory EndModel.fromJson(Map<String, dynamic> json) => _$EndModelFromJson(json);
+  factory EndModel.fromJson(Map<String, dynamic> json) =>
+      _$EndModelFromJson(json);
   Map<String, dynamic> toJson() => _$EndModelToJson(this);
 
   int? calculateScore() {

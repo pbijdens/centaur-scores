@@ -35,7 +35,7 @@ class SingeParticipantScoreForm extends StatelessWidget {
             padding: const EdgeInsets.all(1),
             crossAxisSpacing: 2,
             mainAxisSpacing: 2,
-            crossAxisCount: _model.arrowsPerEnd + 2,
+            crossAxisCount: _model.arrowsPerEnd + 3,
             scrollDirection: Axis.vertical,
             childAspectRatio: StyleHelper.childAspectRatio(_model),
             children: createScoreRows(context),
@@ -45,23 +45,15 @@ class SingeParticipantScoreForm extends StatelessWidget {
 
   List<Widget> createScoreRows(BuildContext context) {
     List<Widget> result = [];
+    int subtotal = 0;
     for (var endNo = 0; endNo < _model.numberOfEnds; endNo++) {
       result.add(InkWell(
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute<void>(
-                    builder: (BuildContext context) =>
-                        ScoreEntryForSingleEndView(
-                            lijnNo: _index,
-                            endNo: endNo,
-                            arrowNo: -1))).then((value) {
-              viewModel.notifyViewmodelUpdated();
-            });
+            onTapScoreField(context, endNo, -1);
           },
           child: Container(
             alignment: Alignment.centerRight,
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
             color: Colors.transparent,
             child: Text('${endNo + 1}',
                 style: StyleHelper.scoreFormEndNumberTextStyle(context)),
@@ -71,21 +63,14 @@ class SingeParticipantScoreForm extends StatelessWidget {
         int? arrowScore = _participant.ends[endNo].arrows[arrowNo];
         result.add(InkWell(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                      builder: (BuildContext context) =>
-                          ScoreEntryForSingleEndView(
-                              lijnNo: _index,
-                              endNo: endNo,
-                              arrowNo: arrowNo))).then((value) {
-                viewModel.notifyViewmodelUpdated();
-              });
+              // onTapScoreField(context, endNo, arrowNo);
+              onTapScoreField(
+                  context, endNo, 0); // always select the first arrow
             },
             child: Container(
               alignment: Alignment.center,
               margin: const EdgeInsets.all(2),
-              padding: const EdgeInsets.fromLTRB(6, 4, 6, 8),
+              padding: const EdgeInsets.fromLTRB(3, 0, 3, 4),
               decoration: BoxDecoration(
                   border: Border.all(
                     color: StyleHelper.colorForArrow(arrowScore),
@@ -100,16 +85,7 @@ class SingeParticipantScoreForm extends StatelessWidget {
 
       result.add(InkWell(
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute<void>(
-                    builder: (BuildContext context) =>
-                        ScoreEntryForSingleEndView(
-                            lijnNo: _index,
-                            endNo: endNo,
-                            arrowNo: -1))).then((value) {
-              viewModel.notifyViewmodelUpdated();
-            });
+            onTapScoreField(context, endNo, -1);
           },
           child: Container(
             padding: const EdgeInsets.all(8),
@@ -118,7 +94,34 @@ class SingeParticipantScoreForm extends StatelessWidget {
             child: Text('${_participant.ends[endNo].score ?? "-"}',
                 style: StyleHelper.scoreFormEndTotalTextStyle(context)),
           )));
+
+      subtotal += _participant.ends[endNo].score ?? 0;
+
+      result.add(InkWell(
+          onTap: () {
+            onTapScoreField(context, endNo, -1);
+          },
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            alignment: Alignment.center,
+            color: Colors.transparent,
+            child: Text('$subtotal',
+                style: StyleHelper.scoreFormEndTotalTextStyle(context)),
+          )));
     }
+
     return result;
+  }
+
+  // Opens the score entry on the field that was tapped. If a summary field is
+  // tapped, open the editor on the first field.
+  void onTapScoreField(BuildContext context, int endNo, int arrowNo) {
+    Navigator.push(
+        context,
+        MaterialPageRoute<void>(
+            builder: (BuildContext context) => ScoreEntryForSingleEndView(
+                lijnNo: _index, endNo: endNo, arrowNo: arrowNo))).then((value) {
+      viewModel.notifyViewmodelUpdated();
+    });
   }
 }
