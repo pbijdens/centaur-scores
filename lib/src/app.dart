@@ -1,4 +1,5 @@
 import 'package:centaur_scores/src/features/score_transfer/score_transfer.dart';
+import 'package:centaur_scores/src/mycustomscrollbehavior.dart';
 import 'package:centaur_scores/src/navigationservice.dart';
 import 'package:centaur_scores/src/repository/repository.dart';
 import 'package:centaur_scores/src/features/participants/participants_view.dart';
@@ -24,6 +25,8 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           // Root key
           navigatorKey: NavigationService.navigatorKey,
+
+          scrollBehavior: MyCustomScrollBehavior(),
 
           debugShowCheckedModeBanner: false,
 
