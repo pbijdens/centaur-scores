@@ -26,7 +26,8 @@ class ScoresSingleEndViewmodel extends EventViewModel {
 
       notify(SingleEndViewmodelLoadedEvent(model: value));
       if (participant != null) {
-        notify(ParticipantChangedEvent(participant: participant!, end: endNo, arrow: arrowNo));
+        notify(ParticipantChangedEvent(
+            participant: participant!, end: endNo, arrow: arrowNo));
       }
       notify(LoadingEvent(isLoading: false));
     });
@@ -65,7 +66,10 @@ class ScoresSingleEndViewmodel extends EventViewModel {
       ParticipantModel? newP = _model?.getParticipantByIndex(nextLijn);
       if (newP != null && (newP.name?.isNotEmpty ?? false)) {
         _lijnNo = nextLijn;
-        if (_endNo < (_model?.numberOfEnds ?? 0) - 1) {
+        _arrowNo = participant?.ends[endNo].arrows
+                .indexWhere((element) => element == null) ??
+            -1;
+        if ((-1 == _arrowNo) && (_endNo < (_model?.numberOfEnds ?? 0) - 1)) {
           _endNo++;
         }
         _setArrowNo();
@@ -209,7 +213,8 @@ class ParticipantChangedEvent extends ViewEvent {
   final int end;
   final int arrow;
 
-  ParticipantChangedEvent({required this.participant, required this.end, required this.arrow})
+  ParticipantChangedEvent(
+      {required this.participant, required this.end, required this.arrow})
       : super("ParticipantChangedEvent");
 }
 

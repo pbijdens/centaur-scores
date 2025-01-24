@@ -4,7 +4,7 @@ description: "Android GUI application for entering archery scores on the Centaur
 # Prevent accidental publishing to pub.dev.
 publish_to: 'none'
 
-version: 1.0.0+7
+version: 1.0.0+8
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
