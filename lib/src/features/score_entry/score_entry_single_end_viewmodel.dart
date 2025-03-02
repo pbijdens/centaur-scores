@@ -1,3 +1,4 @@
+import 'package:centaur_scores/src/model/end_model.dart';
 import 'package:centaur_scores/src/repository/repository.dart';
 import 'package:centaur_scores/src/mvvm/events/loading_event.dart';
 import 'package:centaur_scores/src/mvvm/observer.dart';
@@ -177,7 +178,8 @@ class ScoresSingleEndViewmodel extends EventViewModel {
         ParticipantModel? newP = _model?.getParticipantByIndex(nextLijn);
         allComplete = allComplete &&
             ((newP?.name?.isEmpty ?? true) ||
-                (newP?.ends[_endNo].score != null));
+                ((newP?.ends[_endNo].score != null) &&
+                    areAllArrowsEntered(newP?.ends[_endNo])));
       }
       for (int i = 0; i < participantArrayLength; i++) {
         // try at most as many times as there are array entries
@@ -198,6 +200,18 @@ class ScoresSingleEndViewmodel extends EventViewModel {
     var result =
         _model?.participants.indexWhere((x) => x.lijn == participant.lijn);
     return result ?? 0;
+  }
+
+  bool areAllArrowsEntered(EndModel? end) {
+    if (null != end) {
+      bool allEntered = true;
+      for (int i = 0; i < (_model?.arrowsPerEnd ?? 1); i++) {
+        if (end.arrows[i] == null) allEntered = false;
+      }
+      return allEntered;
+    } else {
+      return false;
+    }
   }
 }
 
