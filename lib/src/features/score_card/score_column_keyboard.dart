@@ -1,4 +1,4 @@
-import 'package:centaur_scores/src/features/score_entry/score_entry_single_end_viewmodel.dart';
+import 'package:centaur_scores/src/features/score_card/scores_viewmodel.dart';
 import 'package:centaur_scores/src/style/style_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -6,18 +6,18 @@ import '../../model/match_model.dart';
 import '../../model/participant_model.dart';
 import '../../model/score_button_definition.dart';
 
-class ScoreKeyboard extends StatelessWidget {
-  final ScoresSingleEndViewmodel _viewModel;
+class ScoreColumnKeyboard extends StatelessWidget {
+  final ScoresViewmodel _viewModel;
   final MatchModel _model;
   final ParticipantModel _participant;
 
-  const ScoreKeyboard(this._viewModel, this._model, this._participant,
+  const ScoreColumnKeyboard(this._viewModel, this._model, this._participant,
       {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: StyleHelper.colorForColumnFooter(_viewModel.lijnNo),
+        color: StyleHelper.colorForColumnFooter(_viewModel.activeKeyboard ?? 0),
         child: SizedBox(
             width: StyleHelper.scoreCardColumnWidth(context, _model),
             child: Padding(
@@ -48,10 +48,10 @@ class ScoreKeyboard extends StatelessWidget {
     for (int i = 0; i < keys.length; i++) {
       currentRow.add(Expanded(
           child: Padding(
-              padding: const EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(1.0),
               child: ElevatedButton(
                   onPressed: () {
-                    _viewModel.setScore(keys[i].value);
+                    _viewModel.setScore(keys[i].value, _model, _participant);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
@@ -62,19 +62,22 @@ class ScoreKeyboard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(5.0),
                     ),
                   ),
-                  child: SizedBox(
-                    height: 60,
+                  child: Expanded(
+                      child: SizedBox(
+                    height: 45,
                     child: Align(
                         alignment: Alignment.center,
                         child: (keys[i].value == null)
                             ? Text(keys[i].label,
-                                style: StyleHelper.keypadTextStyle(context))
+                                style: StyleHelper.keypadTextStyleSmall(
+                                    context, keys[i].label))
                             : Text(keys[i].label,
-                                style: StyleHelper.keypadTextStyle(context)
+                                style: StyleHelper.keypadTextStyleSmall(
+                                        context, keys[i].label)
                                     ?.apply(
                                         color: StyleHelper.colorForButtonLabel(
                                             context, keys[i].value)))),
-                  )))));
+                  ))))));
       if (currentRow.length == buttonsPerRow) {
         result.add(Row(children: currentRow));
         currentRow = [];

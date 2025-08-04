@@ -3,17 +3,56 @@ import 'package:flutter/material.dart';
 import '../model/match_model.dart';
 
 class StyleHelper {
-  static const double preferredCellWidth = 80 * 1.20;
-  static const double preferredCellHeight = 50 * 1.20;
+  static const double endNumberWidth = 25;
+  static const double endTotalWidth = 30;
+  static const double subTotalWidth = 45;
+  static const double scFixedWidth =
+      endNumberWidth + endTotalWidth + subTotalWidth;
+  static const double scVerticalOverhead = 210;
+  static const double scLine1Height = 40;
+  static const double scLine2Height = 30;
+  static const double scFooterHeight = 35;
 
-  static double childAspectRatio(MatchModel model) =>
-      StyleHelper.preferredCellWidth / StyleHelper.preferredCellHeight;
+  static double preferredCellWidth(BuildContext context, MatchModel model) {
+    MediaQueryData q = MediaQuery.of(context);
+    if (q.orientation == Orientation.portrait) {
+      return (((q.size.width * 0.85) - scFixedWidth)) / (model.arrowsPerEnd);
+    } else {
+      double screenWidth = q.size.width;
+      double columnWidth25pct = screenWidth / 4.0;
+      double minColumnWidth = (model.arrowsPerEnd * 40) + scFixedWidth;
+      double finalColumnWidth =
+          columnWidth25pct > minColumnWidth ? columnWidth25pct : minColumnWidth;
+      return (finalColumnWidth - scFixedWidth) / model.arrowsPerEnd;
+    }
+  }
 
-  static double childAspectRatioForEditor(MatchModel model) =>
-      StyleHelper.preferredCellWidth / StyleHelper.preferredCellHeight;
+  static double preferredCellHeight(BuildContext context, MatchModel model) {
+    MediaQueryData q = MediaQuery.of(context);
+    int endsToShow = model.numberOfEnds > 10 ? 12 : model.numberOfEnds;
+    double result = (q.size.height - scVerticalOverhead) / endsToShow;
+    if (result < 30) {
+      result = 30;
+    } else if (result > 45) {
+      result = 45;
+    }
+    return result;
+  }
 
-  static double scoreCardColumnWidth(MatchModel model) =>
-      (model.arrowsPerEnd + 2) * StyleHelper.preferredCellWidth;
+  static double childAspectRatio(BuildContext context, MatchModel model) => 2;
+
+  static double childAspectRatioForEditor(
+          BuildContext context, MatchModel model) =>
+      2;
+
+  static double scoreCardColumnWidth(BuildContext context, MatchModel model) {
+    return (preferredCellWidth(context, model) * model.arrowsPerEnd) +
+        scFixedWidth;
+  }
+
+  static double scoreCardRowHeight(BuildContext context, MatchModel model) {
+    return preferredCellHeight(context, model);
+  }
 
   static Color colorForColumn(int columnNo) {
     List<Color> colors = [
@@ -91,7 +130,7 @@ class StyleHelper {
   static const int numKeysPerRow = 4;
 
   static TextStyle? baseTextStyle(BuildContext context) =>
-      Theme.of(context).textTheme.bodyLarge?.apply(fontSizeFactor: 1.15);
+      Theme.of(context).textTheme.bodyLarge?.apply(fontSizeFactor: 1);
 
   static TextStyle? participantLijnTextStyle(BuildContext context) =>
       baseTextStyle(context);
@@ -117,14 +156,14 @@ class StyleHelper {
 
   static TextStyle? endEditorEndNoTextStyle(BuildContext context) =>
       baseTextStyle(context)?.apply(
-          fontSizeFactor: 1.2, fontWeightDelta: 0, color: Colors.black54);
+          fontSizeFactor: 0.9, fontWeightDelta: 0, color: Colors.black54);
 
   static TextStyle? endEditorArrowScoreTextStyle(BuildContext context) =>
-      baseTextStyle(context)?.apply(fontSizeFactor: 1.5, fontWeightDelta: 0);
+      baseTextStyle(context)?.apply(fontSizeFactor: 1.1, fontWeightDelta: 0);
 
   static TextStyle? endEditorEndTotalTextStyle(BuildContext context) =>
       baseTextStyle(context)?.apply(
-          fontSizeFactor: 1.2, fontWeightDelta: 0, color: Colors.black54);
+          fontSizeFactor: 0.9, fontWeightDelta: 0, color: Colors.black54);
 
   static TextStyle? endEditorBackButtonTextStyle(BuildContext context) =>
       baseTextStyle(context);
@@ -136,13 +175,18 @@ class StyleHelper {
       endEditorTopHeaderTextStyle(context)?.apply(fontWeightDelta: 4);
 
   static TextStyle? editorParticipantNameHeader(BuildContext context) =>
-      baseTextStyle(context)?.apply(fontSizeFactor: 1.7);
+      baseTextStyle(context)?.apply(fontSizeFactor: 1.2);
 
   static TextStyle? keypadTextStyle(BuildContext context) =>
-      baseTextStyle(context)?.apply(fontSizeFactor: 1.5);
+      baseTextStyle(context)?.apply(fontSizeFactor: 1.1);
+
+  static TextStyle? keypadTextStyleSmall(BuildContext context, String label) =>
+      label.length >= 3
+          ? baseTextStyle(context)?.apply(fontSizeFactor: 0.8)
+          : baseTextStyle(context)?.apply(fontSizeFactor: 1.0);
 
   static TextStyle? scoreFormFooterTextStyle(BuildContext context) =>
-      baseTextStyle(context)?.apply(fontSizeFactor: 1.2);
+      baseTextStyle(context)?.apply(fontSizeFactor: 1.1);
 
   static TextStyle? scoreFormHeaderParticipantNameTextStyle(
           BuildContext context) =>
@@ -179,8 +223,8 @@ class StyleHelper {
           fontSizeFactor: 0.9, fontWeightDelta: 2, color: Colors.black87);
 
   static TextStyle? participantNameTextStyle(BuildContext context) =>
-      baseTextStyle(context)?.apply(
-          fontSizeFactor: 1.2, fontWeightDelta: 1, color: Colors.black87);
+      baseTextStyle(context)
+          ?.apply(fontSizeFactor: 1, fontWeightDelta: 1, color: Colors.black87);
 
   static Color darken(Color color, [double amount = .1]) {
     assert(amount >= 0 && amount <= 1);

@@ -21,8 +21,8 @@ class ScoreViewNextEnd extends StatelessWidget {
             _viewModel.nextEnd();
           },
           child: SizedBox(
-              width: StyleHelper.scoreCardColumnWidth(_model),
-              height: StyleHelper.preferredCellHeight,
+              width: StyleHelper.scoreCardColumnWidth(context, _model),
+              height: StyleHelper.preferredCellHeight(context, _model),
               child: ShaderMask(
                   shaderCallback: (rect) {
                     return const LinearGradient(
@@ -34,8 +34,7 @@ class ScoreViewNextEnd extends StatelessWidget {
                   },
                   blendMode: BlendMode.dstIn,
                   child: Container(
-                      color:
-                          StyleHelper.colorForScoreForm(_viewModel.lijnNo),
+                      color: StyleHelper.colorForScoreForm(_viewModel.lijnNo),
                       child: GridView.count(
                         primary: false,
                         padding: const EdgeInsets.all(1),
@@ -43,14 +42,14 @@ class ScoreViewNextEnd extends StatelessWidget {
                         mainAxisSpacing: 2,
                         crossAxisCount: _model.arrowsPerEnd + 2,
                         scrollDirection: Axis.vertical,
-                        childAspectRatio:
-                            StyleHelper.childAspectRatioForEditor(_model),
+                        childAspectRatio: StyleHelper.childAspectRatioForEditor(
+                            context, _model),
                         children: createScoreRows(context),
                       )))));
     }
     return SizedBox(
-        height: StyleHelper.preferredCellHeight,
-        width: StyleHelper.scoreCardColumnWidth(_model),
+        height: StyleHelper.preferredCellHeight(context, _model),
+        width: StyleHelper.scoreCardColumnWidth(context, _model),
         child: Container(
             color: Colors.white70,
             child: Align(
@@ -67,8 +66,8 @@ class ScoreViewNextEnd extends StatelessWidget {
       alignment: Alignment.centerRight,
       padding: const EdgeInsets.all(8),
       color: Colors.transparent,
-      child:
-          Text('${endNo + 1}', style: StyleHelper.nextPrevEndEndNoTextStyle(context)),
+      child: Text('${endNo + 1}',
+          style: StyleHelper.nextPrevEndEndNoTextStyle(context)),
     ));
 
     for (var arrowNo = 0; arrowNo < _model.arrowsPerEnd; arrowNo++) {

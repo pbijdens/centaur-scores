@@ -19,14 +19,15 @@ class SingeParticipantFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
     return Container(
-        color: StyleHelper.colorForColumnFooter(index),
-        child: SizedBox(
-          width: StyleHelper.scoreCardColumnWidth(model),
+      color: StyleHelper.colorForColumnFooter(index),
+      height: StyleHelper.scFooterHeight,
+      child: SizedBox(
+          width: StyleHelper.scoreCardColumnWidth(context, model),
           child: Padding(
-                  padding: const EdgeInsets.all(4),
-                  child: Text('Totaal: ${participant.score}',
-                      textAlign: TextAlign.center,
-                      style: StyleHelper.scoreFormFooterTextStyle(context)))),
-        );
+              padding: const EdgeInsets.all(4),
+              child: Text('Totaal: ${participant.score}',
+                  textAlign: TextAlign.center,
+                  style: StyleHelper.scoreFormFooterTextStyle(context)))),
+    );
   }
 }
