@@ -36,9 +36,12 @@ class ScoresViewmodel extends EventViewModel {
 
   void nextKeyboard(MatchModel model, int endNo, int? arrowNumber) {
     if (activeKeyboard == null) return;
+    var participants = model.participants
+        .where((element) => element.name?.isNotEmpty ?? false)
+        .toList();
     activeKeyboard = activeKeyboard! + 1;
-    if (activeKeyboard! >= model.participants.length) {
-      if (editingEnd < model.numberOfEnds) {
+    if (activeKeyboard! >= participants.length) {
+      if (editingEnd < (model.numberOfEnds - 1)) {
         editingEnd = editingEnd + 1;
       }
       activeKeyboard = 0;
@@ -46,8 +49,7 @@ class ScoresViewmodel extends EventViewModel {
 
     editingArrow = 0;
     for (int i = 0; i < model.arrowsPerEnd; i++) {
-      if (model.participants[activeKeyboard!].ends[editingEnd].arrows[i] ==
-          null) {
+      if (participants[activeKeyboard!].ends[editingEnd].arrows[i] == null) {
         editingArrow = i;
         break;
       }
@@ -77,9 +79,12 @@ class ScoresViewmodel extends EventViewModel {
         (editingArrow == null ||
             editingArrow! < 0 ||
             editingArrow! >= model.arrowsPerEnd)) {
+      var participants = model.participants
+          .where((element) => element.name?.isNotEmpty ?? false)
+          .toList();
       editingArrow = 0;
       for (int i = 0; i < model.arrowsPerEnd; i++) {
-        if (model.participants[index!].ends[editingEnd].arrows[i] == null) {
+        if (participants[index!].ends[editingEnd].arrows[i] == null) {
           editingArrow = i;
           activeArrowChanged = true;
           break;

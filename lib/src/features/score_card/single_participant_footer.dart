@@ -33,6 +33,11 @@ class SingeParticipantFooter extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: StyleHelper.scoreFormFooterTextStyle(context))),
             if (index == viewmodel.activeKeyboard)
+              SizedBox(
+                  height: StyleHelper.scFooterHeight,
+                  width: StyleHelper.scoreCardColumnWidth(context, model),
+                  child: Container(color: Color.fromARGB(128, 0, 0, 0))),
+            if (index == viewmodel.activeKeyboard)
               Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 88, 0),
                   child: Align(

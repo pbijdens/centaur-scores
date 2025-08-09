@@ -16,9 +16,12 @@ class ScoreColumnKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData q = MediaQuery.of(context);
+    //MediaQueryData q = MediaQuery.of(context);
     return Container(
-        color: StyleHelper.colorForColumnFooter(_viewModel.activeKeyboard ?? 0),
+        decoration: BoxDecoration(
+            border: Border.all(width: 2.0, color: Colors.transparent),
+            color: StyleHelper.colorForColumnFooter(
+                _viewModel.activeKeyboard ?? 0)),
         child: SizedBox(
             width: StyleHelper.scoreCardColumnWidth(context, _model),
             child: Padding(
