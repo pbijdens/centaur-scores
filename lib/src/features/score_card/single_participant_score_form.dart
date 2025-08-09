@@ -91,6 +91,9 @@ class SingeParticipantScoreForm extends StatelessWidget {
               style: StyleHelper.scoreFormEndNumberTextStyle(context)),
         )));
 
+    MediaQueryData q = MediaQuery.of(context);
+    double inset = q.size.height > 600 ? 4 : 2;
+
     for (int arrowNo = 0; arrowNo < _model.arrowsPerEnd; arrowNo++) {
       int? arrowScore = _participant.ends[endNo].arrows[arrowNo];
       if (arrowScore != null) {
@@ -111,17 +114,18 @@ class SingeParticipantScoreForm extends StatelessWidget {
                   color: isSelected ? Colors.black : Colors.transparent,
                   child: Padding(
                       padding: isSelected
-                          ? const EdgeInsets.fromLTRB(2, 2, 2, 2)
+                          ? EdgeInsets.fromLTRB(inset, inset, inset, inset)
                           : const EdgeInsets.fromLTRB(1, 1, 1, 1),
                       child: Container(
                         alignment: Alignment.center,
                         color: isSelected
-                            ? StyleHelper.colorForButton(context, 0)
+                            ? StyleHelper.colorForButtonSelected(context)
                             : StyleHelper.colorForButton(context, arrowScore),
                         child: Text('${arrowScore ?? "-"}',
                             style: isSelected
-                                ? StyleHelper.scoreFormArrowScoreTextStyle(
-                                    context, 0)
+                                ? StyleHelper
+                                    .scoreFormArrowScoreTextStyleSelected(
+                                        context)
                                 : StyleHelper.scoreFormArrowScoreTextStyle(
                                     context, arrowScore)),
                       )))));

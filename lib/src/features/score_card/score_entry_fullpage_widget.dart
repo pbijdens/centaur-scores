@@ -178,6 +178,7 @@ class ScoreEntryFullPageWidgetState extends State<ScoreEntryFullPageWidget>
               SingeParticipantFooter(
                   model: model,
                   participant: participant,
+                  viewmodel: _viewModel,
                   index: participants.indexWhere((e) => e.id == participant.id))
             ]))
         .toList();

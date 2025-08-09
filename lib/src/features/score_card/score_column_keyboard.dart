@@ -16,12 +16,13 @@ class ScoreColumnKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData q = MediaQuery.of(context);
     return Container(
         color: StyleHelper.colorForColumnFooter(_viewModel.activeKeyboard ?? 0),
         child: SizedBox(
             width: StyleHelper.scoreCardColumnWidth(context, _model),
             child: Padding(
-                padding: const EdgeInsets.all(4),
+                padding: const EdgeInsets.all(0),
                 child: Column(children: buildRows(context)))));
   }
 
@@ -45,46 +46,59 @@ class ScoreColumnKeyboard extends StatelessWidget {
 
     int buttonsPerRow = keys.length > 7 ? 4 : 3;
 
+    var rowHeight = StyleHelper.keyboardButtonRowHeight(
+        context, _model, buttonsPerRow, keys);
+
     for (int i = 0; i < keys.length; i++) {
       currentRow.add(Expanded(
           child: Padding(
               padding: const EdgeInsets.all(1.0),
               child: ElevatedButton(
-                  onPressed: () {
-                    _viewModel.setScore(keys[i].value, _model, _participant);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        StyleHelper.colorForButton(context, keys[i].value),
-                    foregroundColor:
-                        StyleHelper.colorForButtonLabel(context, keys[i].value),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
+                onPressed: () {
+                  _viewModel.setScore(keys[i].value, _model, _participant);
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero, // remove default padding
+                  backgroundColor:
+                      StyleHelper.colorForButton(context, keys[i].value),
+                  foregroundColor:
+                      StyleHelper.colorForButtonLabel(context, keys[i].value),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                ),
+                child: Container(
+                  height: rowHeight,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  child: Center(
+                    child: Text(
+                      keys[i].label,
+                      style: StyleHelper.keypadTextStyleSmall(
+                        context,
+                        keys[i].label,
+                      )?.apply(
+                        color: StyleHelper.colorForButtonLabel(
+                            context, keys[i].value),
+                      ),
                     ),
                   ),
-                  child: Expanded(
-                      child: SizedBox(
-                    height: 45,
-                    child: Align(
-                        alignment: Alignment.center,
-                        child: (keys[i].value == null)
-                            ? Text(keys[i].label,
-                                style: StyleHelper.keypadTextStyleSmall(
-                                    context, keys[i].label))
-                            : Text(keys[i].label,
-                                style: StyleHelper.keypadTextStyleSmall(
-                                        context, keys[i].label)
-                                    ?.apply(
-                                        color: StyleHelper.colorForButtonLabel(
-                                            context, keys[i].value)))),
-                  ))))));
+                ),
+              ))));
       if (currentRow.length == buttonsPerRow) {
-        result.add(Row(children: currentRow));
+        result.add(Container(
+            height: rowHeight,
+            color: Colors.transparent,
+            child: Row(children: currentRow)));
         currentRow = [];
       }
     }
     if (currentRow.isNotEmpty) {
-      result.add(Row(children: currentRow));
+      result.add(Container(
+          color: Colors.transparent, child: Row(children: currentRow)));
     }
 
     return result;

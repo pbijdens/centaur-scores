@@ -28,6 +28,36 @@ class ScoresViewmodel extends EventViewModel {
     });
   }
 
+  void hideKeyboard() {
+    activeKeyboard = null;
+    notifyViewmodelUpdated();
+    notifyKeyboardShown();
+  }
+
+  void nextKeyboard(MatchModel model, int endNo, int? arrowNumber) {
+    if (activeKeyboard == null) return;
+    activeKeyboard = activeKeyboard! + 1;
+    if (activeKeyboard! >= model.participants.length) {
+      if (editingEnd < model.numberOfEnds) {
+        editingEnd = editingEnd + 1;
+      }
+      activeKeyboard = 0;
+    }
+
+    editingArrow = 0;
+    for (int i = 0; i < model.arrowsPerEnd; i++) {
+      if (model.participants[activeKeyboard!].ends[editingEnd].arrows[i] ==
+          null) {
+        editingArrow = i;
+        break;
+      }
+    }
+
+    notifyViewmodelUpdated();
+    notifyKeyboardShown();
+    notifActiveArrowChanged();
+  }
+
   void activateKeyboard(
       MatchModel model, int? index, int endNo, int? arrowNumber) {
     bool activeKeyboardChanged = false;

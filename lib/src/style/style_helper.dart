@@ -1,3 +1,4 @@
+import 'package:centaur_scores/src/model/score_button_definition.dart';
 import 'package:flutter/material.dart';
 
 import '../model/match_model.dart';
@@ -8,23 +9,29 @@ class StyleHelper {
   static const double subTotalWidth = 45;
   static const double scFixedWidth =
       endNumberWidth + endTotalWidth + subTotalWidth;
-  static const double scVerticalOverhead = 210;
   static const double scLine1Height = 40;
   static const double scLine2Height = 30;
-  static const double scFooterHeight = 35;
+  static const double scFooterHeight = 55;
+  static const double scVerticalOverhead = 175 + scFooterHeight;
+
+  static double scale(BuildContext context) => 1.1;
+
+  static double min(double a, double b) => a < b ? a : b;
+  static double max(double a, double b) => a > b ? a : b;
 
   static double preferredCellWidth(BuildContext context, MatchModel model) {
     MediaQueryData q = MediaQuery.of(context);
+    double screenWidth = q.size.width;
+    double singleColumnPreferredWidth = screenWidth / 4.0;
     if (q.orientation == Orientation.portrait) {
-      return (((q.size.width * 0.85) - scFixedWidth)) / (model.arrowsPerEnd);
-    } else {
-      double screenWidth = q.size.width;
-      double columnWidth25pct = screenWidth / 4.0;
-      double minColumnWidth = (model.arrowsPerEnd * 40) + scFixedWidth;
-      double finalColumnWidth =
-          columnWidth25pct > minColumnWidth ? columnWidth25pct : minColumnWidth;
-      return (finalColumnWidth - scFixedWidth) / model.arrowsPerEnd;
-    }
+      singleColumnPreferredWidth = q.size.width * 0.85;
+      //(((q.size.width * 0.85) - scFixedWidth)) / (model.arrowsPerEnd);
+    } else {}
+    double minColumnWidth = (model.arrowsPerEnd * 40) + scFixedWidth;
+    double maxColumnWidth = (model.arrowsPerEnd * 70) + scFixedWidth;
+    double finalColumnWidth =
+        min(max(singleColumnPreferredWidth, minColumnWidth), maxColumnWidth);
+    return (finalColumnWidth - scFixedWidth) / model.arrowsPerEnd;
   }
 
   static double preferredCellHeight(BuildContext context, MatchModel model) {
@@ -33,8 +40,8 @@ class StyleHelper {
     double result = (q.size.height - scVerticalOverhead) / endsToShow;
     if (result < 30) {
       result = 30;
-    } else if (result > 45) {
-      result = 45;
+    } else if (result > 55) {
+      result = 55;
     }
     return result;
   }
@@ -106,6 +113,10 @@ class StyleHelper {
     return const Color.fromRGBO(0xFF, 0xFF, 0xFF, 1.0);
   }
 
+  static Color colorForButtonSelected(BuildContext context) {
+    return Colors.white;
+  }
+
   static Color colorForButton(BuildContext context, int? arrowValue) {
     if (null == arrowValue) {
       return const Color.fromRGBO(0xFF, 0xFF, 0xFF, 1);
@@ -129,8 +140,10 @@ class StyleHelper {
 
   static const int numKeysPerRow = 4;
 
-  static TextStyle? baseTextStyle(BuildContext context) =>
-      Theme.of(context).textTheme.bodyLarge?.apply(fontSizeFactor: 1);
+  static TextStyle? baseTextStyle(BuildContext context) => Theme.of(context)
+      .textTheme
+      .bodyLarge
+      ?.apply(fontSizeFactor: scale(context) * 1);
 
   static TextStyle? participantLijnTextStyle(BuildContext context) =>
       baseTextStyle(context);
@@ -146,47 +159,55 @@ class StyleHelper {
       baseTextStyle(context);
 
   static TextStyle? nextPrevEndEndNoTextStyle(BuildContext context) =>
-      baseTextStyle(context)?.apply(fontSizeFactor: 0.9, color: Colors.black54);
+      baseTextStyle(context)
+          ?.apply(fontSizeFactor: scale(context) * 0.9, color: Colors.black54);
 
   static TextStyle? nextPrevEndArrowScoreTextStyle(BuildContext context) =>
-      baseTextStyle(context)?.apply(fontSizeFactor: 0.9, color: Colors.black54);
+      baseTextStyle(context)
+          ?.apply(fontSizeFactor: scale(context) * 0.9, color: Colors.black54);
 
   static TextStyle? nextPrevEndEndScoreTextStyle(BuildContext context) =>
-      baseTextStyle(context)?.apply(fontSizeFactor: 0.9, color: Colors.black54);
+      baseTextStyle(context)
+          ?.apply(fontSizeFactor: scale(context) * 0.9, color: Colors.black54);
 
   static TextStyle? endEditorEndNoTextStyle(BuildContext context) =>
       baseTextStyle(context)?.apply(
-          fontSizeFactor: 0.9, fontWeightDelta: 0, color: Colors.black54);
+          fontSizeFactor: scale(context) * 0.9,
+          fontWeightDelta: 0,
+          color: Colors.black54);
 
   static TextStyle? endEditorArrowScoreTextStyle(BuildContext context) =>
-      baseTextStyle(context)?.apply(fontSizeFactor: 1.1, fontWeightDelta: 0);
+      baseTextStyle(context)
+          ?.apply(fontSizeFactor: scale(context) * 1.1, fontWeightDelta: 0);
 
   static TextStyle? endEditorEndTotalTextStyle(BuildContext context) =>
       baseTextStyle(context)?.apply(
-          fontSizeFactor: 0.9, fontWeightDelta: 0, color: Colors.black54);
+          fontSizeFactor: scale(context) * 0.9,
+          fontWeightDelta: 0,
+          color: Colors.black54);
 
   static TextStyle? endEditorBackButtonTextStyle(BuildContext context) =>
       baseTextStyle(context);
 
   static TextStyle? endEditorTopHeaderTextStyle(BuildContext context) =>
-      baseTextStyle(context)?.apply(fontSizeFactor: 1);
+      baseTextStyle(context)?.apply(fontSizeFactor: scale(context) * 1);
 
   static TextStyle? endEditorTopHeaderBoldTextStyle(BuildContext context) =>
       endEditorTopHeaderTextStyle(context)?.apply(fontWeightDelta: 4);
 
   static TextStyle? editorParticipantNameHeader(BuildContext context) =>
-      baseTextStyle(context)?.apply(fontSizeFactor: 1.2);
+      baseTextStyle(context)?.apply(fontSizeFactor: scale(context) * 1.1);
 
   static TextStyle? keypadTextStyle(BuildContext context) =>
-      baseTextStyle(context)?.apply(fontSizeFactor: 1.1);
+      baseTextStyle(context)?.apply(fontSizeFactor: scale(context) * 1.1);
 
   static TextStyle? keypadTextStyleSmall(BuildContext context, String label) =>
       label.length >= 3
-          ? baseTextStyle(context)?.apply(fontSizeFactor: 0.8)
-          : baseTextStyle(context)?.apply(fontSizeFactor: 1.0);
+          ? baseTextStyle(context)?.apply(fontSizeFactor: scale(context) * 0.8)
+          : baseTextStyle(context)?.apply(fontSizeFactor: scale(context) * 1.1);
 
   static TextStyle? scoreFormFooterTextStyle(BuildContext context) =>
-      baseTextStyle(context)?.apply(fontSizeFactor: 1.1);
+      baseTextStyle(context)?.apply(fontSizeFactor: scale(context) * 1.1);
 
   static TextStyle? scoreFormHeaderParticipantNameTextStyle(
           BuildContext context) =>
@@ -208,23 +229,37 @@ class StyleHelper {
               ?.apply(color: darken(Colors.white, 0.05))
           : endEditorArrowScoreTextStyle(context)?.apply(color: Colors.black87);
 
+  static TextStyle? scoreFormArrowScoreTextStyleSelected(
+          BuildContext context) =>
+      colorForButtonSelected(context).computeLuminance() < 0.5
+          ? endEditorArrowScoreTextStyle(context)
+              ?.apply(color: darken(Colors.white, 0.05))
+          : endEditorArrowScoreTextStyle(context)?.apply(color: Colors.black87);
+
   static TextStyle? scoreFormEndTotalTextStyle(BuildContext context) =>
       endEditorEndTotalTextStyle(context);
 
   static TextStyle? noMoreEndsTextStyle(BuildContext context) =>
-      baseTextStyle(context)?.apply(fontSizeFactor: 0.9, color: Colors.black54);
+      baseTextStyle(context)
+          ?.apply(fontSizeFactor: scale(context) * 0.9, color: Colors.black54);
 
   static TextStyle? participantEntryHeading1TextStyle(BuildContext context) =>
       baseTextStyle(context)?.apply(
-          fontSizeFactor: 1.1, fontWeightDelta: 2, color: Colors.black87);
+          fontSizeFactor: scale(context) * 1.1,
+          fontWeightDelta: 2,
+          color: Colors.black87);
 
   static TextStyle? participantEntryLabelTextStyle(BuildContext context) =>
       baseTextStyle(context)?.apply(
-          fontSizeFactor: 0.9, fontWeightDelta: 2, color: Colors.black87);
+          fontSizeFactor: scale(context) * 0.9,
+          fontWeightDelta: 2,
+          color: Colors.black87);
 
   static TextStyle? participantNameTextStyle(BuildContext context) =>
-      baseTextStyle(context)
-          ?.apply(fontSizeFactor: 1, fontWeightDelta: 1, color: Colors.black87);
+      baseTextStyle(context)?.apply(
+          fontSizeFactor: scale(context) * 1,
+          fontWeightDelta: 1,
+          color: Colors.black87);
 
   static Color darken(Color color, [double amount = .1]) {
     assert(amount >= 0 && amount <= 1);
@@ -243,5 +278,23 @@ class StyleHelper {
         hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
 
     return hslLight.toColor();
+  }
+
+  static double keyboardButtonRowHeight(BuildContext context, MatchModel match,
+      int buttonsPerRow, List<ScoreButtonDefinition> keys) {
+    MediaQueryData q = MediaQuery.of(context);
+    double result;
+    if (q.size.height > 600) {
+      result = 60 * scale(context);
+    } else {
+      result = 40 * scale(context);
+      // double space = q.size.height - scVerticalOverhead;
+      // double kbSpace = preferredCellHeight(context, match);
+      // space -= 3 * kbSpace;
+      // result = space / ((1.0 * keys.length) / (1.0 * buttonsPerRow));
+    }
+    debugPrint("Returning $result");
+    return result;
+    // return 45 * scale(context);
   }
 }

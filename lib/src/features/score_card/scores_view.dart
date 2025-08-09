@@ -16,9 +16,15 @@ class ScoresView extends StatelessWidget {
         listenable: MatchRepository(),
         builder: (BuildContext context, Widget? child) {
           return Scaffold(
-              appBar: AppBar(
-                title: Row(children: [const ScoreSyncWidget(), Text(AppLocalizations.of(context)!.scoresScreenTitle)],
-              )),
+              appBar: PreferredSize(
+                  preferredSize: const Size.fromHeight(40.0),
+                  child: AppBar(
+                      title: Row(
+                    children: [
+                      const ScoreSyncWidget(),
+                      Text(AppLocalizations.of(context)!.scoresScreenTitle)
+                    ],
+                  ))),
               drawer: MyApp.drawer(context),
               body: Container(
                   margin: const EdgeInsets.all(0),
