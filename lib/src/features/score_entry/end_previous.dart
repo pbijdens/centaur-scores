@@ -21,8 +21,8 @@ class ScoreViewPreviousEnd extends StatelessWidget {
             _viewModel.previousEnd();
           },
           child: SizedBox(
-              width: StyleHelper.scoreCardColumnWidth(_model),
-              height: StyleHelper.preferredCellHeight,
+              width: StyleHelper.scoreCardColumnWidth(context, _model),
+              height: StyleHelper.preferredCellHeight(context, _model),
               child: ShaderMask(
                   shaderCallback: (rect) {
                     return const LinearGradient(
@@ -42,14 +42,14 @@ class ScoreViewPreviousEnd extends StatelessWidget {
                         mainAxisSpacing: 2,
                         crossAxisCount: _model.arrowsPerEnd + 2,
                         scrollDirection: Axis.vertical,
-                        childAspectRatio:
-                            StyleHelper.childAspectRatioForEditor(_model),
+                        childAspectRatio: StyleHelper.childAspectRatioForEditor(
+                            context, _model),
                         children: createScoreRows(context),
                       )))));
     }
     return SizedBox(
-        height: StyleHelper.preferredCellHeight,
-        width: StyleHelper.scoreCardColumnWidth(_model),
+        height: StyleHelper.preferredCellHeight(context, _model),
+        width: StyleHelper.scoreCardColumnWidth(context, _model),
         child: Container(
             color: Colors.white70,
             child: Align(

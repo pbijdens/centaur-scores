@@ -20,15 +20,16 @@ class ScoreInputThisEnd extends StatelessWidget {
       int hlArrow = _viewModel.participant?.ends[_viewModel.endNo].arrows
               .indexWhere((element) => element != null) ??
           0;
-      _viewModel.hilightCellNoNotify(_viewModel.endNo, hlArrow < 0 ? 0 : hlArrow);
+      _viewModel.hilightCellNoNotify(
+          _viewModel.endNo, hlArrow < 0 ? 0 : hlArrow);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: StyleHelper.scoreCardColumnWidth(_model),
-        height: StyleHelper.preferredCellHeight + 4,
+        width: StyleHelper.scoreCardColumnWidth(context, _model),
+        height: StyleHelper.preferredCellHeight(context, _model) + 4,
         child: Container(
             color: StyleHelper.colorForScoreForm(_viewModel.lijnNo),
             child: GridView.count(
@@ -38,7 +39,8 @@ class ScoreInputThisEnd extends StatelessWidget {
               mainAxisSpacing: 4,
               crossAxisCount: _model.arrowsPerEnd + 2,
               scrollDirection: Axis.vertical,
-              childAspectRatio: StyleHelper.childAspectRatioForEditor(_model),
+              childAspectRatio:
+                  StyleHelper.childAspectRatioForEditor(context, _model),
               children: createScoreRows(context),
             )));
   }

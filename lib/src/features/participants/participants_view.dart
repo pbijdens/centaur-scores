@@ -19,13 +19,21 @@ class ParticipantsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData queryData = MediaQuery.of(context);
+    double devicePixelRatio = queryData.devicePixelRatio;
+    Size size = queryData.size;
+
+    debugPrint("pixel ratio: $devicePixelRatio; size: $size");
+
     return ListenableBuilder(
         listenable: MatchRepository(),
         builder: (BuildContext context, Widget? child) {
           return Scaffold(
               appBar: AppBar(
-                title:
-                    Row(children: [const ScoreSyncWidget(), Text(AppLocalizations.of(context)!.participantScreenTitle)]),
+                title: Row(children: [
+                  const ScoreSyncWidget(),
+                  Text(AppLocalizations.of(context)!.participantScreenTitle)
+                ]),
               ),
               drawer: MyApp.drawer(context),
               floatingActionButton: FloatingActionButton.extended(
@@ -44,7 +52,7 @@ class ParticipantsView extends StatelessWidget {
                               context))),
                   icon: const Icon(Icons.edit)),
               body: Container(
-                  margin: const EdgeInsets.all(20),
+                  margin: const EdgeInsets.all(0),
                   child: const ParticipantsForm())
               //
               );
@@ -102,7 +110,7 @@ class ParticipantsFormState extends State<ParticipantsForm>
                   child: ConstrainedBox(
                       constraints: BoxConstraints(
                         minHeight: viewportConstraints.maxHeight,
-                      ),                      
+                      ),
                       //
                       child: Column(
                         mainAxisSize: MainAxisSize.min,

@@ -19,7 +19,7 @@ class ScoreKeyboard extends StatelessWidget {
     return Container(
         color: StyleHelper.colorForColumnFooter(_viewModel.lijnNo),
         child: SizedBox(
-            width: StyleHelper.scoreCardColumnWidth(_model),
+            width: StyleHelper.scoreCardColumnWidth(context, _model),
             child: Padding(
                 padding: const EdgeInsets.all(4),
                 child: Column(children: buildRows(context)))));
@@ -32,7 +32,10 @@ class ScoreKeyboard extends StatelessWidget {
     List<ScoreButtonDefinition> keys = [];
 
     String? mostRelevantKeyboard = _model.scoreValues.keys
-        .where((element) => element.split(',').map((e) => e.trim()).contains(_participant.target))
+        .where((element) => element
+            .split(',')
+            .map((e) => e.trim())
+            .contains(_participant.target))
         .lastOrNull;
     if (mostRelevantKeyboard == null) {
       keys = _model.scoreValues.entries.firstOrNull?.value ?? [];

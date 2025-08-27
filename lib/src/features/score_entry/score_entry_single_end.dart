@@ -197,7 +197,7 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
   SizedBox headerLineOne(
       BuildContext context, GroupInfo group, GroupInfo subgroup) {
     return SizedBox(
-      width: StyleHelper.scoreCardColumnWidth(model),
+      width: StyleHelper.scoreCardColumnWidth(context, model),
       child: Container(
           alignment: Alignment.topLeft,
           color: StyleHelper.colorForColumnFooter(_viewModel.lijnNo),
@@ -242,7 +242,7 @@ class SingleEndPage extends State<ScoreEntryForSingleEndViewForm>
 
   SizedBox headerLineTwo(BuildContext context) {
     return SizedBox(
-      width: StyleHelper.scoreCardColumnWidth(model),
+      width: StyleHelper.scoreCardColumnWidth(context, model),
       child: Container(
           alignment: Alignment.topLeft,
           color: StyleHelper.colorForColumn(_viewModel.lijnNo),

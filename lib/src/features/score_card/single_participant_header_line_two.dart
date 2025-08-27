@@ -38,7 +38,8 @@ class SingleParticipantHeaderLineTwo extends StatelessWidget {
             ));
       },
       child: SizedBox(
-          width: StyleHelper.scoreCardColumnWidth(model),
+          width: StyleHelper.scoreCardColumnWidth(context, model),
+          height: StyleHelper.scLine2Height,
           //height: 80,
           child: Container(
               alignment: Alignment.topLeft,
